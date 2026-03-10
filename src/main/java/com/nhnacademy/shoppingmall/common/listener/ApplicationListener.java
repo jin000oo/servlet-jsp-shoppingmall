@@ -40,6 +40,7 @@ public class ApplicationListener implements ServletContextListener {
                         User.Auth.ROLE_ADMIN, 1_000_000, LocalDateTime.now(), null);
 
                 userService.saveUser(admin);
+                log.debug("create admin test account - id: {} [{}]", admin.getUserId(), admin.getUserAuth());
             }
 
             if (userService.getUser("user") == null) {
@@ -47,6 +48,7 @@ public class ApplicationListener implements ServletContextListener {
                         User.Auth.ROLE_USER, 1_000_000, LocalDateTime.now(), null);
 
                 userService.saveUser(user);
+                log.debug("create user test account - id: {} [{}]", user.getUserId(), user.getUserAuth());
             }
 
         } finally {
