@@ -1,3 +1,15 @@
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * + Copyright 2026. NHN Academy Corp. All rights reserved.
+ * + * While every precaution has been taken in the preparation of this resource,  assumes no
+ * + responsibility for errors or omissions, or for damages resulting from the use of the information
+ * + contained herein
+ * + No part of this resource may be reproduced, stored in a retrieval system, or transmitted, in any
+ * + form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the
+ * + prior written permission.
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
 package com.nhnacademy.shoppingmall.check.common.mvc.view;
 
 import com.nhnacademy.shoppingmall.common.mvc.view.ViewResolver;
@@ -14,54 +26,58 @@ class ViewResolverTest {
     @Test
     @DisplayName("prefix,postfix initialize")
     void constructor() throws Exception {
-        Try<Object> prefixField = ReflectionUtils.tryToReadFieldValue(ViewResolver.class,"prefix",viewResolver);
-        Try<Object> postfixField = ReflectionUtils.tryToReadFieldValue(ViewResolver.class,"postfix",viewResolver);
+        Try<Object> prefixField = ReflectionUtils.tryToReadFieldValue(ViewResolver.class, "prefix", viewResolver);
+        Try<Object> postfixField = ReflectionUtils.tryToReadFieldValue(ViewResolver.class, "postfix", viewResolver);
 
         String prefix = (String) prefixField.get();
         String postfix = (String) postfixField.get();
 
         Assertions.assertAll(
-                ()->Assertions.assertEquals(ViewResolver.DEFAULT_PREFIX,prefix),
-                ()->Assertions.assertEquals(ViewResolver.DEFAULT_POSTFIX, postfix)
+                () -> Assertions.assertEquals(ViewResolver.DEFAULT_PREFIX, prefix),
+                () -> Assertions.assertEquals(ViewResolver.DEFAULT_POSTFIX, postfix)
         );
     }
 
     @Test
     void getPath() {
-
         String expected = "/WEB-INF/views/main/index.jsp";
+
         Assertions.assertAll(
-                ()->Assertions.assertEquals(expected,viewResolver.getPath("main/index")),
-                ()->Assertions.assertEquals(expected,viewResolver.getPath("/main/index"))
+                () -> Assertions.assertEquals(expected, viewResolver.getPath("main/index")),
+                () -> Assertions.assertEquals(expected, viewResolver.getPath("/main/index"))
         );
     }
 
     @Test
     void isRedirect() {
         Assertions.assertAll(
-                ()->Assertions.assertTrue(viewResolver.isRedirect("redirect:/index.do")),
-                ()->Assertions.assertTrue(viewResolver.isRedirect("REDIRECT:/login.do")),
-                ()->Assertions.assertTrue(viewResolver.isRedirect("ReDIrECT:/login.do")),
-                ()->Assertions.assertFalse(viewResolver.isRedirect("/main/index")),
-                ()->Assertions.assertFalse(viewResolver.isRedirect("/admin/producnt/list"))
+                () -> Assertions.assertTrue(viewResolver.isRedirect("redirect:/index.do")),
+                () -> Assertions.assertTrue(viewResolver.isRedirect("REDIRECT:/login.do")),
+                () -> Assertions.assertTrue(viewResolver.isRedirect("ReDIrECT:/login.do")),
+                () -> Assertions.assertFalse(viewResolver.isRedirect("/main/index")),
+                () -> Assertions.assertFalse(viewResolver.isRedirect("/admin/producnt/list"))
         );
     }
 
     @Test
     void getRedirectUrl() {
         Assertions.assertAll(
-                ()->Assertions.assertEquals("/index.do",viewResolver.getRedirectUrl("redirect:/index.do")),
-                ()->Assertions.assertEquals("/login.do",viewResolver.getRedirectUrl("REDIRECT:/login.do")),
-                ()->Assertions.assertEquals("/admin/product/list.do", viewResolver.getRedirectUrl("ReDIrECT:/admin/product/list.do"))
+                () -> Assertions.assertEquals("/index.do", viewResolver.getRedirectUrl("redirect:/index.do")),
+                () -> Assertions.assertEquals("/login.do", viewResolver.getRedirectUrl("REDIRECT:/login.do")),
+                () -> Assertions.assertEquals("/admin/product/list.do",
+                        viewResolver.getRedirectUrl("ReDIrECT:/admin/product/list.do"))
         );
     }
 
     @Test
     void getLayOut() {
         Assertions.assertAll(
-            ()->Assertions.assertEquals(ViewResolver.DEFAULT_ADMIN_LAYOUT, viewResolver.getLayOut("/admin/product/list")),
-            ()->Assertions.assertEquals(ViewResolver.DEFAULT_SHOP_LAYOUT, viewResolver.getLayOut("/mypage/product/list")),
-            ()->Assertions.assertEquals(ViewResolver.DEFAULT_SHOP_LAYOUT, viewResolver.getLayOut("/main/index"))
+                () -> Assertions.assertEquals(ViewResolver.DEFAULT_ADMIN_LAYOUT,
+                        viewResolver.getLayOut("/admin/product/list")),
+                () -> Assertions.assertEquals(ViewResolver.DEFAULT_SHOP_LAYOUT,
+                        viewResolver.getLayOut("/mypage/product/list")),
+                () -> Assertions.assertEquals(ViewResolver.DEFAULT_SHOP_LAYOUT, viewResolver.getLayOut("/main/index"))
         );
     }
+
 }
