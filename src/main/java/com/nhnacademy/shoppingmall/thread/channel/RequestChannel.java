@@ -23,13 +23,17 @@ public class RequestChannel {
         }
 
         //todo#14-4 queue에서 request 반환합니다.
-        return queue.poll();
+        ChannelRequest request = queue.poll();
+
+        notifyAll();
+
+        return request;
     }
 
     public synchronized void addRequest(ChannelRequest request) throws InterruptedException {
         //todo#14-5 queue가 가득차있다면 요청이 소비될 때까지 대기합니다.
-        while (queue.size() > queueMaxSize) {
-            queue.wait();
+        while (queue.size() >= queueMaxSize) {
+            wait();
         }
 
         //todo#14-6 queue에 요청을 추가하고 대기하고 있는 스레드를 깨웁니다

@@ -39,8 +39,18 @@
                     </form>
 
                     <div class="text-end">
-                        <a class="btn btn-outline-light me-2" href="/login.do" >로그인</a>
-                        <a class="btn btn-warning" href="signup.do" >회원가입</a>
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.user}">
+                                <span class="text-white me-3">${sessionScope.user.userName}님 환영합니다!</span>
+                                <form action="/logout.do" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-light me-2">로그아웃</button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="btn btn-outline-light me-2" href="/login.do">로그인</a>
+                                <a class="btn btn-warning" href="/signup.do">회원가입</a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

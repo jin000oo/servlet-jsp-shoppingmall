@@ -83,10 +83,12 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("[UserServiceImpl] user password is null or blank");
         }
 
+        User user = userRepository.findByUserIdAndUserPassword(userId, userPassword)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
         userRepository.updateLatestLoginAtByUserId(userId, LocalDateTime.now());
 
-        return userRepository.findByUserIdAndUserPassword(userId, userPassword)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+        return user;
     }
 
     private void validateUserId(String userId) {

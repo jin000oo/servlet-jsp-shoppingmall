@@ -20,7 +20,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 public class DbUtils {
 
-    public DbUtils() {
+    private DbUtils() {
         throw new IllegalStateException("Utility class");
     }
 
@@ -50,6 +50,7 @@ public class DbUtils {
         //todo#1-3 Validation Query를 설정하세요
         basicDataSource.setValidationQuery("select 1");
 
+        basicDataSource.setTestOnBorrow(true);
         basicDataSource.setMaxWait(Duration.ofSeconds(2));
 
         //todo#1-4 적절히 변경하세요
