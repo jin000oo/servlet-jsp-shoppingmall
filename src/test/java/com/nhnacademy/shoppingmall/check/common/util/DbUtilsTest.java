@@ -1,11 +1,28 @@
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * + Copyright 2026. NHN Academy Corp. All rights reserved.
+ * + * While every precaution has been taken in the preparation of this resource,  assumes no
+ * + responsibility for errors or omissions, or for damages resulting from the use of the information
+ * + contained herein
+ * + No part of this resource may be reproduced, stored in a retrieval system, or transmitted, in any
+ * + form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the
+ * + prior written permission.
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
 package com.nhnacademy.shoppingmall.check.common.util;
 
 import com.nhnacademy.shoppingmall.common.util.DbUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.jupiter.api.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 //todo#2 - connection-pool test
 
@@ -23,12 +40,14 @@ class DbUtilsTest {
     @Test
     @Order(2)
     @DisplayName("mysql driver load : success")
-    void mysql_driver_load(){
-        String driverClassName="com.mysql.cj.jdbc.Driver";
+    void mysql_driver_load() {
+        String driverClassName = "com.mysql.cj.jdbc.Driver";
+
         try {
             Class<?> driver = Class.forName(driverClassName);
             log.info("driver:{}", driver.getName());
-            Assertions.assertEquals(driver.getName(),driverClassName);
+            Assertions.assertEquals(driverClassName, driver.getName());
+
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -45,13 +64,14 @@ class DbUtilsTest {
     @Test
     @Order(4)
     @DisplayName("테스트를 위한 pool-size:5 설정, maxIdle, maxTotal, initialSize, minIdle")
-    void connection_pool_size(){
+    void connection_pool_size() {
         BasicDataSource basicDataSource = (BasicDataSource) DbUtils.getDataSource();
+
         Assertions.assertAll(
-                ()->Assertions.assertEquals(5,basicDataSource.getMaxIdle()),
-                ()->Assertions.assertEquals(5,basicDataSource.getMaxTotal()),
-                ()->Assertions.assertEquals(5,basicDataSource.getInitialSize()),
-                ()->Assertions.assertEquals(5,basicDataSource.getMinIdle())
+                () -> Assertions.assertEquals(5, basicDataSource.getMaxIdle()),
+                () -> Assertions.assertEquals(5, basicDataSource.getMaxTotal()),
+                () -> Assertions.assertEquals(5, basicDataSource.getInitialSize()),
+                () -> Assertions.assertEquals(5, basicDataSource.getMinIdle())
         );
     }
 

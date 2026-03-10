@@ -1,11 +1,24 @@
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * + Copyright 2026. NHN Academy Corp. All rights reserved.
+ * + * While every precaution has been taken in the preparation of this resource,  assumes no
+ * + responsibility for errors or omissions, or for damages resulting from the use of the information
+ * + contained herein
+ * + No part of this resource may be reproduced, stored in a retrieval system, or transmitted, in any
+ * + form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the
+ * + prior written permission.
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
 package com.nhnacademy.shoppingmall.user.domain;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class User {
-    public enum Auth{
-        ROLE_ADMIN,ROLE_USER
+
+    public enum Auth {
+        ROLE_ADMIN, ROLE_USER
     }
 
     private String userId;
@@ -17,7 +30,8 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime latestLoginAt;
 
-    public User (String userId, String userName, String userPassword, String userBirth, Auth userAuth, int userPoint, LocalDateTime createdAt, LocalDateTime latestLoginAt ){
+    public User(String userId, String userName, String userPassword, String userBirth, Auth userAuth, int userPoint,
+                LocalDateTime createdAt, LocalDateTime latestLoginAt) {
         this.userId = userId;
         this.userName = userName;
         this.userPassword = userPassword;
@@ -25,7 +39,7 @@ public class User {
         this.userAuth = userAuth;
         this.userPoint = userPoint;
         this.createdAt = createdAt;
-        this.latestLoginAt=latestLoginAt;
+        this.latestLoginAt = latestLoginAt;
     }
 
     public String getUserId() {
@@ -82,9 +96,16 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         User user = (User) o;
+
         return userPoint == user.userPoint &&
                 Objects.equals(userId, user.userId) &&
                 Objects.equals(userName, user.userName) &&
@@ -111,4 +132,5 @@ public class User {
                 ", latestLoginAt=" + latestLoginAt +
                 '}';
     }
+
 }

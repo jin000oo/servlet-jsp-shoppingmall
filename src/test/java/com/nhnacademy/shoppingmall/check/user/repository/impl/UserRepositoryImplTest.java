@@ -1,16 +1,34 @@
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * + Copyright 2026. NHN Academy Corp. All rights reserved.
+ * + * While every precaution has been taken in the preparation of this resource,  assumes no
+ * + responsibility for errors or omissions, or for damages resulting from the use of the information
+ * + contained herein
+ * + No part of this resource may be reproduced, stored in a retrieval system, or transmitted, in any
+ * + form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the
+ * + prior written permission.
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
 package com.nhnacademy.shoppingmall.check.user.repository.impl;
 
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
-
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 //todo#3-8 Test Code가 통과하도록 UserRepositoryImpl를 구현합니다.
 
@@ -24,7 +42,15 @@ class UserRepositoryImplTest {
     @BeforeEach
     void setUp() throws SQLException {
         DbConnectionThreadLocal.initialize();
-        testUser = new User("nhnacademy-test-user","nhn아카데미","nhnacademy-test-password","19900505", User.Auth.ROLE_USER,100_0000,LocalDateTime.now(),null);
+
+        testUser = new User(
+                "nhnacademy-test-user",
+                "nhn아카데미",
+                "nhnacademy-test-password",
+                "19900505", User.Auth.ROLE_USER,
+                100_0000,
+                LocalDateTime.now(),
+                null);
         userRepository.save(testUser);
     }
 
@@ -38,19 +64,21 @@ class UserRepositoryImplTest {
     @Order(1)
     @DisplayName("로그인: user 조회 by userId and userPassword")
     void findByUserIdAndUserPassword() {
-        Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(),testUser.getUserPassword());
-        Assertions.assertEquals(testUser,userOptional.get());
+        Optional<User> userOptional =
+                userRepository.findByUserIdAndUserPassword(testUser.getUserId(), testUser.getUserPassword());
+
+        Assertions.assertEquals(testUser, userOptional.get());
     }
 
     @Test
     @Order(2)
     @DisplayName("로그인 : sql injection 방어")
-    @Disabled
-    void findByUserIdAndUserPassword_sql_injection(){
+    void findByUserIdAndUserPassword_sql_injection() {
         //테스트 코드가 통과할 수 있도록  userRepository.findByUserIdAndUserPassword를 수정하세요.
-        String password="' or '1'='1";
-        Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(),password);
-        log.debug("user:{}",userOptional.orElse(null));
+        String password = "' or '1'='1";
+        Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(), password);
+        log.debug("user:{}", userOptional.orElse(null));
+
         Assertions.assertFalse(userOptional.isPresent());
     }
 
@@ -59,18 +87,28 @@ class UserRepositoryImplTest {
     @DisplayName("user 조회 by uerId")
     void findById() {
         Optional<User> userOptional = userRepository.findById(testUser.getUserId());
-        Assertions.assertEquals(testUser,userOptional.get());
+
+        Assertions.assertEquals(testUser, userOptional.get());
     }
 
     @Test
     @Order(4)
     @DisplayName("user 등록")
     void save() {
-        User newUser = new User("nhnacademy-test-user2","nhn아카데미2","nhnacademy-test-password2","19900502", User.Auth.ROLE_USER,100_0000,LocalDateTime.now(),null);
+        User newUser = new User(
+                "nhnacademy-test-user2",
+                "nhn아카데미2",
+                "nhnacademy-test-password2",
+                "19900502",
+                User.Auth.ROLE_USER,
+                100_0000,
+                LocalDateTime.now(),
+                null);
         int result = userRepository.save(newUser);
+
         Assertions.assertAll(
-                ()->Assertions.assertEquals(1,result),
-                ()->Assertions.assertEquals(newUser, userRepository.findById(newUser.getUserId()).get())
+                () -> Assertions.assertEquals(1, result),
+                () -> Assertions.assertEquals(newUser, userRepository.findById(newUser.getUserId()).get())
         );
     }
 
@@ -78,11 +116,12 @@ class UserRepositoryImplTest {
     @Order(5)
     @DisplayName("user 중복 등록 - 제약조건 확인")
     void save_duplicate_user_id() {
-
-        Throwable throwable = Assertions.assertThrows(RuntimeException.class,()->{
+        Throwable throwable = Assertions.assertThrows(RuntimeException.class, () -> {
             userRepository.save(testUser);
         });
-        Assertions.assertTrue(throwable.getMessage().contains(SQLIntegrityConstraintViolationException.class.getName()));
+
+        Assertions.assertTrue(
+                throwable.getMessage().contains(SQLIntegrityConstraintViolationException.class.getName()));
         log.debug("errorMessage:{}", throwable.getMessage());
     }
 
@@ -91,9 +130,10 @@ class UserRepositoryImplTest {
     @DisplayName("user 삭제")
     void deleteByUserId() {
         int result = userRepository.deleteByUserId(testUser.getUserId());
+
         Assertions.assertAll(
-                ()->Assertions.assertEquals(1,result),
-                ()->Assertions.assertFalse(userRepository.findById(testUser.getUserId()).isPresent())
+                () -> Assertions.assertEquals(1, result),
+                () -> Assertions.assertFalse(userRepository.findById(testUser.getUserId()).isPresent())
         );
     }
 
@@ -106,11 +146,11 @@ class UserRepositoryImplTest {
         testUser.setUserBirth("20100505");
         testUser.setUserPoint(20_0000);
         testUser.setUserPassword("new-password");
-
         int result = userRepository.update(testUser);
+
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1,result),
-                ()-> Assertions.assertEquals(testUser, userRepository.findById(testUser.getUserId()).get())
+                () -> Assertions.assertEquals(1, result),
+                () -> Assertions.assertEquals(testUser, userRepository.findById(testUser.getUserId()).get())
         );
     }
 
@@ -118,7 +158,9 @@ class UserRepositoryImplTest {
     @Order(8)
     @DisplayName("최근 로그인시간 update")
     void updateLatestLoginAtByUserId() {
-        int result = userRepository.updateLatestLoginAtByUserId(testUser.getUserId(),LocalDateTime.now());
-        Assertions.assertEquals(1,result);
+        int result = userRepository.updateLatestLoginAtByUserId(testUser.getUserId(), LocalDateTime.now());
+
+        Assertions.assertEquals(1, result);
     }
+
 }
