@@ -216,21 +216,18 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public int countById(String productId) {
-        String sql = "SELECT COUNT(*) FROM products WHERE product_id = ?";
+    public boolean existsById(String productId) {
+        String sql = "SELECT 1 FROM products WHERE product_id = ? LIMIT 1";
 
         Connection connection = DbConnectionThreadLocal.getConnection();
         try (PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setString(1, productId);
             try (ResultSet rs = psmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
+                return rs.next();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return 0;
     }
     
     // Private Helper Methods

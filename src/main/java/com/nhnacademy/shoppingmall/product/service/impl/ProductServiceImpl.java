@@ -27,13 +27,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void saveProduct(Product product) {
-        if (productRepository.countById(product.getProductId()) > 0) {
+        if (productRepository.existsById(product.getProductId())) {
             throw new ProductAlreadyExistsException(product.getProductId());
         }
 
         // Verify all category IDs exist in DB
         for (String categoryId : product.getCategoryIds()) {
-            if (categoryRepository.countById(categoryId) == 0) {
+            if (!categoryRepository.existsById(categoryId)) {
                 throw new CategoryNotFoundException(categoryId);
             }
         }
@@ -46,12 +46,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProduct(Product product) {
-        if (productRepository.countById(product.getProductId()) == 0) {
+        if (!productRepository.existsById(product.getProductId())) {
             throw new ProductNotFoundException(product.getProductId());
         }
 
         for (String categoryId : product.getCategoryIds()) {
-            if (categoryRepository.countById(categoryId) == 0) {
+            if (!categoryRepository.existsById(categoryId)) {
                 throw new CategoryNotFoundException(categoryId);
             }
         }
@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(String productId) {
-        if (productRepository.countById(productId) == 0) {
+        if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(productId);
         }
 

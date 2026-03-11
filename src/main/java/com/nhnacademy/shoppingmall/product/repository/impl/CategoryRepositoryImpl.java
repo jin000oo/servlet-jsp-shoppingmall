@@ -111,20 +111,17 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public int countById(String categoryId) {
-        String sql = "SELECT COUNT(*) FROM categories WHERE category_id = ?";
+    public boolean existsById(String categoryId) {
+        String sql = "SELECT 1 FROM categories WHERE category_id = ? LIMIT 1";
         Connection connection = DbConnectionThreadLocal.getConnection();
         try (PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setString(1, categoryId);
             try (ResultSet rs = psmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
+                return rs.next();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return 0;
     }
 }
 

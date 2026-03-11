@@ -13,5 +13,5 @@ public interface CategoryRepository {
     List<Category> findAll();
 
     int deleteById(String categoryId);
-    int countById(String categoryId);
+    boolean existsById(String categoryId);
 }

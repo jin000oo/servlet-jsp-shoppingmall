@@ -15,5 +15,5 @@ public interface ProductRepository {
     Page<Product> findByCategory(String categoryId, int page, int pageSize);
 
     int deleteById(String productId);
-    int countById(String productId);
+    boolean existsById(String productId);
 }

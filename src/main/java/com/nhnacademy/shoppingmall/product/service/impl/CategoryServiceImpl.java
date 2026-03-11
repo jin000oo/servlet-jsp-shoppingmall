@@ -18,7 +18,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void saveCategory(Category category) {
-        if (categoryRepository.countById(category.getCategoryId()) > 0) {
+        if (categoryRepository.existsById(category.getCategoryId())) {
             throw new CategoryAlreadyExistsException(category.getCategoryId());
         }
 
@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateCategory(Category category) {
-        if (categoryRepository.countById(category.getCategoryId()) == 0) {
+        if (!categoryRepository.existsById(category.getCategoryId())) {
             throw new CategoryNotFoundException(category.getCategoryId());
         }
 
@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(String categoryId) {
-        if (categoryRepository.countById(categoryId) == 0) {
+        if (!categoryRepository.existsById(categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
 
