@@ -11,7 +11,7 @@ import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,17 +29,16 @@ class ProductRepositoryImplTest {
     void setUp() throws SQLException {
         DbConnectionThreadLocal.initialize();
 
-        testCategory1 = new Category("cat_test_01", "Test Category 1", 1);
-        testCategory2 = new Category("cat_test_02", "Test Category 2", 2);
+        testCategory1 = new Category("C001", "카테고리1", 1);
+        testCategory2 = new Category("C002", "카테고리2", 2);
         categoryRepository.save(testCategory1);
         categoryRepository.save(testCategory2);
 
         testProduct = new Product(
-                "test_prod_01",
-                "Test Product",
+                "P001",
+                "상품1",
                 10000,
                 100,
-                Product.NO_IMAGE_PATH,
                 List.of(testCategory1.getCategoryId())
         );
         productRepository.save(testProduct);
@@ -53,41 +52,59 @@ class ProductRepositoryImplTest {
 
     @Test
     @Order(1)
-    @DisplayName("product 등록")
+    @DisplayName("save - 성공")
     void save() {
-        Product newProduct = new Product("test_prod_02", "New Product", 20000, 50, Product.NO_IMAGE_PATH, List.of(testCategory2.getCategoryId()));
+        Product newProduct = new Product(
+                "P002",
+                "상품2",
+                20000,
+                50,
+                Product.NO_IMAGE_PATH,
+                List.of(testCategory2.getCategoryId())
+        );
         
         int result = productRepository.save(newProduct);
         assertEquals(1, result, "Should return 1 when product is successfully saved.");
 
-        Optional<Product> savedProduct = productRepository.findById("test_prod_02");
-        assertTrue(savedProduct.isPresent());
-        assertEquals("New Product", savedProduct.get().getProductName());
-        assertEquals(20000, savedProduct.get().getPrice());
-        assertEquals(50, savedProduct.get().getStock());
-        assertTrue(savedProduct.get().getCategoryIds().contains(testCategory2.getCategoryId()));
+        Product actualProduct = productRepository.findById("P002").orElse(null);
+
+        assertFalse(Objects.isNull(actualProduct));
+        assertAll (
+                () -> assertEquals("상품2", actualProduct.getProductName()),
+                () -> assertEquals(20000, actualProduct.getPrice()),
+                () -> assertEquals(50, actualProduct.getStock()),
+                () -> assertTrue(actualProduct.getCategoryIds().contains(testCategory2.getCategoryId()))
+        );
     }
 
     @Test
     @Order(2)
-    @DisplayName("product 조회 테스트")
+    @DisplayName("findById - 성공")
     void findById() {
-        Optional<Product> foundProduct = productRepository.findById(testProduct.getProductId());
-        assertTrue(foundProduct.isPresent(), "Product should exist when finding by existing ID.");
-        assertEquals(testProduct.getProductId(), foundProduct.get().getProductId());
-        assertTrue(foundProduct.get().getCategoryIds().contains(testCategory1.getCategoryId()));
-
-        Optional<Product> notFoundProduct = productRepository.findById("unknown_prod_id");
-        assertTrue(notFoundProduct.isEmpty(), "Should return empty Optional when finding by non-existent ID.");
+        Product foundProduct = productRepository.findById(testProduct.getProductId()).orElse(null);
+        assertFalse(Objects.isNull(foundProduct), "product not found");
+        
+        assertAll(
+                () -> assertEquals(testProduct.getProductId(), foundProduct.getProductId()),
+                () -> assertTrue(foundProduct.getCategoryIds().contains(testCategory1.getCategoryId()))
+        );
     }
 
     @Test
     @Order(3)
-    @DisplayName("상품 수정 테스트")
+    @DisplayName("findById - 실패 (존재하지 않는 상품)")
+    void findById_notFound() {
+        Product notFoundProduct = productRepository.findById("unknown_prod_id").orElse(null);
+        assertTrue(Objects.isNull(notFoundProduct), "product should be null");
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("update - 성공")
     void update() {
         Product updateParam = new Product(
                 testProduct.getProductId(), 
-                "Updated Product Name", 
+                "상품1_수정", 
                 15000, 
                 30,
                 Product.NO_IMAGE_PATH,
@@ -95,67 +112,71 @@ class ProductRepositoryImplTest {
         );
 
         int result = productRepository.update(updateParam);
-        assertEquals(1, result, "Should return 1 when product is successfully updated.");
+        assertEquals(1, result, "update failed");
 
-        Optional<Product> updatedProduct = productRepository.findById(testProduct.getProductId());
-        assertTrue(updatedProduct.isPresent());
-        assertEquals("Updated Product Name", updatedProduct.get().getProductName());
-        assertEquals(15000, updatedProduct.get().getPrice());
-        assertEquals(30, updatedProduct.get().getStock());
-        assertEquals(2, updatedProduct.get().getCategoryIds().size());
-        assertTrue(updatedProduct.get().getCategoryIds().contains(testCategory2.getCategoryId()));
-    }
-
-    @Test
-    @Order(4)
-    @DisplayName("상품 존재 여부 카운트 테스트")
-    void countById() {
-        int countExist = productRepository.countById(testProduct.getProductId());
-        assertEquals(1, countExist, "Count for existing product should be 1.");
-
-        int countNotExist = productRepository.countById("unknown_id");
-        assertEquals(0, countNotExist, "Count for non-existent product should be 0.");
+        Product updatedProduct = productRepository.findById(testProduct.getProductId()).orElse(null);
+        assertFalse(Objects.isNull(updatedProduct), "product not found");
+        
+        assertAll(
+                () -> assertEquals("상품1_수정", updatedProduct.getProductName()),
+                () -> assertEquals(15000, updatedProduct.getPrice()),
+                () -> assertEquals(30, updatedProduct.getStock()),
+                () -> assertEquals(2, updatedProduct.getCategoryIds().size()),
+                () -> assertTrue(updatedProduct.getCategoryIds().contains(testCategory2.getCategoryId()))
+        );
     }
 
     @Test
     @Order(5)
-    @DisplayName("상품 삭제 테스트")
-    void deleteById() {
-        int result = productRepository.deleteById(testProduct.getProductId());
-        assertEquals(1, result, "Should return 1 when product is successfully deleted.");
-
-        Optional<Product> deletedProduct = productRepository.findById(testProduct.getProductId());
-        assertTrue(deletedProduct.isEmpty(), "Deleted product should not be found.");
+    @DisplayName("existsById 테스트")
+    void existsById() {
+        assertAll(
+                () -> assertTrue(productRepository.existsById(testProduct.getProductId()), "product should exist"),
+                () -> assertFalse(productRepository.existsById("unknown_id"), "product should not exist")
+        );
     }
 
     @Test
-    @Order(6)
-    @DisplayName("상품 전체 페이징 조회 테스트")
+    @Order(7)
+    @DisplayName("deleteById - 성공")
+    void deleteById() {
+        int result = productRepository.deleteById(testProduct.getProductId());
+        assertEquals(1, result, "delete failed");
+
+        Product deletedProduct = productRepository.findById(testProduct.getProductId()).orElse(null);
+        assertTrue(Objects.isNull(deletedProduct), "product should be deleted");
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("findAll - 성공")
     void findAll() {
-        Product newProduct = new Product("test_prod_03", "Paging Test Product", 30000, 10, Product.NO_IMAGE_PATH, List.of(testCategory1.getCategoryId()));
+        Product newProduct = new Product("P003", "상품3", 30000, 10, List.of(testCategory1.getCategoryId()));
         productRepository.save(newProduct);
 
         int page = 1;
         int pageSize = 10;
         Page<Product> productPage = productRepository.findAll(page, pageSize);
 
-        assertNotNull(productPage);
-        assertTrue(productPage.getContent().size() >= 2, "At least 2 products should be retrieved.");
-        assertTrue(productPage.getTotalCount() >= 2, "Total count should be correct.");
+        assertFalse(Objects.isNull(productPage), "page is null");
+        assertAll(
+                () -> assertTrue(productPage.getContent().size() >= 2, "size < 2"),
+                () -> assertTrue(productPage.getTotalCount() >= 2, "total count < 2")
+        );
     }
 
     @Test
-    @Order(7)
-    @DisplayName("특정 카테고리에 속한 상품 페이징 조회 테스트")
+    @Order(9)
+    @DisplayName("findByCategory - 성공")
     void findByCategory() {
         int page = 1;
         int pageSize = 10;
         Page<Product> productPage = productRepository.findByCategory(testCategory1.getCategoryId(), page, pageSize);
 
-        assertNotNull(productPage);
-        assertFalse(productPage.getContent().isEmpty(), "Products linked to the category should be retrieved.");
-        
-        Product foundProduct = productPage.getContent().get(0);
-        assertEquals(testProduct.getProductId(), foundProduct.getProductId());
+        assertFalse(Objects.isNull(productPage), "page is null");
+        assertAll(
+                () -> assertFalse(productPage.getContent().isEmpty(), "content is empty"),
+                () -> assertEquals(testProduct.getProductId(), productPage.getContent().get(0).getProductId())
+        );
     }
 }
