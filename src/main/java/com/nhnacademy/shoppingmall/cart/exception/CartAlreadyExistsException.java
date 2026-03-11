@@ -10,12 +10,12 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.cart.exception;
 
-public class UserNotFoundException extends RuntimeException {
+public class CartAlreadyExistsException extends RuntimeException {
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
+    public CartAlreadyExistsException(String productId) {
+        super(String.format("cart already exists: %s", productId));
     }
 
 }

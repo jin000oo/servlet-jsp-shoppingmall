@@ -10,12 +10,21 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.cart.service;
 
-public class UserNotFoundException extends RuntimeException {
+import com.nhnacademy.shoppingmall.cart.domain.Cart;
+import java.util.List;
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
-    }
+public interface CartService {
+
+    void saveCart(Cart cart);
+
+    Cart getCart(String userId, String productId);
+
+    List<Cart> getCartList(String userId);
+
+    void updateQuantity(String cartId, int quantity);
+
+    void deleteCart(String userId, String productId);
 
 }

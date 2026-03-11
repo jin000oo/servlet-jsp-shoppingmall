@@ -10,12 +10,12 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.order.exception;
 
-public class UserNotFoundException extends RuntimeException {
+public class InsufficientQuantityException extends RuntimeException {
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
+    public InsufficientQuantityException(String productId) {
+        super(String.format("insufficient quantity: %s", productId));
     }
 
 }

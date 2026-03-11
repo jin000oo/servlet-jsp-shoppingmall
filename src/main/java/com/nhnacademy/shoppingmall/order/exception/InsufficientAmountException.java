@@ -10,12 +10,12 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.order.exception;
 
-public class UserNotFoundException extends RuntimeException {
+public class InsufficientAmountException extends RuntimeException {
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
+    public InsufficientAmountException(String userId) {
+        super(String.format("insufficient amount: %s", userId));
     }
 
 }

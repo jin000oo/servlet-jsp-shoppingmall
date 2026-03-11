@@ -10,12 +10,14 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.order.service;
 
-public class UserNotFoundException extends RuntimeException {
+import com.nhnacademy.shoppingmall.order.domain.Order;
+import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
+import java.util.List;
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
-    }
+public interface OrderService {
+
+    void order(Order order, List<OrderDetail> orderDetails);
 
 }

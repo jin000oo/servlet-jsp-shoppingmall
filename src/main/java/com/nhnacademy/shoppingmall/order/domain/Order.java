@@ -25,22 +25,19 @@ public class Order {
     private String orderId;
     private String userId;
     private int totalAmount;
-    private int earnPoint;
     private LocalDateTime createdAt;
 
-    public Order(String orderId, String userId, int totalAmount, int earnPoint) {
+    public Order(String orderId, String userId, int totalAmount) {
         this.orderId = orderId;
         this.userId = userId;
         this.totalAmount = totalAmount;
-        this.earnPoint = earnPoint;
         this.createdAt = LocalDateTime.now();
     }
 
-    public Order(String orderId, String userId, int totalAmount, int earnPoint, LocalDateTime createdAt) {
+    public Order(String orderId, String userId, int totalAmount, LocalDateTime createdAt) {
         this.orderId = orderId;
         this.userId = userId;
         this.totalAmount = totalAmount;
-        this.earnPoint = earnPoint;
         this.createdAt = createdAt;
     }
 
