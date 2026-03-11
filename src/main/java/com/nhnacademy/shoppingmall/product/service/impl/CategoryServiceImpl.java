@@ -17,18 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategory(String categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
-    }
-
-    @Override
-    public List<Category> getCategories() {
-        return categoryRepository.findAll();
-    }
-
-    @Override
-    public void registerCategory(Category category) {
+    public void saveCategory(Category category) {
         if (categoryRepository.countById(category.getCategoryId()) > 0) {
             throw new CategoryAlreadyExistsException(category.getCategoryId());
         }
@@ -40,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void modifyCategory(Category category) {
+    public void updateCategory(Category category) {
         if (categoryRepository.countById(category.getCategoryId()) == 0) {
             throw new CategoryNotFoundException(category.getCategoryId());
         }
@@ -61,5 +50,16 @@ public class CategoryServiceImpl implements CategoryService {
         if (result < 1) {
             throw new RuntimeException("Failed to delete category: " + categoryId);
         }
+    }
+
+    @Override
+    public Category getCategory(String categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+    }
+
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 }

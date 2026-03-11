@@ -13,10 +13,6 @@ public interface ProductRepository {
     Optional<Product> findById(String productId);
     Page<Product> findAll(int page, int pageSize);
     Page<Product> findByCategory(String categoryId, int page, int pageSize);
-    // Page<Product> findByProductName(String keyword, int page, int pageSize);
-
-    int saveProductCategory(String productId, String categoryId);
-    int deleteCategoriesByProductId(String productId);
 
     int deleteById(String productId);
     int countById(String productId);

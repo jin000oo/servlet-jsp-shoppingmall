@@ -9,4 +9,12 @@ public class Category {
     private String categoryId;
     private String categoryName;
     private int sortOrder;
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
 }
