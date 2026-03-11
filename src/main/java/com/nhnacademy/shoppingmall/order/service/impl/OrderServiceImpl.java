@@ -15,11 +15,15 @@ package com.nhnacademy.shoppingmall.order.service.impl;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
+import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
 import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.service.PointService;
+import com.nhnacademy.shoppingmall.product.domain.Product;
+import com.nhnacademy.shoppingmall.product.exception.ProductNotFoundException;
+import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -35,16 +39,18 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     private final PointService pointService;
     private final RequestChannel requestChannel;
 
     public OrderServiceImpl(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-                            UserRepository userRepository,
+                            UserRepository userRepository, ProductRepository productRepository,
                             PointService pointService, RequestChannel requestChannel) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
 
         this.pointService = pointService;
         this.requestChannel = requestChannel;
@@ -65,7 +71,15 @@ public class OrderServiceImpl implements OrderService {
             throw new InsufficientAmountException(order.getUserId());
         }
 
-        // TODO: 재고 검증
+        // 재고 검증
+        for (OrderDetail orderDetail : orderDetails) {
+            Product product = productRepository.findById(orderDetail.getProductId())
+                    .orElseThrow(() -> new ProductNotFoundException(orderDetail.getProductId()));
+
+            if (product.getStock() < orderDetail.getQuantity()) {
+                throw new InsufficientQuantityException(orderDetail.getProductId());
+            }
+        }
 
         // 포인트 차감: users 테이블 수정
         user.setUserPoint(user.getUserPoint() - order.getTotalAmount());

@@ -29,8 +29,8 @@ public class OrderRepositoryImpl implements OrderRepository {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
-                INSERT INTO orders (order_id, user_id, total_amount, earn_point, created_at) 
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO orders (order_id, user_id, total_amount, created_at) 
+                VALUES (?, ?, ?, ?)
                 """;
         log.debug("sql:{}", sql);
 
@@ -38,8 +38,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             psmt.setString(1, order.getOrderId());
             psmt.setString(2, order.getUserId());
             psmt.setInt(3, order.getTotalAmount());
-            psmt.setInt(4, order.getEarnPoint());
-            psmt.setTimestamp(5, Timestamp.valueOf(order.getCreatedAt()));
+            psmt.setTimestamp(4, Timestamp.valueOf(order.getCreatedAt()));
 
             return psmt.executeUpdate();
 
