@@ -10,12 +10,31 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.cart.domain;
 
-public class UserNotFoundException extends RuntimeException {
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
+@EqualsAndHashCode
+@Getter
+@ToString
+public class Cart {
+
+    private String cartId;
+    private String userId;
+    private String productId;
+    private int quantity;
+
+    public Cart(String cartId, String userId, String productId, int quantity) {
+        this.cartId = cartId;
+        this.userId = userId;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
 }

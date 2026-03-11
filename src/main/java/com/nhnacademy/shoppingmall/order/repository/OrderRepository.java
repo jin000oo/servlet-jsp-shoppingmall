@@ -10,12 +10,13 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.order.repository;
 
-public class UserNotFoundException extends RuntimeException {
+import com.nhnacademy.shoppingmall.order.domain.Order;
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
-    }
+public interface OrderRepository {
+
+    // 주문 저장
+    int save(Order order);
 
 }

@@ -10,12 +10,27 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.order.domain;
 
-public class UserNotFoundException extends RuntimeException {
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
+@EqualsAndHashCode
+@Getter
+@ToString
+public class OrderDetail {
+
+    private String orderDetailId;
+    private String orderId;
+    private String productId;
+    private int quantity;
+
+    public OrderDetail(String orderDetailId, String orderId, String productId, int quantity) {
+        this.orderDetailId = orderDetailId;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
     }
 
 }

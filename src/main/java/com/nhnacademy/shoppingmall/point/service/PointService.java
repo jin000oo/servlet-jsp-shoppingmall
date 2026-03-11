@@ -10,12 +10,12 @@
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-package com.nhnacademy.shoppingmall.user.exception;
+package com.nhnacademy.shoppingmall.point.service;
 
-public class UserNotFoundException extends RuntimeException {
+import com.nhnacademy.shoppingmall.point.domain.Point;
 
-    public UserNotFoundException(String userId) {
-        super(String.format("user not found: %s", userId));
-    }
+public interface PointService {
+
+    void savePoint(Point point);
 
 }
