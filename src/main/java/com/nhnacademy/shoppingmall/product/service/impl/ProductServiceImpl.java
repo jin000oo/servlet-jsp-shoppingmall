@@ -1,0 +1,86 @@
+package com.nhnacademy.shoppingmall.product.service.impl;
+
+import com.nhnacademy.shoppingmall.common.page.Page;
+import com.nhnacademy.shoppingmall.product.domain.Product;
+import com.nhnacademy.shoppingmall.product.exception.CategoryNotFoundException;
+import com.nhnacademy.shoppingmall.product.exception.ProductAlreadyExistsException;
+import com.nhnacademy.shoppingmall.product.exception.ProductNotFoundException;
+import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
+import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
+import com.nhnacademy.shoppingmall.product.service.ProductService;
+
+public class ProductServiceImpl implements ProductService {
+
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Override
+    public Product getProduct(String productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+    }
+
+    @Override
+    public void saveProduct(Product product) {
+        if (productRepository.existsById(product.getProductId())) {
+            throw new ProductAlreadyExistsException(product.getProductId());
+        }
+
+        // Verify all category IDs exist in DB
+        for (String categoryId : product.getCategoryIds()) {
+            if (!categoryRepository.existsById(categoryId)) {
+                throw new CategoryNotFoundException(categoryId);
+            }
+        }
+
+        int result = productRepository.save(product);
+        if (result < 1) {
+            throw new RuntimeException("Failed to register product: " + product.getProductId());
+        }
+    }
+
+    @Override
+    public void updateProduct(Product product) {
+        if (!productRepository.existsById(product.getProductId())) {
+            throw new ProductNotFoundException(product.getProductId());
+        }
+
+        for (String categoryId : product.getCategoryIds()) {
+            if (!categoryRepository.existsById(categoryId)) {
+                throw new CategoryNotFoundException(categoryId);
+            }
+        }
+
+        int result = productRepository.update(product);
+        if (result < 1) {
+            throw new RuntimeException("Failed to modify product: " + product.getProductId());
+        }
+    }
+
+    @Override
+    public void deleteProduct(String productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(productId);
+        }
+
+        int result = productRepository.deleteById(productId);
+        if (result < 1) {
+            throw new RuntimeException("Failed to delete product: " + productId);
+        }
+    }
+
+    @Override
+    public Page<Product> getProducts(int page, int pageSize) {
+        return productRepository.findAll(page, pageSize);
+    }
+
+    @Override
+    public Page<Product> getProductsByCategory(String categoryId, int page, int pageSize) {
+        return productRepository.findByCategory(categoryId, page, pageSize);
+    }
+}
