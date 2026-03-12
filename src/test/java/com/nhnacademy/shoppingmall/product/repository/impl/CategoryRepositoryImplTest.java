@@ -23,7 +23,10 @@ class CategoryRepositoryImplTest {
     void setUp() throws SQLException {
         DbConnectionThreadLocal.initialize();
 
-        testCategory = new Category("C001", "카테고리1", 1);
+        testCategory = new Category("Test_C001", "카테고리1", 1);
+        if (categoryRepository.existsById(testCategory.getCategoryId())) {
+            categoryRepository.deleteById(testCategory.getCategoryId());
+        }
         categoryRepository.save(testCategory);
     }
 
@@ -37,12 +40,15 @@ class CategoryRepositoryImplTest {
     @Order(1)
     @DisplayName("save - 성공")
     void save() {
-        Category newCategory = new Category("C002", "카테고리2", 2);
+        Category newCategory = new Category("Test_C002", "카테고리2", 2);
+        if (categoryRepository.existsById(newCategory.getCategoryId())) {
+            categoryRepository.deleteById(newCategory.getCategoryId());
+        }
         
         int result = categoryRepository.save(newCategory);
         assertEquals(1, result, "save failed");
 
-        Category actualCategory = categoryRepository.findById("C002").orElse(null);
+        Category actualCategory = categoryRepository.findById("Test_C002").orElse(null);
 
         assertFalse(Objects.isNull(actualCategory), "category not found");
         assertAll(
@@ -104,7 +110,10 @@ class CategoryRepositoryImplTest {
     @Order(7)
     @DisplayName("findAll - 성공")
     void findAll() {
-        Category newCategory = new Category("C003", "카테고리3", 3);
+        Category newCategory = new Category("Test_C003", "카테고리3", 3);
+        if (categoryRepository.existsById(newCategory.getCategoryId())) {
+            categoryRepository.deleteById(newCategory.getCategoryId());
+        }
         categoryRepository.save(newCategory);
 
         List<Category> categories = categoryRepository.findAll();

@@ -99,6 +99,45 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
+    public List<Category> findByIds(List<String> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < categoryIds.size(); i++) {
+            placeholders.append("?");
+            if (i < categoryIds.size() - 1) {
+                placeholders.append(",");
+            }
+        }
+
+        String sql = "SELECT category_id, category_name, sort_order FROM categories WHERE category_id IN (" + placeholders.toString() + ")";
+
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        List<Category> categories = new ArrayList<>();
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            for (int i = 0; i < categoryIds.size(); i++) {
+                psmt.setString(i + 1, categoryIds.get(i));
+            }
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    categories.add(new Category(
+                            rs.getString("category_id"),
+                            rs.getString("category_name"),
+                            rs.getInt("sort_order")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return categories;
+    }
+
+    @Override
     public int deleteById(String categoryId) {
         String sql = "DELETE FROM categories WHERE category_id = ?";
         Connection connection = DbConnectionThreadLocal.getConnection();

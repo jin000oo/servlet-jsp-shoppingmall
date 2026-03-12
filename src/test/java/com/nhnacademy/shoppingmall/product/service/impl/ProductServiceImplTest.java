@@ -37,16 +37,16 @@ class ProductServiceImplTest {
     @DisplayName("getProduct - 성공")
     void getProduct() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.findById("P001")).thenReturn(Optional.of(product));
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.findById("Test_P001")).thenReturn(Optional.of(product));
 
         // when
-        Product result = productService.getProduct("P001");
+        Product result = productService.getProduct("Test_P001");
 
         // then
         assertNotNull(result);
-        assertEquals("P001", result.getProductId());
-        verify(productRepository, times(1)).findById("P001");
+        assertEquals("Test_P001", result.getProductId());
+        verify(productRepository, times(1)).findById("Test_P001");
     }
 
     @Test
@@ -54,11 +54,11 @@ class ProductServiceImplTest {
     @DisplayName("getProduct - 실패 (상품 없음)")
     void getProduct_notFound() {
         // given
-        when(productRepository.findById("P001")).thenReturn(Optional.empty());
+        when(productRepository.findById("Test_P001")).thenReturn(Optional.empty());
 
         // when, then
-        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> productService.getProduct("P001"));
-        assertTrue(exception.getMessage().contains("P001"));
+        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> productService.getProduct("Test_P001"));
+        assertTrue(exception.getMessage().contains("Test_P001"));
     }
 
     @Test
@@ -66,9 +66,9 @@ class ProductServiceImplTest {
     @DisplayName("saveProduct - 성공")
     void saveProduct() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(false);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(false);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
         when(productRepository.save(product)).thenReturn(1);
 
         // when
@@ -83,8 +83,8 @@ class ProductServiceImplTest {
     @DisplayName("saveProduct - 실패 (이미 존재하는 상품)")
     void saveProduct_alreadyExists() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(true);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(true);
 
         // when, then
         assertThrows(ProductAlreadyExistsException.class, () -> productService.saveProduct(product));
@@ -95,9 +95,9 @@ class ProductServiceImplTest {
     @DisplayName("saveProduct - 실패 (카테고리 없음)")
     void saveProduct_categoryNotFound() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(false);
-        when(categoryRepository.existsById("C001")).thenReturn(false);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(false);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
 
         // when, then
         assertThrows(CategoryNotFoundException.class, () -> productService.saveProduct(product));
@@ -108,9 +108,9 @@ class ProductServiceImplTest {
     @DisplayName("saveProduct - 실패 (저장 실패)")
     void saveProduct_failToSave() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(false);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(false);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
         when(productRepository.save(product)).thenReturn(0);
 
         // when, then
@@ -123,9 +123,9 @@ class ProductServiceImplTest {
     @DisplayName("updateProduct - 성공")
     void updateProduct() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(true);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(true);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
         when(productRepository.update(product)).thenReturn(1);
 
         // when
@@ -140,8 +140,8 @@ class ProductServiceImplTest {
     @DisplayName("updateProduct - 실패 (상품 없음)")
     void updateProduct_notFound() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(false);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(false);
 
         // when, then
         assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(product));
@@ -152,9 +152,9 @@ class ProductServiceImplTest {
     @DisplayName("updateProduct - 실패 (카테고리 없음)")
     void updateProduct_categoryNotFound() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(true);
-        when(categoryRepository.existsById("C001")).thenReturn(false);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(true);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
 
         // when, then
         assertThrows(CategoryNotFoundException.class, () -> productService.updateProduct(product));
@@ -165,9 +165,9 @@ class ProductServiceImplTest {
     @DisplayName("updateProduct - 실패 (수정 실패)")
     void updateProduct_failToUpdate() {
         // given
-        Product product = new Product("P001", "상품1", 10000, 10, List.of("C001"));
-        when(productRepository.existsById("P001")).thenReturn(true);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
+        when(productRepository.existsById("Test_P001")).thenReturn(true);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
         when(productRepository.update(product)).thenReturn(0);
 
         // when, then
@@ -180,14 +180,14 @@ class ProductServiceImplTest {
     @DisplayName("deleteProduct - 성공")
     void deleteProduct() {
         // given
-        when(productRepository.existsById("P001")).thenReturn(true);
-        when(productRepository.deleteById("P001")).thenReturn(1);
+        when(productRepository.existsById("Test_P001")).thenReturn(true);
+        when(productRepository.deleteById("Test_P001")).thenReturn(1);
 
         // when
-        productService.deleteProduct("P001");
+        productService.deleteProduct("Test_P001");
 
         // then
-        verify(productRepository, times(1)).deleteById("P001");
+        verify(productRepository, times(1)).deleteById("Test_P001");
     }
 
     @Test
@@ -195,10 +195,10 @@ class ProductServiceImplTest {
     @DisplayName("deleteProduct - 실패 (상품 없음)")
     void deleteProduct_notFound() {
         // given
-        when(productRepository.existsById("P001")).thenReturn(false);
+        when(productRepository.existsById("Test_P001")).thenReturn(false);
 
         // when, then
-        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct("P001"));
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct("Test_P001"));
     }
 
     @Test
@@ -206,11 +206,11 @@ class ProductServiceImplTest {
     @DisplayName("deleteProduct - 실패 (삭제 실패)")
     void deleteProduct_failToDelete() {
         // given
-        when(productRepository.existsById("P001")).thenReturn(true);
-        when(productRepository.deleteById("P001")).thenReturn(0);
+        when(productRepository.existsById("Test_P001")).thenReturn(true);
+        when(productRepository.deleteById("Test_P001")).thenReturn(0);
 
         // when, then
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> productService.deleteProduct("P001"));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> productService.deleteProduct("Test_P001"));
         assertTrue(exception.getMessage().contains("Failed to delete product"));
     }
 
@@ -219,7 +219,7 @@ class ProductServiceImplTest {
     @DisplayName("getProducts - 페이징 성공")
     void getProducts() {
         // given
-        Page<Product> page = new Page<>(List.of(new Product("P001", "상품1", 10000, 10, List.of("C001"))), 1);
+        Page<Product> page = new Page<>(List.of(new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"))), 1);
         when(productRepository.findAll(1, 10)).thenReturn(page);
 
         // when
@@ -236,11 +236,11 @@ class ProductServiceImplTest {
     @DisplayName("getProductsByCategory - 카테고리별 페이징 성공")
     void getProductsByCategory() {
         // given
-        Page<Product> page = new Page<>(List.of(new Product("P001", "상품1", 10000, 10, List.of("C001"))), 1);
-        when(productRepository.findByCategory("C001", 1, 10)).thenReturn(page);
+        Page<Product> page = new Page<>(List.of(new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"))), 1);
+        when(productRepository.findByCategory("Test_C001", 1, 10)).thenReturn(page);
 
         // when
-        Page<Product> result = productService.getProductsByCategory("C001", 1, 10);
+        Page<Product> result = productService.getProductsByCategory("Test_C001", 1, 10);
 
         // then
         assertNotNull(result);

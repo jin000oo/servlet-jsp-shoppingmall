@@ -29,18 +29,29 @@ class ProductRepositoryImplTest {
     void setUp() throws SQLException {
         DbConnectionThreadLocal.initialize();
 
-        testCategory1 = new Category("C001", "카테고리1", 1);
-        testCategory2 = new Category("C002", "카테고리2", 2);
+        testCategory1 = new Category("Test_C001", "카테고리1", 1);
+        testCategory2 = new Category("Test_C002", "카테고리2", 2);
+        
+        if (categoryRepository.existsById(testCategory1.getCategoryId())) {
+            categoryRepository.deleteById(testCategory1.getCategoryId());
+        }
         categoryRepository.save(testCategory1);
+        
+        if (categoryRepository.existsById(testCategory2.getCategoryId())) {
+            categoryRepository.deleteById(testCategory2.getCategoryId());
+        }
         categoryRepository.save(testCategory2);
 
         testProduct = new Product(
-                "P001",
+                "Test_P001",
                 "상품1",
                 10000,
                 100,
                 List.of(testCategory1.getCategoryId())
         );
+        if (productRepository.existsById(testProduct.getProductId())) {
+            productRepository.deleteById(testProduct.getProductId());
+        }
         productRepository.save(testProduct);
     }
 
@@ -55,18 +66,21 @@ class ProductRepositoryImplTest {
     @DisplayName("save - 성공")
     void save() {
         Product newProduct = new Product(
-                "P002",
+                "Test_P002",
                 "상품2",
                 20000,
                 50,
                 Product.NO_IMAGE_PATH,
                 List.of(testCategory2.getCategoryId())
         );
+        if (productRepository.existsById(newProduct.getProductId())) {
+            productRepository.deleteById(newProduct.getProductId());
+        }
         
         int result = productRepository.save(newProduct);
         assertEquals(1, result, "Should return 1 when product is successfully saved.");
 
-        Product actualProduct = productRepository.findById("P002").orElse(null);
+        Product actualProduct = productRepository.findById("Test_P002").orElse(null);
 
         assertFalse(Objects.isNull(actualProduct));
         assertAll (
@@ -151,7 +165,10 @@ class ProductRepositoryImplTest {
     @Order(8)
     @DisplayName("findAll - 성공")
     void findAll() {
-        Product newProduct = new Product("P003", "상품3", 30000, 10, List.of(testCategory1.getCategoryId()));
+        Product newProduct = new Product("Test_P003", "상품3", 30000, 10, List.of(testCategory1.getCategoryId()));
+        if (productRepository.existsById(newProduct.getProductId())) {
+            productRepository.deleteById(newProduct.getProductId());
+        }
         productRepository.save(newProduct);
 
         int page = 1;
@@ -176,7 +193,7 @@ class ProductRepositoryImplTest {
         assertFalse(Objects.isNull(productPage), "page is null");
         assertAll(
                 () -> assertFalse(productPage.getContent().isEmpty(), "content is empty"),
-                () -> assertEquals(testProduct.getProductId(), productPage.getContent().get(0).getProductId())
+                () -> assertEquals(testProduct.getProductId(), productPage.getContent().getFirst().getProductId())
         );
     }
 }

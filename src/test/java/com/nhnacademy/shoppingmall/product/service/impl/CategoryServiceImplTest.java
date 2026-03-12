@@ -31,8 +31,8 @@ class CategoryServiceImplTest {
     @DisplayName("saveCategory - 성공")
     void saveCategory() {
         // given
-        Category category = new Category("C001", "카테고리1", 1);
-        when(categoryRepository.existsById("C001")).thenReturn(false);
+        Category category = new Category("Test_C001", "카테고리1", 1);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
         when(categoryRepository.save(category)).thenReturn(1);
 
         // when
@@ -47,8 +47,8 @@ class CategoryServiceImplTest {
     @DisplayName("saveCategory - 실패 (이미 존재하는 카테고리)")
     void saveCategory_alreadyExists() {
         // given
-        Category category = new Category("C001", "카테고리1", 1);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Category category = new Category("Test_C001", "카테고리1", 1);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
 
         // when, then
         assertThrows(CategoryAlreadyExistsException.class, () -> categoryService.saveCategory(category));
@@ -59,8 +59,8 @@ class CategoryServiceImplTest {
     @DisplayName("saveCategory - 실패 (저장 실패)")
     void saveCategory_failToSave() {
         // given
-        Category category = new Category("C001", "카테고리1", 1);
-        when(categoryRepository.existsById("C001")).thenReturn(false);
+        Category category = new Category("Test_C001", "카테고리1", 1);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
         when(categoryRepository.save(category)).thenReturn(0);
 
         // when, then
@@ -73,8 +73,8 @@ class CategoryServiceImplTest {
     @DisplayName("updateCategory - 성공")
     void updateCategory() {
         // given
-        Category category = new Category("C001", "카테고리1_수정", 2);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Category category = new Category("Test_C001", "카테고리1_수정", 2);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
         when(categoryRepository.update(category)).thenReturn(1);
 
         // when
@@ -89,8 +89,8 @@ class CategoryServiceImplTest {
     @DisplayName("updateCategory - 실패 (카테고리 없음)")
     void updateCategory_notFound() {
         // given
-        Category category = new Category("C001", "카테고리1_수정", 2);
-        when(categoryRepository.existsById("C001")).thenReturn(false);
+        Category category = new Category("Test_C001", "카테고리1_수정", 2);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
 
         // when, then
         assertThrows(CategoryNotFoundException.class, () -> categoryService.updateCategory(category));
@@ -101,8 +101,8 @@ class CategoryServiceImplTest {
     @DisplayName("updateCategory - 실패 (수정 실패)")
     void updateCategory_failToUpdate() {
         // given
-        Category category = new Category("C001", "카테고리1_수정", 2);
-        when(categoryRepository.existsById("C001")).thenReturn(true);
+        Category category = new Category("Test_C001", "카테고리1_수정", 2);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
         when(categoryRepository.update(category)).thenReturn(0);
 
         // when, then
@@ -115,14 +115,14 @@ class CategoryServiceImplTest {
     @DisplayName("deleteCategory - 성공")
     void deleteCategory() {
         // given
-        when(categoryRepository.existsById("C001")).thenReturn(true);
-        when(categoryRepository.deleteById("C001")).thenReturn(1);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
+        when(categoryRepository.deleteById("Test_C001")).thenReturn(1);
 
         // when
-        categoryService.deleteCategory("C001");
+        categoryService.deleteCategory("Test_C001");
 
         // then
-        verify(categoryRepository, times(1)).deleteById("C001");
+        verify(categoryRepository, times(1)).deleteById("Test_C001");
     }
 
     @Test
@@ -130,10 +130,10 @@ class CategoryServiceImplTest {
     @DisplayName("deleteCategory - 실패 (카테고리 없음)")
     void deleteCategory_notFound() {
         // given
-        when(categoryRepository.existsById("C001")).thenReturn(false);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
 
         // when, then
-        assertThrows(CategoryNotFoundException.class, () -> categoryService.deleteCategory("C001"));
+        assertThrows(CategoryNotFoundException.class, () -> categoryService.deleteCategory("Test_C001"));
     }
 
     @Test
@@ -141,11 +141,11 @@ class CategoryServiceImplTest {
     @DisplayName("deleteCategory - 실패 (삭제 실패)")
     void deleteCategory_failToDelete() {
         // given
-        when(categoryRepository.existsById("C001")).thenReturn(true);
-        when(categoryRepository.deleteById("C001")).thenReturn(0);
+        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
+        when(categoryRepository.deleteById("Test_C001")).thenReturn(0);
 
         // when, then
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> categoryService.deleteCategory("C001"));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> categoryService.deleteCategory("Test_C001"));
         assertTrue(exception.getMessage().contains("Failed to delete category"));
     }
 
@@ -154,18 +154,18 @@ class CategoryServiceImplTest {
     @DisplayName("getCategory - 성공")
     void getCategory() {
         // given
-        Category category = new Category("C001", "카테고리1", 1);
-        when(categoryRepository.findById("C001")).thenReturn(Optional.of(category));
+        Category category = new Category("Test_C001", "카테고리1", 1);
+        when(categoryRepository.findById("Test_C001")).thenReturn(Optional.of(category));
 
         // when
-        Category result = categoryService.getCategory("C001");
+        Category result = categoryService.getCategory("Test_C001");
 
         // then
         assertNotNull(result);
-        assertEquals("C001", result.getCategoryId());
+        assertEquals("Test_C001", result.getCategoryId());
         assertEquals("카테고리1", result.getCategoryName());
         assertEquals(1, result.getSortOrder());
-        verify(categoryRepository, times(1)).findById("C001");
+        verify(categoryRepository, times(1)).findById("Test_C001");
     }
 
     @Test
@@ -173,11 +173,11 @@ class CategoryServiceImplTest {
     @DisplayName("getCategory - 실패 (카테고리 없음)")
     void getCategory_notFound() {
         // given
-        when(categoryRepository.findById("C001")).thenReturn(Optional.empty());
+        when(categoryRepository.findById("Test_C001")).thenReturn(Optional.empty());
 
         // when, then
-        CategoryNotFoundException exception = assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategory("C001"));
-        assertTrue(exception.getMessage().contains("C001"));
+        CategoryNotFoundException exception = assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategory("Test_C001"));
+        assertTrue(exception.getMessage().contains("Test_C001"));
     }
 
     @Test
@@ -186,8 +186,8 @@ class CategoryServiceImplTest {
     void getCategories() {
         // given
         List<Category> categories = List.of(
-                new Category("C001", "카테고리1", 1),
-                new Category("C002", "카테고리2", 2)
+                new Category("Test_C001", "카테고리1", 1),
+                new Category("Test_C002", "카테고리2", 2)
         );
         when(categoryRepository.findAll()).thenReturn(categories);
 
@@ -197,7 +197,7 @@ class CategoryServiceImplTest {
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("C001", result.get(0).getCategoryId());
+        assertEquals("Test_C001", result.getFirst().getCategoryId());
         verify(categoryRepository, times(1)).findAll();
     }
 }
