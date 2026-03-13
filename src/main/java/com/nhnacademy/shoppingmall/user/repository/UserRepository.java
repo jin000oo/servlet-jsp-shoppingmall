@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.user.repository;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 
 import java.time.LocalDateTime;
@@ -8,7 +9,6 @@ import java.util.Optional;
 public interface UserRepository {
 
     Optional<User> findByUserIdAndUserPassword(String userId, String userPassword);
-
     Optional<User> findById(String userId);
 
     int save(User user);
@@ -21,4 +21,5 @@ public interface UserRepository {
 
     int countByUserId(String userId);
 
+    Page<User> findAll(int page, int pageSize);
 }

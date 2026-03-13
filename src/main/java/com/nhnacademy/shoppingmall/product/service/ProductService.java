@@ -4,6 +4,8 @@ import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 
 public interface ProductService {
+    String CONTEXT_PRODUCT_SERVICE_NAME = "CONTEXT_PRODUCT_SERVICE";
+
     void saveProduct(Product product);
     void updateProduct(Product product);
     void deleteProduct(String productId);

@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.user.service.impl;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
@@ -91,6 +92,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public Page<User> getUsers(int page, int pageSize) {
+        if(page <= 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("page or pageSize must be a positive number");
+        }
+        return userRepository.findAll(page, pageSize);
+    }
+
     private void validateUserId(String userId) {
         if (userId == null || userId.isBlank()) {
             log.warn("[UserServiceImpl] user id is null or blank");
@@ -108,5 +117,4 @@ public class UserServiceImpl implements UserService {
     private boolean isExistUser(String userId) {
         return userRepository.countByUserId(userId) > 0;
     }
-
 }

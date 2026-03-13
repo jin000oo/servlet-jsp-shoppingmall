@@ -11,6 +11,7 @@ public interface CategoryRepository {
 
     Optional<Category> findById(String categoryId);
     List<Category> findAll();
+    List<Category> findByIds(List<String> categoryIds);
 
     int deleteById(String categoryId);
     boolean existsById(String categoryId);
