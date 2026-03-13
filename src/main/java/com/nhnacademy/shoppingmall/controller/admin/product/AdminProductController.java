@@ -33,8 +33,11 @@ public class AdminProductController implements BaseController {
         if (pageParam != null && !pageParam.isEmpty()) {
             try {
                 page = Integer.parseInt(pageParam);
+                if (page < 1) {
+                    page = 1;
+                }
             } catch (NumberFormatException e) {
-                // 페이지 파라미터가 지정되어 있지 않으므로 자동으로 page = 1로 설정
+                // 페이지 파라미터가 비정상적인 문자열일 경우 기본값 page = 1 유지
             }
         }
 

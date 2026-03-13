@@ -19,7 +19,7 @@ public class ProductUpdateFormController implements BaseController {
 
         String id = req.getParameter("id");
         if (id == null || id.trim().isEmpty()) {
-            return "redirect:/admin/index.do";
+            return "redirect:/admin/product.do";
         }
 
         Product product = productService.getProduct(id);

@@ -33,6 +33,6 @@ public class ProductUpdatePostController implements BaseController {
         Product product = new Product(productId, productName, price, stock, thumbnailImagePath, categoryIds);
         productService.updateProduct(product);
 
-        return "redirect:/admin/index.do";
+        return "redirect:/admin/product.do";
     }
 }
