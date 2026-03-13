@@ -7,11 +7,13 @@ import com.nhnacademy.shoppingmall.product.service.CategoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Slf4j
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/admin/category.do")
 public class AdminCategoryController implements BaseController {
 

@@ -6,7 +6,9 @@ import com.nhnacademy.shoppingmall.product.service.CategoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/admin/category/delete.do")
 public class CategoryDeleteController implements BaseController {
 

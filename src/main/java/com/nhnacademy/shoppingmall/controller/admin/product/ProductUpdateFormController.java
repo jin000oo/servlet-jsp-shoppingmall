@@ -8,7 +8,9 @@ import com.nhnacademy.shoppingmall.product.service.ProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/admin/product/edit.do")
 public class ProductUpdateFormController implements BaseController {
 

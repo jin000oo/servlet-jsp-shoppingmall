@@ -6,7 +6,9 @@ import com.nhnacademy.shoppingmall.product.service.CategoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/admin/product/register.do")
 public class ProductRegisterFormController implements BaseController {
 
