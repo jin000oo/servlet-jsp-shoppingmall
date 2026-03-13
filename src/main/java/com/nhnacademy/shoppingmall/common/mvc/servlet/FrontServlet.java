@@ -14,7 +14,6 @@ package com.nhnacademy.shoppingmall.common.mvc.servlet;
 
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.mvc.controller.ControllerFactory;
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.mvc.view.ViewResolver;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -46,8 +45,6 @@ public class FrontServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
         try {
             //todo#7-3 Connection pool로 부터 connection 할당 받습니다. connection은 Thread 내에서 공유됩니다.
-            DbConnectionThreadLocal.initialize();
-
             BaseController baseController = (BaseController) controllerFactory.getController(req);
             String viewName = baseController.execute(req, resp);
 
@@ -69,7 +66,6 @@ public class FrontServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.error("error:{}", e.getMessage());
-            DbConnectionThreadLocal.setSqlError(true);
 
             //todo#7-5 예외가 발생하면 해당 예외에 대해서 적절한 처리를 합니다.
             req.setAttribute("status_code", 500);
@@ -86,10 +82,6 @@ public class FrontServlet extends HttpServlet {
             } catch (ServletException | IOException ex) {
                 throw new RuntimeException(ex);
             }
-
-        } finally {
-            //todo#7-4 connection을 반납합니다.
-            DbConnectionThreadLocal.reset();
         }
     }
 
