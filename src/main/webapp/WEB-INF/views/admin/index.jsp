@@ -17,7 +17,7 @@
 <!-- 탭 콘텐츠 영역 -->
 <c:choose>
     <c:when test="${activeTab == 'category'}">
-        <!-- <jsp:include page="category.jsp" /> -->
+        <jsp:include page="category.jsp" />
     </c:when>
     <c:when test="${activeTab == 'user'}">
         <!-- <jsp:include page="user.jsp" /> -->
