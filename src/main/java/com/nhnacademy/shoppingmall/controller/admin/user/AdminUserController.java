@@ -8,7 +8,9 @@ import com.nhnacademy.shoppingmall.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/admin/user.do")
 public class AdminUserController implements BaseController {
 

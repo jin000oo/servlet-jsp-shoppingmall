@@ -7,9 +7,11 @@ import com.nhnacademy.shoppingmall.product.service.ProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/admin/product/register.do")
 public class ProductRegisterPostController implements BaseController {
 

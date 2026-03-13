@@ -7,7 +7,9 @@ import com.nhnacademy.shoppingmall.product.service.CategoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/admin/category/edit.do")
 public class CategoryUpdateFormController implements BaseController {
 

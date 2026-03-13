@@ -7,9 +7,11 @@ import com.nhnacademy.shoppingmall.user.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/admin/user/detail.do")
 public class UserDetailController implements BaseController {
 
