@@ -58,6 +58,9 @@ public class ControllerFactory {
                         String key = getKey(method, path);
                         beanMap.put(key, controllerInstance);
                         log.debug("{} -> {}", key, clazz.getName());
+
+                        TransactionProxy transactionProxy = new TransactionProxy((BaseController) controllerInstance);
+                        beanMap.put(key, transactionProxy);
                     }
 
                 } catch (InvocationTargetException | InstantiationException |
