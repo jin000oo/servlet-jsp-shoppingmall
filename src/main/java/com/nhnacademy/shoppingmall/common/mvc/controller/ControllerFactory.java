@@ -52,15 +52,14 @@ public class ControllerFactory {
             if (requestMapping != null) {
                 try {
                     Object controllerInstance = clazz.getDeclaredConstructor().newInstance();
+                    BaseController proxyInstance = new TransactionProxy((BaseController) controllerInstance);
+
                     String method = requestMapping.method().name();
 
                     for (String path : requestMapping.value()) {
                         String key = getKey(method, path);
-                        beanMap.put(key, controllerInstance);
+                        beanMap.put(key, proxyInstance);
                         log.debug("{} -> {}", key, clazz.getName());
-
-                        TransactionProxy transactionProxy = new TransactionProxy((BaseController) controllerInstance);
-                        beanMap.put(key, transactionProxy);
                     }
 
                 } catch (InvocationTargetException | InstantiationException |

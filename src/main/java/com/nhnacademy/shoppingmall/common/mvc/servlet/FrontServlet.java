@@ -68,13 +68,13 @@ public class FrontServlet extends HttpServlet {
             log.error("error:{}", e.getMessage());
 
             //todo#7-5 예외가 발생하면 해당 예외에 대해서 적절한 처리를 합니다.
-            req.setAttribute("status_code", 500);
-            req.setAttribute("exception_type", e.getClass().getName());
-            req.setAttribute("message", e.getMessage());
-            req.setAttribute("exception", e);
-            req.setAttribute("request_uri", req.getRequestURI());
+            req.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, 500);
+            req.setAttribute(RequestDispatcher.ERROR_EXCEPTION_TYPE, e.getClass().getName());
+            req.setAttribute(RequestDispatcher.ERROR_MESSAGE, e.getMessage());
+            req.setAttribute(RequestDispatcher.ERROR_EXCEPTION, e);
+            req.setAttribute(RequestDispatcher.ERROR_REQUEST_URI, req.getRequestURI());
 
-            RequestDispatcher rd = req.getRequestDispatcher("/error.jsp");
+            RequestDispatcher rd = req.getRequestDispatcher("/error.do");
 
             try {
                 rd.forward(req, resp);
