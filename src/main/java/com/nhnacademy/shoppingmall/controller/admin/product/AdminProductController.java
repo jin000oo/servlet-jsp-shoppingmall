@@ -27,7 +27,6 @@ public class AdminProductController implements BaseController {
         CategoryService categoryService = (CategoryService) req.getServletContext().getAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME);
 
         int page = 1;
-        int pageSize = 10;
 
         String pageParam = req.getParameter("page");
         if (pageParam != null && !pageParam.isEmpty()) {
@@ -41,7 +40,7 @@ public class AdminProductController implements BaseController {
             }
         }
 
-        Page<Product> productPage = productService.getProducts(page, pageSize);
+        Page<Product> productPage = productService.getProducts(page, Page.DEFAULT_PAGE_SIZE);
         
         List<String> categoryIdsOnPage = productPage.getContent().stream()
                 .map(Product::getCategoryIds)
@@ -58,7 +57,7 @@ public class AdminProductController implements BaseController {
         req.setAttribute("currentPage", page);
         req.setAttribute("activeTab", "product");
         
-        int totalPages = (int) Math.ceil((double) productPage.getTotalCount() / pageSize);
+        int totalPages = (int) Math.ceil((double) productPage.getTotalCount() / Page.DEFAULT_PAGE_SIZE);
         req.setAttribute("totalPages", totalPages > 0 ? totalPages : 1);
 
         return "/admin/index";

@@ -17,7 +17,7 @@ public class CategoryRegisterPostController implements BaseController {
 
         String categoryId = req.getParameter("categoryId");
         String categoryName = req.getParameter("categoryName");
-        int sortOrder = Integer.parseInt(req.getParameter("sortOrder") != null ? req.getParameter("sortOrder") : "0");
+        int sortOrder = Integer.parseInt(req.getParameter("sortOrder"));
 
         Category category = new Category(categoryId, categoryName, sortOrder);
         categoryService.saveCategory(category);

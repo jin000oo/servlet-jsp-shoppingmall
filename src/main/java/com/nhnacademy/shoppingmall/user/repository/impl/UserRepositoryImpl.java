@@ -13,6 +13,7 @@
 package com.nhnacademy.shoppingmall.user.repository.impl;
 
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import java.sql.Connection;
@@ -240,4 +241,58 @@ public class UserRepositoryImpl implements UserRepository {
         return 0;
     }
 
+    @Override
+    public Page<User> findAll(int page, int pageSize) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        int offset = (page - 1) * pageSize;
+
+        // user_auth ASC -> ADMIN, USER 순서로 정렬
+        String sql = """
+                SELECT *
+                FROM users
+                ORDER BY user_auth ASC, created_at DESC
+                LIMIT ? OFFSET ?
+                """;
+        log.debug("sql:{}", sql);
+
+        java.util.List<User> userList = new java.util.ArrayList<>();
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setInt(1, pageSize);
+            psmt.setInt(2, offset);
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    userList.add(new User(
+                            rs.getString("user_id"),
+                            rs.getString("user_name"),
+                            rs.getString("user_password"),
+                            rs.getString("user_birth"),
+                            User.Auth.valueOf(rs.getString("user_auth")),
+                            rs.getInt("user_point"),
+                            rs.getObject("created_at", LocalDateTime.class),
+                            rs.getObject("latest_login_at", LocalDateTime.class)
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return new Page<>(userList, countUsers());
+    }
+
+    private long countUsers() {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "SELECT count(*) FROM users";
+        log.debug("sql:{}", sql);
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql);
+             ResultSet rs = psmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
 }

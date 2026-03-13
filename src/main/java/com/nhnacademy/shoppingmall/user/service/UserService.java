@@ -1,8 +1,10 @@
 package com.nhnacademy.shoppingmall.user.service;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 
 public interface UserService {
+    String CONTEXT_USER_SERVICE_NAME = "CONTEXT_USER_SERVICE";
 
     User getUser(String userId);
 
@@ -14,4 +16,5 @@ public interface UserService {
 
     User doLogin(String userId, String userPassword);
 
+    Page<User> getUsers(int page, int pageSize);
 }

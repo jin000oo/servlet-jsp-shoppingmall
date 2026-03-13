@@ -76,6 +76,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> getProducts(int page, int pageSize) {
+        if(page <= 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("page or pageSize must be a positive number");
+        }
         return productRepository.findAll(page, pageSize);
     }
 

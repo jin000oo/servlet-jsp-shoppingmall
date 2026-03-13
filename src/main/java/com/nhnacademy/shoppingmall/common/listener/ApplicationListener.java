@@ -62,7 +62,7 @@ public class ApplicationListener implements ServletContextListener {
         this.productService = new ProductServiceImpl(productRepository, categoryRepository);
 
         // ServletContext에 Service 등록 (IoC Container 역할)
-        // context.setAttribute("userService", this.userService); // todo: userService를 ServletContext에 등록하여 사용하도록 수정
+        context.setAttribute(UserService.CONTEXT_USER_SERVICE_NAME, this.userService);
         context.setAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME, this.categoryService);
         context.setAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME, this.productService);
 

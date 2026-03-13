@@ -17,12 +17,12 @@ public class ProductUpdateFormController implements BaseController {
         ProductService productService = (ProductService) req.getServletContext().getAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME);
         CategoryService categoryService = (CategoryService) req.getServletContext().getAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME);
 
-        String id = req.getParameter("id");
-        if (id == null || id.trim().isEmpty()) {
+        String productId = req.getParameter("id");
+        if (productId == null || productId.trim().isEmpty()) {
             return "redirect:/admin/product.do";
         }
 
-        Product product = productService.getProduct(id);
+        Product product = productService.getProduct(productId);
         req.setAttribute("product", product);
         req.setAttribute("categories", categoryService.getCategories());
 

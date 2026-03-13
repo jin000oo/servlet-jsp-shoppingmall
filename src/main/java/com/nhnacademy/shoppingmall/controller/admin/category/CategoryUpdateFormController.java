@@ -15,12 +15,12 @@ public class CategoryUpdateFormController implements BaseController {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         CategoryService categoryService = (CategoryService) req.getServletContext().getAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME);
 
-        String id = req.getParameter("id");
-        if (id == null || id.trim().isEmpty()) {
+        String categoryId = req.getParameter("id");
+        if (categoryId == null || categoryId.trim().isEmpty()) {
             return "redirect:/admin/category.do";
         }
 
-        Category category = categoryService.getCategory(id);
+        Category category = categoryService.getCategory(categoryId);
         req.setAttribute("category", category);
 
         return "admin/category_form";

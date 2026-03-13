@@ -20,7 +20,7 @@
         <jsp:include page="category.jsp" />
     </c:when>
     <c:when test="${activeTab == 'user'}">
-        <!-- <jsp:include page="user.jsp" /> -->
+        <jsp:include page="user.jsp" />
     </c:when>
     <c:otherwise>
         <jsp:include page="product.jsp" />
