@@ -5,6 +5,8 @@ import com.nhnacademy.shoppingmall.product.domain.Category;
 import java.util.List;
 
 public interface CategoryService {
+    String CONTEXT_CATEGORY_SERVICE_NAME = "CONTEXT_CATEGORY_SERVICE";
+
     void saveCategory(Category category);
     void updateCategory(Category category);
     void deleteCategory(String categoryId);
