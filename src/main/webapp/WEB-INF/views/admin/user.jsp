@@ -9,7 +9,7 @@
 </div>
 
 <div class="table-responsive border rounded">
-    <table class="table table-striped table-hover align-middle mb-0">
+    <table class="table table-striped table-hover align-middle mb-0 text-nowrap">
         <thead class="table-dark">
             <tr class="text-center">
                 <th scope="col" style="width: 120px;">권한</th>

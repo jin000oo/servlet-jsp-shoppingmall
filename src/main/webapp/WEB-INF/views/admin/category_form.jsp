@@ -19,7 +19,7 @@
                 <form action="${formAction}" method="post">
                     
                     <div class="mb-3">
-                        <label for="categoryId" class="form-label fw-bold">카테고리 ID (필수)</label>
+                        <label for="categoryId" class="form-label fw-bold">카테고리 ID</label>
                         <input type="text" class="form-control" id="categoryId" name="categoryId" 
                                value="${category.categoryId}" required ${isEdit ? 'readonly' : ''} 
                                placeholder="예: C001" />
@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="categoryName" class="form-label fw-bold">카테고리명 (필수)</label>
+                        <label for="categoryName" class="form-label fw-bold">카테고리명</label>
                         <input type="text" class="form-control" id="categoryName" name="categoryName" 
                                value="${category.categoryName}" required placeholder="카테고리 이름을 입력하세요" />
                     </div>

@@ -8,7 +8,7 @@
 </div>
 
 <div class="table-responsive border rounded">
-    <table class="table table-striped table-hover align-middle mb-0">
+    <table class="table table-striped table-hover align-middle mb-0 text-nowrap">
         <thead class="table-dark">
             <tr class="text-center">
                 <th scope="col" style="width: 150px;">카테고리 ID</th>
@@ -27,11 +27,11 @@
                 <c:otherwise>
                     <c:forEach var="category" items="${categories}">
                         <tr class="text-center">
-                            <td class="fw-bold">${category.categoryId}</td>
-                            <td class="text-start">${category.categoryName}</td>
+                            <td class="text-start ps-4">${category.categoryId}</td>
+                            <td class="fw-bold text-start ps-4">${category.categoryName}</td>
                             <td>${category.sortOrder}</td>
                             <td>
-                                <div class="btn-group" role="group">
+                                <div class="d-flex justify-content-center gap-2">
                                     <a href="/admin/category/edit.do?id=${category.categoryId}" class="btn btn-sm btn-outline-secondary">수정</a>
                                     <form action="/admin/category/delete.do" method="post" style="display:inline;" onsubmit="return confirm('정말 [${category.categoryName}] 카테고리를 삭제하시겠습니까?');">
                                         <input type="hidden" name="categoryId" value="${category.categoryId}">

@@ -16,10 +16,10 @@
                 <span class="fw-bold text-dark">기본 정보</span>
                 <c:choose>
                     <c:when test="${userDetail.userAuth == 'ROLE_ADMIN'}">
-                        <span class="badge bg-danger fs-6">관리자 (ROLE_ADMIN)</span>
+                        <span class="badge bg-danger fs-6">관리자 (ADMIN)</span>
                     </c:when>
                     <c:otherwise>
-                        <span class="badge bg-secondary fs-6">일반회원 (ROLE_USER)</span>
+                        <span class="badge bg-secondary fs-6">일반회원 (USER)</span>
                     </c:otherwise>
                 </c:choose>
             </div>

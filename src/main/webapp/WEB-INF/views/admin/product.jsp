@@ -9,7 +9,7 @@
 </div>
 
 <div class="table-responsive border rounded">
-    <table class="table table-striped table-hover align-middle mb-0">
+    <table class="table table-striped table-hover align-middle mb-0 text-nowrap">
         <thead class="table-dark">
             <tr class="text-center">
                 <th scope="col" style="width: 80px;">이미지</th>
@@ -34,7 +34,7 @@
                             <td>
                                 <img src="${product.thumbnailImagePath}" alt="상품 이미지" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
                             </td>
-                            <td>${product.productId}</td>
+                            <td class="text-start ps-4">${product.productId}</td>
                             <td class="text-start fw-bold">${product.productName}</td>
                             <td>
                                 <c:forEach var="catId" items="${product.categoryIds}">
@@ -47,7 +47,7 @@
                                 </c:forEach>
                             </td>
                             <td class="text-end pe-4"><fmt:formatNumber value="${product.price}" type="number" />원</td>
-                            <td>
+                            <td class="text-end pe-4">
                                 <c:choose>
                                     <c:when test="${product.stock <= 5}">
                                         <span class="text-danger fw-bold">${product.stock}</span>
@@ -58,7 +58,7 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <div class="btn-group" role="group">
+                                <div class="d-flex justify-content-center gap-2">
                                     <a href="/admin/product/edit.do?id=${product.productId}" class="btn btn-sm btn-outline-secondary">수정</a>
                                     <form action="/admin/product/delete.do" method="post" style="display:inline;" onsubmit="return confirm('정말 [${product.productName}] 상품을 삭제하시겠습니까?');">
                                         <input type="hidden" name="productId" value="${product.productId}">

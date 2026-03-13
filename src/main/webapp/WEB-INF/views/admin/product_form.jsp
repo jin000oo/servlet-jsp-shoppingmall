@@ -19,7 +19,7 @@
                 <form action="${formAction}" method="post">
                     
                     <div class="mb-3">
-                        <label for="productId" class="form-label fw-bold">상품 ID (필수)</label>
+                        <label for="productId" class="form-label fw-bold">상품 ID</label>
                         <input type="text" class="form-control" id="productId" name="productId" 
                                value="${product.productId}" required ${isEdit ? 'readonly' : ''} 
                                placeholder="예: P001" />
@@ -29,26 +29,26 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="productName" class="form-label fw-bold">상품명 (필수)</label>
+                        <label for="productName" class="form-label fw-bold">상품명</label>
                         <input type="text" class="form-control" id="productName" name="productName" 
                                value="${product.productName}" required placeholder="상품 이름을 입력하세요" />
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="price" class="form-label fw-bold">가격 (원, 필수)</label>
+                            <label for="price" class="form-label fw-bold">가격 (원)</label>
                             <input type="number" class="form-control" id="price" name="price" 
                                    value="${isEdit ? product.price : 0}" required min="0" />
                         </div>
                         <div class="col-md-6">
-                            <label for="stock" class="form-label fw-bold">재고수량 (개, 필수)</label>
+                            <label for="stock" class="form-label fw-bold">재고수량 (개)</label>
                             <input type="number" class="form-control" id="stock" name="stock" 
                                    value="${isEdit ? product.stock : 0}" required min="0" />
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">카테고리 선택 (1~3개 필수)</label>
+                        <label class="form-label fw-bold">카테고리 선택 (1~3개 선택)</label>
                         <div class="border rounded p-3 bg-light">
                             <div class="row">
                                 <c:forEach var="category" items="${categories}">
