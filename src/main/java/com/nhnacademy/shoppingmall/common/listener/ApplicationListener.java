@@ -15,8 +15,6 @@ package com.nhnacademy.shoppingmall.common.listener;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.domain.Product;
-import com.nhnacademy.shoppingmall.product.exception.CategoryAlreadyExistsException;
-import com.nhnacademy.shoppingmall.product.exception.ProductAlreadyExistsException;
 import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
 import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
@@ -64,7 +62,7 @@ public class ApplicationListener implements ServletContextListener {
         this.productService = new ProductServiceImpl(productRepository, categoryRepository);
 
         // ServletContext에 Service 등록 (IoC Container 역할)
-        // context.setAttribute("userService", this.userService); // todo: 추후 ServletContext에 등록하여 사용하도록 수정
+        // context.setAttribute("userService", this.userService); // todo: userService를 ServletContext에 등록하여 사용하도록 수정
         context.setAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME, this.categoryService);
         context.setAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME, this.productService);
 
@@ -74,6 +72,7 @@ public class ApplicationListener implements ServletContextListener {
             DbConnectionThreadLocal.initialize();
 
             initUsers();
+            // TODO: 테스트를 위한 상품 및 카테고리 초기화. 추후 삭제합니다.
             initCategories();
             initProducts();
 
@@ -111,10 +110,11 @@ public class ApplicationListener implements ServletContextListener {
 
         for (Category category : initCategoryList) {
             try {
+                categoryService.deleteCategory(category.getCategoryId());
                 categoryService.saveCategory(category);
-            } catch (CategoryAlreadyExistsException e) {
-                // 존재하므로 스킵
-                log.debug("[InitCategory] ID:{} is already exist", category.getCategoryId());
+            } catch (RuntimeException e) {
+                // 이미 존재 할 경우, 초기화합니다.
+                log.debug("[InitCategory] Failed to Initialize category ID:{}", category.getCategoryId());
             }
         }
         log.debug("create test categories");
@@ -136,10 +136,11 @@ public class ApplicationListener implements ServletContextListener {
 
         for (Product product : initProductList) {
             try {
+                productService.deleteProduct(product.getProductId());
                 productService.saveProduct(product);
-            } catch (ProductAlreadyExistsException e) {
-                // 존재하므로 스킵
-                log.debug("[InitProducts] ID:{} is already exist", product.getProductId());
+            } catch (RuntimeException e) {
+                // 실패할 경우 스킵
+                log.debug("[InitProduct] Failed to Initialize product ID:{}", product.getProductId());
             }
         }
         log.debug("create test products");
