@@ -72,9 +72,6 @@ public class ApplicationListener implements ServletContextListener {
             DbConnectionThreadLocal.initialize();
 
             initUsers();
-            // TODO: 테스트를 위한 상품 및 카테고리 초기화. 추후 삭제합니다.
-            initCategories();
-            initProducts();
 
         } finally {
             DbConnectionThreadLocal.reset();
@@ -98,51 +95,5 @@ public class ApplicationListener implements ServletContextListener {
             userService.saveUser(user);
             log.debug("create user test account - id: {} [{}]", user.getUserId(), user.getUserAuth());
         }
-    }
-
-    private void initCategories() {
-        List<Category> initCategoryList = Arrays.asList(
-                new Category("C001", "남성 의류", 1),
-                new Category("C002", "여성 의류", 2),
-                new Category("C003", "컴퓨터", 3),
-                new Category("C004", "도서", 4)
-        );
-
-        for (Category category : initCategoryList) {
-            try {
-                categoryService.deleteCategory(category.getCategoryId());
-                categoryService.saveCategory(category);
-            } catch (RuntimeException e) {
-                // 이미 존재 할 경우, 초기화합니다.
-                log.debug("[InitCategory] Failed to Initialize category ID:{}", category.getCategoryId());
-            }
-        }
-        log.debug("create test categories");
-    }
-
-    private void initProducts() {
-        List<Product> initProductList = Arrays.asList(
-                new Product("P001", "남성 반팔티", 25000, 10, List.of("C001")),
-                new Product("P002", "남성 청바지", 30000, 10, List.of("C001")),
-                new Product("P003", "여성 원피스", 45000, 10, List.of("C002")),
-                new Product("P004", "여성 가디건", 35000, 10, List.of("C002")),
-                new Product("P005", "남녀공용 후드티", 40000, 15, List.of("C001", "C002")),
-                new Product("P006", "게이밍 마우스", 85000, 20, List.of("C003")),
-                new Product("P007", "기계식 키보드", 150000, 5, List.of("C003")),
-                new Product("P008", "개발자 노트북", 1000000, 3, List.of("C003")),
-                new Product("P009", "자바 프로그래밍", 30000, 30, List.of("C004")),
-                new Product("P010", "스프링 부트 기초", 35000, 20, List.of("C004"))
-        );
-
-        for (Product product : initProductList) {
-            try {
-                productService.deleteProduct(product.getProductId());
-                productService.saveProduct(product);
-            } catch (RuntimeException e) {
-                // 실패할 경우 스킵
-                log.debug("[InitProduct] Failed to Initialize product ID:{}", product.getProductId());
-            }
-        }
-        log.debug("create test products");
     }
 }
