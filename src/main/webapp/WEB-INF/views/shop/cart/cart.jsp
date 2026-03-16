@@ -42,7 +42,10 @@
                 <td>${cart.productId}</td>
                 <td>${cart.quantity} 개</td>
                 <td>
-                    <button class="btn btn-sm btn-danger">삭제</button>
+                    <form action="/cart/delete.do" method="post" style="display: inline;">
+                        <input type="hidden" name="product_id" value="${cart.productId}">
+                        <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                    </form>
                 </td>
             </tr>
         </c:forEach>
@@ -50,6 +53,6 @@
     </table>
 
     <div class="text-end mt-3">
-        <button class="btn btn-primary btn-lg">주문하기</button>
+        <a class="btn btn-primary btn-lg">주문하기</a>
     </div>
 </div>

@@ -28,7 +28,7 @@ public interface CartRepository {
     List<Cart> findByUserId(String userId);
 
     // 장바구니 수량 변경
-    int updateQuantityByCartId(String cartId, int quantity);
+    int updateQuantity(String userId, String productId, int quantity);
 
     // 주문 완료 후 장바구니에서 비우기
     int deleteByUserIdAndProductId(String userId, String productId);

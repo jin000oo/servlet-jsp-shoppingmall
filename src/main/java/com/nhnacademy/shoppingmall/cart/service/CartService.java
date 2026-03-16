@@ -23,7 +23,7 @@ public interface CartService {
 
     List<Cart> getCartList(String userId);
 
-    void updateQuantity(String cartId, int quantity);
+    void updateQuantity(String userId, String productId, int quantity);
 
     void deleteCart(String userId, String productId);
 

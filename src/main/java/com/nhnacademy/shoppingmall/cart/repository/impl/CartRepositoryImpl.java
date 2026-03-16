@@ -122,18 +122,19 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    public int updateQuantityByCartId(String cartId, int quantity) {
+    public int updateQuantity(String userId, String productId, int quantity) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
                 UPDATE carts SET quantity = ? 
-                WHERE cart_id = ?
+                WHERE user_id = ? AND product_id = ?
                 """;
         log.debug("sql:{}", sql);
 
         try (PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setInt(1, quantity);
-            psmt.setString(2, cartId);
+            psmt.setString(2, userId);
+            psmt.setString(3, productId);
 
             return psmt.executeUpdate();
 

@@ -151,7 +151,7 @@ public class CartRepositoryImplTest {
     void updateQuantityByCartId() {
         cartRepository.save(testCart);
 
-        int result = cartRepository.updateQuantityByCartId(testCart.getCartId(), 10);
+        int result = cartRepository.updateQuantity(testCart.getUserId(), testCart.getProductId(), 10);
         Optional<Cart> updatedCart =
                 cartRepository.findByUserIdAndProductId(testCart.getUserId(), testCart.getProductId());
 

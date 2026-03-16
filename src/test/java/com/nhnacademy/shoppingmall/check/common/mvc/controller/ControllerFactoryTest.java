@@ -14,6 +14,7 @@ package com.nhnacademy.shoppingmall.check.common.mvc.controller;
 
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.mvc.controller.ControllerFactory;
+import com.nhnacademy.shoppingmall.common.mvc.controller.TransactionProxy;
 import com.nhnacademy.shoppingmall.common.mvc.exception.ControllerNotFoundException;
 import com.nhnacademy.shoppingmall.controller.auth.LoginController;
 import com.nhnacademy.shoppingmall.controller.auth.LoginPostController;
@@ -65,9 +66,9 @@ class ControllerFactoryTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(3, beanMap.size()),
-                () -> Assertions.assertInstanceOf(IndexController.class, beanMap.get("GET-/index.do")),
-                () -> Assertions.assertInstanceOf(LoginController.class, beanMap.get("GET-/login.do")),
-                () -> Assertions.assertInstanceOf(LoginPostController.class, beanMap.get("POST-/loginAction.do"))
+                () -> Assertions.assertInstanceOf(TransactionProxy.class, beanMap.get("GET-/index.do")),
+                () -> Assertions.assertInstanceOf(TransactionProxy.class, beanMap.get("GET-/login.do")),
+                () -> Assertions.assertInstanceOf(TransactionProxy.class, beanMap.get("POST-/loginAction.do"))
         );
     }
 
@@ -80,7 +81,7 @@ class ControllerFactoryTest {
 
         BaseController controller = (BaseController) controllerFactory.getController(request);
 
-        Assertions.assertInstanceOf(IndexController.class, controller);
+        Assertions.assertInstanceOf(TransactionProxy.class, controller);
     }
 
     @Test
@@ -89,7 +90,7 @@ class ControllerFactoryTest {
     void getController_by_path_method() {
         BaseController controller = (BaseController) controllerFactory.getController("GET", "/index.do");
 
-        Assertions.assertInstanceOf(IndexController.class, controller);
+        Assertions.assertInstanceOf(TransactionProxy.class, controller);
     }
 
     @Test
@@ -122,7 +123,7 @@ class ControllerFactoryTest {
         method.setAccessible(true);
         BaseController controller =
                 (BaseController) method.invoke(controllerFactory, String.format("%s-%s", paramMethod, paramPath));
-        
+
         Assertions.assertNotNull(controller);
     }
 
