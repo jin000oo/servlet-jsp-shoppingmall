@@ -57,14 +57,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateQuantity(String cartId, int quantity) {
-        validateId(cartId);
+    public void updateQuantity(String userId, String productId, int quantity) {
+        validateId(userId);
+        validateId(productId);
 
         if (quantity < 1) {
             throw new InsufficientQuantityException("quantity must be greater than 1");
         }
 
-        cartRepository.updateQuantityByCartId(cartId, quantity);
+        cartRepository.updateQuantity(userId, productId, quantity);
     }
 
     @Override

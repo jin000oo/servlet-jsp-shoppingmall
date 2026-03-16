@@ -12,6 +12,10 @@
 
 package com.nhnacademy.shoppingmall.controller.auth;
 
+import com.nhnacademy.shoppingmall.cart.domain.Cart;
+import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
+import com.nhnacademy.shoppingmall.cart.service.CartService;
+import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -21,6 +25,7 @@ import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Map;
 import javax.transaction.Transactional;
 
 @Transactional
@@ -28,6 +33,7 @@ import javax.transaction.Transactional;
 public class LoginPostController implements BaseController {
 
     private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
+    private final CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -40,14 +46,34 @@ public class LoginPostController implements BaseController {
 
             HttpSession session = req.getSession(true);
             session.setAttribute("user", user);
-
             session.setMaxInactiveInterval(3600);
+
+            Map<String, Cart> guestCart = (Map<String, Cart>) session.getAttribute("guestCart");
+
+            if (guestCart != null && !guestCart.isEmpty()) {
+                for (Cart cart : guestCart.values()) {
+                    // DB에 해당 상품이 이미 존재하는지 확인
+                    Cart existCart = cartService.getCart(user.getUserId(), cart.getProductId());
+
+                    if (existCart != null) {
+                        // 존재하면 기존 수량, 비회원 상태에서 담은 수량 합쳐서 업데이트
+                        int quantity = existCart.getQuantity() + cart.getQuantity();
+                        cartService.updateQuantity(user.getUserId(), cart.getProductId(), quantity);
+                    } else {
+                        // 없으면 기존 비회원 장바구니에서 user_id만 바꿔서 insert
+                        Cart newCart =
+                                new Cart(cart.getCartId(), user.getUserId(), cart.getProductId(), cart.getQuantity());
+                        cartService.saveCart(newCart);
+                    }
+                }
+
+                // DB로 다 옮긴 후 세션에 있는 비회원 장바구니 삭제
+                session.removeAttribute("guestCart");
+            }
 
             return "redirect:/index.do";
 
         } catch (Exception e) {
-            req.setAttribute("errorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
-
             return "shop/login/login_form";
         }
     }

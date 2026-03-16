@@ -82,18 +82,19 @@ public class CartServiceImplTest {
     @Test
     @DisplayName("장바구니 수량 변경")
     void updateQuantity() {
-        cartService.updateQuantity(testCart.getCartId(), 10);
+        cartService.updateQuantity(testCart.getUserId(), testCart.getProductId(), 10);
 
-        verify(cartRepository, times(1)).updateQuantityByCartId(testCart.getCartId(), 10);
+        verify(cartRepository, times(1))
+                .updateQuantity(testCart.getUserId(), testCart.getProductId(), 10);
     }
 
     @Test
     @DisplayName("장바구니 수량 변경 실패 - 수량이 1보다 작을 때")
     void updateQuantity_fail() {
         Assertions.assertThrows(InsufficientQuantityException.class, () ->
-                cartService.updateQuantity(testCart.getCartId(), 0));
+                cartService.updateQuantity(testCart.getUserId(), testCart.getProductId(), 0));
 
-        verify(cartRepository, never()).updateQuantityByCartId(anyString(), anyInt());
+        verify(cartRepository, never()).updateQuantity(anyString(), anyString(), anyInt());
     }
 
     @Test
