@@ -25,7 +25,9 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = "/cart.do")
 public class CartController implements BaseController {
 

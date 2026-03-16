@@ -26,7 +26,9 @@ import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.transaction.Transactional;
 
+@Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/cart.do")
 public class CartPostController implements BaseController {
 
