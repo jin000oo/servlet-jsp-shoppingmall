@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.controller.cart;
 
+import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
 import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
@@ -21,6 +22,7 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Map;
 import javax.transaction.Transactional;
 
 @Transactional
@@ -32,15 +34,21 @@ public class CartUpdateController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String productId = req.getParameter("product_id");
+        int quantity = Integer.parseInt(req.getParameter("quantity"));
 
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
 
         if (user != null) {
-
+            cartService.updateQuantity(user.getUserId(), productId, quantity);
+        } else {
+            Map<String, Cart> guestCart = (Map<String, Cart>) session.getAttribute("guestCart");
+            Cart cart = guestCart.get(productId);
+            cart.setQuantity(quantity);
+            session.setAttribute("guestCart", guestCart);
         }
 
-        return "";
+        return "redirect:/cart.do";
     }
 
 }
