@@ -18,11 +18,38 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-</body>
-</html>
+<div class="container mt-5">
+    <h2>장바구니</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>상품 ID</th>
+            <th>수량</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:if test="${empty cartList}">
+            <tr>
+                <td colspan="3" class="text-center">장바구니가 비어있습니다.</td>
+            </tr>
+        </c:if>
+
+        <c:forEach items="${cartList}" var="cart">
+            <tr>
+                <td>${cart.productId}</td>
+                <td>${cart.quantity} 개</td>
+                <td>
+                    <button class="btn btn-sm btn-danger">삭제</button>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+
+    <div class="text-end mt-3">
+        <button class="btn btn-primary btn-lg">주문하기</button>
+    </div>
+</div>
