@@ -34,9 +34,12 @@
             </div>
         </main>
 
-        <footer class="text-muted py-5 mt-5 border-top">
-            <div class="container text-center">
-                <p class="mb-1">admin dashboard is &copy; nhnacademy.com</p>
+        <footer class="text-muted py-5">
+            <div class="container">
+                <p class="float-end mb-1">
+                    <a href="#">Back to top</a>
+                </p>
+                <p class="mb-1">shoppingmall example is © nhnacademy.com</p>
             </div>
         </footer>
     </div>
