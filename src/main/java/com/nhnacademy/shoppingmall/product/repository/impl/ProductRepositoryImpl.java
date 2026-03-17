@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,6 +185,81 @@ public class ProductRepositoryImpl implements ProductRepository {
             throw new RuntimeException(e);
         }
         return new Page<>(content, totalCount);
+    }
+
+    @Override
+    public Page<Product> findByName(String name, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        long totalCount = 0;
+        List<Product> content = new ArrayList<>();
+
+        String countSql = "SELECT COUNT(*) FROM products WHERE product_name LIKE ?";
+
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        try (PreparedStatement countStmt = connection.prepareStatement(countSql)) {
+            countStmt.setString(1, "%" + name + "%");
+            try (ResultSet countRs = countStmt.executeQuery()) {
+                if (countRs.next()) {
+                    totalCount = countRs.getLong(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        String selectSql = """
+                SELECT p.product_id, p.product_name, p.price, p.stock, p.thumbnail_image_path,
+                       (SELECT GROUP_CONCAT(category_id) FROM product_category WHERE product_id = p.product_id) as category_ids,
+                       (SELECT GROUP_CONCAT(image_path) FROM images WHERE product_id = p.product_id) as detail_image_paths
+                FROM products p 
+                WHERE p.product_name LIKE ?
+                ORDER BY p.product_id DESC 
+                LIMIT ? OFFSET ?
+                """;
+        try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
+            selectStmt.setString(1, "%" + name + "%");
+            selectStmt.setInt(2, pageSize);
+            selectStmt.setInt(3, offset);
+            try (ResultSet rs = selectStmt.executeQuery()) {
+                while (rs.next()) {
+                    content.add(mapRowToProduct(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return new Page<>(content, totalCount);
+    }
+
+    @Override
+    public List<Product> findByIds(List<String> productIds) {
+        if (productIds == null || productIds.isEmpty()) return List.of();
+
+        // SQL IN clause with dynamic parameters
+        String placeholders = String.join(",", Collections.nCopies(productIds.size(), "?"));
+        String sql = String.format("""
+                SELECT p.product_id, p.product_name, p.price, p.stock, p.thumbnail_image_path,
+                       (SELECT GROUP_CONCAT(category_id) FROM product_category WHERE product_id = p.product_id) as category_ids,
+                       (SELECT GROUP_CONCAT(image_path) FROM images WHERE product_id = p.product_id) as detail_image_paths
+                FROM products p 
+                WHERE p.product_id IN (%s)
+                """, placeholders);
+
+        List<Product> content = new ArrayList<>();
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            for (int i = 0; i < productIds.size(); i++) {
+                psmt.setString(i + 1, productIds.get(i));
+            }
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    content.add(mapRowToProduct(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return content;
     }
 
     @Override
