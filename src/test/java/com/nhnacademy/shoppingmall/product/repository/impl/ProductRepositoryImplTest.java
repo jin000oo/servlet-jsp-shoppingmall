@@ -47,7 +47,9 @@ class ProductRepositoryImplTest {
                 "상품1",
                 10000,
                 100,
-                List.of(testCategory1.getCategoryId())
+                "/images/thumb_test1.png",
+                List.of(testCategory1.getCategoryId()),
+                List.of("/images/test1.png", "/images/test2.png")
         );
         if (productRepository.existsById(testProduct.getProductId())) {
             productRepository.deleteById(testProduct.getProductId());
@@ -70,8 +72,9 @@ class ProductRepositoryImplTest {
                 "상품2",
                 20000,
                 50,
-                Product.NO_IMAGE_PATH,
-                List.of(testCategory2.getCategoryId())
+                "/images/thumb_save1.png",
+                List.of(testCategory2.getCategoryId()),
+                List.of("/images/save1.png", "/images/save2.png")
         );
         if (productRepository.existsById(newProduct.getProductId())) {
             productRepository.deleteById(newProduct.getProductId());
@@ -87,7 +90,11 @@ class ProductRepositoryImplTest {
                 () -> assertEquals("상품2", actualProduct.getProductName()),
                 () -> assertEquals(20000, actualProduct.getPrice()),
                 () -> assertEquals(50, actualProduct.getStock()),
-                () -> assertTrue(actualProduct.getCategoryIds().contains(testCategory2.getCategoryId()))
+                () -> assertTrue(actualProduct.getCategoryIds().contains(testCategory2.getCategoryId())),
+                () -> assertEquals("/images/thumb_save1.png", actualProduct.getThumbnailImagePath()),
+                () -> assertEquals(2, actualProduct.getDetailImagePaths().size()),
+                () -> assertTrue(actualProduct.getDetailImagePaths().contains("/images/save1.png")),
+                () -> assertTrue(actualProduct.getDetailImagePaths().contains("/images/save2.png"))
         );
     }
 
@@ -100,7 +107,13 @@ class ProductRepositoryImplTest {
         
         assertAll(
                 () -> assertEquals(testProduct.getProductId(), foundProduct.getProductId()),
-                () -> assertTrue(foundProduct.getCategoryIds().contains(testCategory1.getCategoryId()))
+                () -> assertEquals(testProduct.getProductName(), foundProduct.getProductName()),
+                () -> assertEquals(testProduct.getPrice(), foundProduct.getPrice()),
+                () -> assertEquals(testProduct.getStock(), foundProduct.getStock()),
+                () -> assertTrue(foundProduct.getCategoryIds().contains(testCategory1.getCategoryId())),
+                () -> assertEquals(testProduct.getThumbnailImagePath(), foundProduct.getThumbnailImagePath()),
+                () -> assertEquals(2, foundProduct.getDetailImagePaths().size()),
+                () -> assertEquals(testProduct.getDetailImagePaths(), foundProduct.getDetailImagePaths())
         );
     }
 
@@ -114,15 +127,16 @@ class ProductRepositoryImplTest {
 
     @Test
     @Order(4)
-    @DisplayName("update - 성공")
+    @DisplayName("update - 성공 (상세 이미지 수정 포함)")
     void update() {
         Product updateParam = new Product(
                 testProduct.getProductId(), 
                 "상품1_수정", 
                 15000, 
                 30,
-                Product.NO_IMAGE_PATH,
-                List.of(testCategory1.getCategoryId(), testCategory2.getCategoryId())
+                "/images/thumb_update1.png",
+                List.of(testCategory1.getCategoryId(), testCategory2.getCategoryId()),
+                List.of("/images/update1.png")
         );
 
         int result = productRepository.update(updateParam);
@@ -132,11 +146,14 @@ class ProductRepositoryImplTest {
         assertFalse(Objects.isNull(updatedProduct), "product not found");
         
         assertAll(
-                () -> assertEquals("상품1_수정", updatedProduct.getProductName()),
-                () -> assertEquals(15000, updatedProduct.getPrice()),
-                () -> assertEquals(30, updatedProduct.getStock()),
-                () -> assertEquals(2, updatedProduct.getCategoryIds().size()),
-                () -> assertTrue(updatedProduct.getCategoryIds().contains(testCategory2.getCategoryId()))
+                () -> assertEquals(updateParam.getProductName(), updatedProduct.getProductName()),
+                () -> assertEquals(updateParam.getPrice(), updatedProduct.getPrice()),
+                () -> assertEquals(updateParam.getStock(), updatedProduct.getStock()),
+                () -> assertTrue(updatedProduct.getCategoryIds().contains(testCategory1.getCategoryId())),
+                () -> assertTrue(updatedProduct.getCategoryIds().contains(testCategory2.getCategoryId())),
+                () -> assertEquals(updateParam.getThumbnailImagePath(), updatedProduct.getThumbnailImagePath()),
+                () -> assertEquals(updateParam.getDetailImagePaths().size(), updatedProduct.getDetailImagePaths().size()),
+                () -> assertTrue(updatedProduct.getDetailImagePaths().contains(updateParam.getDetailImagePaths().get(0)))
         );
     }
 

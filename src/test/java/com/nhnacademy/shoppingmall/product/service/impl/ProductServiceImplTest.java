@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.product.service.impl;
 
 import com.nhnacademy.shoppingmall.common.page.Page;
+import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.exception.CategoryNotFoundException;
 import com.nhnacademy.shoppingmall.product.exception.ProductAlreadyExistsException;
@@ -25,7 +26,6 @@ class ProductServiceImplTest {
 
     @Mock
     ProductRepository productRepository;
-
     @Mock
     CategoryRepository categoryRepository;
 
@@ -68,7 +68,7 @@ class ProductServiceImplTest {
         // given
         Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
         when(productRepository.existsById("Test_P001")).thenReturn(false);
-        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
+        when(categoryRepository.findByIds(List.of("Test_C001"))).thenReturn(List.of(new Category("Test_C001", "카테고리1", 1)));
         when(productRepository.save(product)).thenReturn(1);
 
         // when
@@ -97,7 +97,7 @@ class ProductServiceImplTest {
         // given
         Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
         when(productRepository.existsById("Test_P001")).thenReturn(false);
-        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
+        when(categoryRepository.findByIds(List.of("Test_C001"))).thenReturn(List.of());
 
         // when, then
         assertThrows(CategoryNotFoundException.class, () -> productService.saveProduct(product));
@@ -110,7 +110,7 @@ class ProductServiceImplTest {
         // given
         Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
         when(productRepository.existsById("Test_P001")).thenReturn(false);
-        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
+        when(categoryRepository.findByIds(List.of("Test_C001"))).thenReturn(List.of(new Category("Test_C001", "카테고리1", 1)));
         when(productRepository.save(product)).thenReturn(0);
 
         // when, then
@@ -125,7 +125,7 @@ class ProductServiceImplTest {
         // given
         Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
         when(productRepository.existsById("Test_P001")).thenReturn(true);
-        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
+        when(categoryRepository.findByIds(List.of("Test_C001"))).thenReturn(List.of(new Category("Test_C001", "카테고리1", 1)));
         when(productRepository.update(product)).thenReturn(1);
 
         // when
@@ -154,7 +154,7 @@ class ProductServiceImplTest {
         // given
         Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
         when(productRepository.existsById("Test_P001")).thenReturn(true);
-        when(categoryRepository.existsById("Test_C001")).thenReturn(false);
+        when(categoryRepository.findByIds(List.of("Test_C001"))).thenReturn(List.of());
 
         // when, then
         assertThrows(CategoryNotFoundException.class, () -> productService.updateProduct(product));
@@ -167,7 +167,7 @@ class ProductServiceImplTest {
         // given
         Product product = new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"));
         when(productRepository.existsById("Test_P001")).thenReturn(true);
-        when(categoryRepository.existsById("Test_C001")).thenReturn(true);
+        when(categoryRepository.findByIds(List.of("Test_C001"))).thenReturn(List.of(new Category("Test_C001", "카테고리1", 1)));
         when(productRepository.update(product)).thenReturn(0);
 
         // when, then

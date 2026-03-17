@@ -9,6 +9,8 @@ import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
 
+import java.util.List;
+
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -31,10 +33,11 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductAlreadyExistsException(product.getProductId());
         }
 
-        // Verify all category IDs exist in DB
-        for (String categoryId : product.getCategoryIds()) {
-            if (!categoryRepository.existsById(categoryId)) {
-                throw new CategoryNotFoundException(categoryId);
+        // Verify all category IDs exist in DB using a single query
+        List<String> categoryIds = product.getCategoryIds();
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            if (categoryRepository.findByIds(categoryIds).size() != categoryIds.size()) {
+                throw new CategoryNotFoundException("One or more categories not found");
             }
         }
 
@@ -50,9 +53,10 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException(product.getProductId());
         }
 
-        for (String categoryId : product.getCategoryIds()) {
-            if (!categoryRepository.existsById(categoryId)) {
-                throw new CategoryNotFoundException(categoryId);
+        List<String> categoryIds = product.getCategoryIds();
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            if (categoryRepository.findByIds(categoryIds).size() != categoryIds.size()) {
+                throw new CategoryNotFoundException("One or more categories not found");
             }
         }
 

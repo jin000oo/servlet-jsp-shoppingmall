@@ -14,32 +14,28 @@ public class Product {
     private String productName;
     private int price;
     private int stock;
-    private String thumbnailImagePath;
-    
     private List<String> categoryIds = new ArrayList<>();
 
+    private String thumbnailImagePath;
+
+    private List<String> detailImagePaths = new ArrayList<>();
+
     public Product(String productId, String productName, int price, int stock, List<String> categoryIds) {
-        this(productId, productName, price, stock, NO_IMAGE_PATH, categoryIds);
+        this(productId, productName, price, stock, NO_IMAGE_PATH, categoryIds, new ArrayList<>());
     }
 
-    public Product(String productId, String productName, int price, int stock, String thumbnailImagePath, List<String> categoryIds) {
+    public Product(String productId, String productName, int price, int stock, String thumbnailImagePath, List<String> categoryIds, List<String> detailImagePaths) {
         validateCategories(categoryIds);
 
         this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.stock = stock;
-        this.thumbnailImagePath = thumbnailImagePath;
-
         this.categoryIds.addAll(categoryIds);
-    }
 
-    private void validateCategories(List<String> categoryIds) {
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            throw new IllegalArgumentException("A product must belong to at least 1 category.");
-        }
-        if (categoryIds.size() > 3) {
-            throw new IllegalArgumentException("A product can belong to a maximum of 3 categories.");
+        this.thumbnailImagePath = thumbnailImagePath;
+        if (detailImagePaths != null) {
+            this.detailImagePaths.addAll(detailImagePaths);
         }
     }
 
@@ -66,5 +62,18 @@ public class Product {
     public void setCategoryIds(List<String> categoryIds) {
         validateCategories(categoryIds);
         this.categoryIds = categoryIds;
+    }
+
+    public void setDetailImagePaths(List<String> detailImagePaths) {
+        this.detailImagePaths = detailImagePaths;
+    }
+
+    private void validateCategories(List<String> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            throw new IllegalArgumentException("A product must belong to at least 1 category.");
+        }
+        if (categoryIds.size() > 3) {
+            throw new IllegalArgumentException("A product can belong to a maximum of 3 categories.");
+        }
     }
 }

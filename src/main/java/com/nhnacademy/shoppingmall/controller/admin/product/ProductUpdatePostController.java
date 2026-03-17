@@ -28,11 +28,14 @@ public class ProductUpdatePostController implements BaseController {
         String[] categoryIdsArr = req.getParameterValues("categoryIds");
         List<String> categoryIds = categoryIdsArr != null ? Arrays.asList(categoryIdsArr) : List.of();
 
+        String[] detailImagePathsArr = req.getParameterValues("detailImagePaths");
+        List<String> detailImagePaths = detailImagePathsArr != null ? Arrays.asList(detailImagePathsArr) : List.of();
+
         if (thumbnailImagePath == null || thumbnailImagePath.trim().isEmpty()) {
             thumbnailImagePath = Product.NO_IMAGE_PATH;
         }
 
-        Product product = new Product(productId, productName, price, stock, thumbnailImagePath, categoryIds);
+        Product product = new Product(productId, productName, price, stock, thumbnailImagePath, categoryIds, detailImagePaths);
         productService.updateProduct(product);
 
         return "redirect:/admin/product.do";

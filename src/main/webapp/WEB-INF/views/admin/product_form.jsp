@@ -83,6 +83,29 @@
                         <div class="form-text">이미지가 없을 경우 기본 이미지가 표시됩니다.</div>
                     </div>
 
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">상세 이미지 경로 (선택)</label>
+                        <div id="detailImagesContainer">
+                            <c:choose>
+                                <c:when test="${not empty product.detailImagePaths}">
+                                    <c:forEach var="imagePath" items="${product.detailImagePaths}">
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" name="detailImagePaths" value="${imagePath}" placeholder="/resources/detail-image.png" />
+                                            <button class="btn btn-outline-danger" type="button" onclick="this.parentElement.remove()">삭제</button>
+                                        </div>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" name="detailImagePaths" placeholder="/resources/detail-image.png" />
+                                        <button class="btn btn-outline-danger" type="button" onclick="this.parentElement.remove()">삭제</button>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addDetailImageField()">+ 이미지 추가</button>
+                    </div>
+
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-lg" onclick="return validateForm();">${submitBtnText}</button>
                     </div>
@@ -94,6 +117,15 @@
 </div>
 
 <script>
+function addDetailImageField() {
+    const container = document.getElementById('detailImagesContainer');
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2';
+    div.innerHTML = '<input type="text" class="form-control" name="detailImagePaths" placeholder="/resources/detail-image.png" />' +
+                    '<button class="btn btn-outline-danger" type="button" onclick="this.parentElement.remove()">삭제</button>';
+    container.appendChild(div);
+}
+
 function validateForm() {
     const checkboxes = document.querySelectorAll('input[name="categoryIds"]:checked');
     if (checkboxes.length < 1) {
