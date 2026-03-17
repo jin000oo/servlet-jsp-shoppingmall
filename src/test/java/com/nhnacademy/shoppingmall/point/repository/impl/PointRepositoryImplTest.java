@@ -22,6 +22,7 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,11 +79,21 @@ public class PointRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("포인트 적립/차감 내역 저장")
     void save() {
         int result = pointRepository.save(testPoint);
 
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    @DisplayName("포인트 내역 조회")
+    void findByUserId() {
+        pointRepository.save(testPoint);
+        
+        List<Point> pointList = pointRepository.findByUserId(testUser.getUserId());
+
+        Assertions.assertEquals(1, pointList.size());
     }
 
 }

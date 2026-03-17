@@ -93,9 +93,30 @@ public class PointServiceImplTest {
         Assertions.assertThrows(UserNotFoundException.class, () ->
                 pointService.savePoint(testPoint));
 
-        verify(pointRepository, times(1)).save(testPoint);
         verify(userRepository, times(1)).findById(testUser.getUserId());
+        verify(pointRepository, never()).save(any(Point.class));
         verify(userRepository, never()).update(any(User.class));
+    }
+
+    @Test
+    @DisplayName("포인트 내역 조회")
+    void getPointList() {
+        pointService.getPointList(testUser.getUserId());
+
+        verify(pointRepository, times(1)).findByUserId(testUser.getUserId());
+    }
+
+    @Test
+    @DisplayName("포인트 내역 조회 실패 - id가 null이거나 비어있음")
+    void getPointList_fail() {
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        pointService.getPointList(null)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        pointService.getPointList("")),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        pointService.getPointList(" "))
+        );
     }
 
 }

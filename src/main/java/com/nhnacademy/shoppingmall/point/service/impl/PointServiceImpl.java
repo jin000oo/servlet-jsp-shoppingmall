@@ -39,12 +39,14 @@ public class PointServiceImpl implements PointService {
             throw new IllegalArgumentException("[PointServiceImpl] point is null");
         }
 
+        // 해당하는 회원 조회
+        User user = userRepository.findById(point.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(point.getUserId()));
+
         // 포인트 내역 저장
         pointRepository.save(point);
 
         // 포인트 적립: users 테이블 수정
-        User user = userRepository.findById(point.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(point.getUserId()));
         user.setUserPoint(user.getUserPoint() + point.getAmount());
         userRepository.update(user);
     }
