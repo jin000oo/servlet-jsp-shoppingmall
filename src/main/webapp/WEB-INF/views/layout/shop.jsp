@@ -60,9 +60,9 @@
                     </c:if>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..."
-                           aria-label="Search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="/index.do" method="get">
+                    <input type="search" name="searchName" class="form-control form-control-dark" placeholder="Search..."
+                           aria-label="Search" value="${searchName}">
                 </form>
 
                 <div class="text-end">
@@ -75,7 +75,7 @@
                         </c:when>
                         <c:otherwise>
                             <a class="btn btn-outline-light me-2" href="/login.do">로그인</a>
-                            <a class="btn btn-warning" href="/signup.do">회원가입</a>
+                            <a class="btn btn-warning me-2"  href="/signup.do">회원가입</a>
                         </c:otherwise>
                     </c:choose>
                     <a class="btn btn-outline-light me-2" href="/cart.do">장바구니</a>
