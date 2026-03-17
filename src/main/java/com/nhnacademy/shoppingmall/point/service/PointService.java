@@ -13,9 +13,12 @@
 package com.nhnacademy.shoppingmall.point.service;
 
 import com.nhnacademy.shoppingmall.point.domain.Point;
+import java.util.List;
 
 public interface PointService {
 
     void savePoint(Point point);
+
+    List<Point> getPointList(String userId);
 
 }

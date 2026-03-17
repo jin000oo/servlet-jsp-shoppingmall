@@ -13,10 +13,14 @@
 package com.nhnacademy.shoppingmall.point.repository;
 
 import com.nhnacademy.shoppingmall.point.domain.Point;
+import java.util.List;
 
 public interface PointRepository {
 
     // 포인트 적립/차감 내역 저장
     int save(Point point);
+
+    // 포인트 내역 조회
+    List<Point> findByUserId(String userId);
 
 }

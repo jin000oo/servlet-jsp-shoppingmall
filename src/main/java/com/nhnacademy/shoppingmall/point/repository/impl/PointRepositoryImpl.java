@@ -17,8 +17,12 @@ import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.PointRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,6 +47,45 @@ public class PointRepositoryImpl implements PointRepository {
             psmt.setTimestamp(6, Timestamp.valueOf(point.getCreatedAt()));
 
             return psmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Point> findByUserId(String userId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        String sql = """
+                SELECT point_id, user_id, order_id, amount, reason, created_at 
+                FROM points 
+                WHERE user_id = ?
+                """;
+        log.debug("sql:{}", sql);
+
+        List<Point> pointList = new ArrayList<>();
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, userId);
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    Point point = new Point(
+                            rs.getString("point_id"),
+                            rs.getString("user_id"),
+                            rs.getString("order_id"),
+                            rs.getInt("amount"),
+                            rs.getString("reason"),
+                            Objects.nonNull(rs.getTimestamp("created_at")) ?
+                                    rs.getTimestamp("created_at").toLocalDateTime() : null
+                    );
+
+                    pointList.add(point);
+                }
+            }
+
+            return pointList;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

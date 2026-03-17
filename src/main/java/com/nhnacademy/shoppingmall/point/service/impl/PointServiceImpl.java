@@ -18,6 +18,7 @@ import com.nhnacademy.shoppingmall.point.service.PointService;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,6 +47,16 @@ public class PointServiceImpl implements PointService {
                 .orElseThrow(() -> new UserNotFoundException(point.getUserId()));
         user.setUserPoint(user.getUserPoint() + point.getAmount());
         userRepository.update(user);
+    }
+
+    @Override
+    public List<Point> getPointList(String userId) {
+        if (userId == null || userId.isBlank()) {
+            log.warn("[PointServiceImpl] user id is null or blank");
+            throw new IllegalArgumentException("[PointServiceImpl] user id is null or blank");
+        }
+
+        return pointRepository.findByUserId(userId);
     }
 
 }
