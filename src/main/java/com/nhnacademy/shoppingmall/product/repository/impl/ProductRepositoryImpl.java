@@ -275,22 +275,20 @@ public class ProductRepositoryImpl implements ProductRepository {
             categoryIds.addAll(List.of(categoryIdsStr.split(",")));
         }
 
-        Product product = new Product(
-                productId,
-                rs.getString("product_name"),
-                rs.getInt("price"),
-                rs.getInt("stock"),
-                rs.getString("thumbnail_image_path"),
-                categoryIds
-        );
-
         String detailImagePathsStr = rs.getString("detail_image_paths");
         List<String> detailImagePaths = new ArrayList<>();
         if (detailImagePathsStr != null && !detailImagePathsStr.isBlank()) {
             detailImagePaths.addAll(List.of(detailImagePathsStr.split(",")));
         }
-        product.setDetailImagePaths(detailImagePaths);
 
-        return product;
+        return new Product(
+                productId,
+                rs.getString("product_name"),
+                rs.getInt("price"),
+                rs.getInt("stock"),
+                rs.getString("thumbnail_image_path"),
+                categoryIds,
+                detailImagePaths
+        );
     }
 }
