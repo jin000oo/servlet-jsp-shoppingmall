@@ -130,7 +130,7 @@ CREATE INDEX `fk_orders_users1_idx` ON `orders` (`user_id` ASC) VISIBLE;
 -- Table `images`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `images` (
-  `image_id` VARCHAR(50) NOT NULL COMMENT '아이디',
+  `image_id` INT AUTO_INCREMENT NOT NULL COMMENT '아이디',
   `product_id` VARCHAR(50) NOT NULL,
   `image_path` VARCHAR(200) NOT NULL COMMENT '이미지 경로',
   PRIMARY KEY (`image_id`),

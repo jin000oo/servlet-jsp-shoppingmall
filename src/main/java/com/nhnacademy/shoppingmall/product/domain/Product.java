@@ -14,9 +14,11 @@ public class Product {
     private String productName;
     private int price;
     private int stock;
-    private String thumbnailImagePath;
-    
     private List<String> categoryIds = new ArrayList<>();
+
+    private String thumbnailImagePath;
+
+    private List<String> detailImagePaths = new ArrayList<>();
 
     public Product(String productId, String productName, int price, int stock, List<String> categoryIds) {
         this(productId, productName, price, stock, NO_IMAGE_PATH, categoryIds);
@@ -29,9 +31,9 @@ public class Product {
         this.productName = productName;
         this.price = price;
         this.stock = stock;
-        this.thumbnailImagePath = thumbnailImagePath;
-
         this.categoryIds.addAll(categoryIds);
+
+        this.thumbnailImagePath = thumbnailImagePath;
     }
 
     private void validateCategories(List<String> categoryIds) {
@@ -66,5 +68,9 @@ public class Product {
     public void setCategoryIds(List<String> categoryIds) {
         validateCategories(categoryIds);
         this.categoryIds = categoryIds;
+    }
+
+    public void setDetailImagePaths(List<String> detailImagePaths) {
+        this.detailImagePaths = detailImagePaths;
     }
 }

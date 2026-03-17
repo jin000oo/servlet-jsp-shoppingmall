@@ -49,6 +49,7 @@ class ProductRepositoryImplTest {
                 100,
                 List.of(testCategory1.getCategoryId())
         );
+        testProduct.setDetailImagePaths(List.of("/images/test1.png", "/images/test2.png"));
         if (productRepository.existsById(testProduct.getProductId())) {
             productRepository.deleteById(testProduct.getProductId());
         }
@@ -100,7 +101,10 @@ class ProductRepositoryImplTest {
         
         assertAll(
                 () -> assertEquals(testProduct.getProductId(), foundProduct.getProductId()),
-                () -> assertTrue(foundProduct.getCategoryIds().contains(testCategory1.getCategoryId()))
+                () -> assertTrue(foundProduct.getCategoryIds().contains(testCategory1.getCategoryId())),
+                () -> assertEquals(2, foundProduct.getDetailImagePaths().size(), "Should have 2 image paths"),
+                () -> assertTrue(foundProduct.getDetailImagePaths().contains("/images/test1.png"), "Should contain test1.png"),
+                () -> assertTrue(foundProduct.getDetailImagePaths().contains("/images/test2.png"), "Should contain test2.png")
         );
     }
 
@@ -124,6 +128,7 @@ class ProductRepositoryImplTest {
                 Product.NO_IMAGE_PATH,
                 List.of(testCategory1.getCategoryId(), testCategory2.getCategoryId())
         );
+        updateParam.setDetailImagePaths(List.of("/images/update1.png"));
 
         int result = productRepository.update(updateParam);
         assertEquals(1, result, "update failed");
@@ -136,7 +141,9 @@ class ProductRepositoryImplTest {
                 () -> assertEquals(15000, updatedProduct.getPrice()),
                 () -> assertEquals(30, updatedProduct.getStock()),
                 () -> assertEquals(2, updatedProduct.getCategoryIds().size()),
-                () -> assertTrue(updatedProduct.getCategoryIds().contains(testCategory2.getCategoryId()))
+                () -> assertTrue(updatedProduct.getCategoryIds().contains(testCategory2.getCategoryId())),
+                () -> assertEquals(1, updatedProduct.getDetailImagePaths().size(), "Should be updated to 1 image path"),
+                () -> assertTrue(updatedProduct.getDetailImagePaths().contains("/images/update1.png"), "Should contain update1.png")
         );
     }
 
