@@ -12,11 +12,16 @@
 
 package com.nhnacademy.shoppingmall.controller.order;
 
+import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
 import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.order.domain.Order;
+import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
+import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
+import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
 import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.order.repository.impl.OrderDetailRepositoryImpl;
@@ -35,6 +40,9 @@ import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import javax.transaction.Transactional;
 
 @Transactional
@@ -60,10 +68,53 @@ public class OrderPostController implements BaseController {
             return "redirect:/login.do";
         }
 
-        int totalAmount = 0;
+        try {
+            int totalAmount = Integer.parseInt(req.getParameter("totalAmount"));
 
+            List<Cart> cartList = cartService.getCartList(user.getUserId());
 
-        return "";
+            if (cartList == null || cartList.isEmpty()) {
+                return "redirect:/cart.do";
+            }
+
+            String orderId = UUID.randomUUID().toString();
+
+            Order order = new Order(orderId, user.getUserId(), totalAmount);
+
+            List<OrderDetail> orderDetails = new ArrayList<>();
+
+            for (Cart cart : cartList) {
+                OrderDetail orderDetail = new OrderDetail(
+                        UUID.randomUUID().toString(),
+                        orderId,
+                        cart.getProductId(),
+                        cart.getQuantity()
+                );
+
+                orderDetails.add(orderDetail);
+            }
+
+            orderService.order(order, orderDetails);
+
+            for (Cart cart : cartList) {
+                cartService.deleteCart(user.getUserId(), cart.getProductId());
+            }
+
+            return "redirect:/index.do";
+
+        } catch (InsufficientAmountException e) {
+            req.setAttribute("errorMessage", "포인트 잔액이 부족합니다.");
+
+            return "shop/order/order";
+
+        } catch (InsufficientQuantityException e) {
+            req.setAttribute("errorMessage", "일부 상품의 재고가 부족합니다.");
+
+            return "shop/order/order";
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
