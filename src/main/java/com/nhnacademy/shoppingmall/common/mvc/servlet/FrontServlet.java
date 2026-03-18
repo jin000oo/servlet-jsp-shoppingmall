@@ -77,9 +77,9 @@ public class FrontServlet extends HttpServlet {
             RequestDispatcher rd = req.getRequestDispatcher("/error.do");
 
             try {
-                rd.forward(req, resp);
+                resp.sendRedirect("/error.do");
 
-            } catch (ServletException | IOException ex) {
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
