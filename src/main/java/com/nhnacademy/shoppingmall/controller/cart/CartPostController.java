@@ -37,7 +37,7 @@ public class CartPostController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String cartId = UUID.randomUUID().toString();
-        String productId = req.getParameter("product_id");
+        String productId = req.getParameter("productId");
         int quantity = Integer.parseInt(req.getParameter("quantity"));
 
         HttpSession session = req.getSession(true);

@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="d-grid gap-2 mt-3">
                                         <form action="/cart.do" method="post" class="d-grid">
-                                            <input type="hidden" name="product_id" value="${product.productId}">
+                                            <input type="hidden" name="productId" value="${product.productId}">
                                             <input type="hidden" name="quantity" value="1">
                                             <button type="submit"
                                                     class="btn btn-sm btn-outline-primary" ${product.stock <= 0 || sessionScope.user.userAuth == "ROLE_ADMIN" ? 'disabled' : ''}>

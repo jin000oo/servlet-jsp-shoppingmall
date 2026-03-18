@@ -42,15 +42,15 @@ public class PointController implements BaseController {
 
         if (user == null) {
             return "redirect:/login.do";
-        } else {
-            List<Point> pointList = pointService.getPointList(user.getUserId());
-            req.setAttribute("pointList", pointList);
-
-            User recentUser = userService.getUser(user.getUserId());
-            req.setAttribute("currentPoint", recentUser.getUserPoint());
-
-            return "shop/point/point_history";
         }
+
+        List<Point> pointList = pointService.getPointList(user.getUserId());
+        req.setAttribute("pointList", pointList);
+
+        User recentUser = userService.getUser(user.getUserId());
+        req.setAttribute("currentPoint", recentUser.getUserPoint());
+
+        return "shop/point/point_history";
     }
 
 }
