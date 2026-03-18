@@ -264,11 +264,9 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public int deleteById(String productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
-        deleteCategoryMappings(connection, productId);
-        deleteImageMappings(connection, productId);
-        
         String sql = "DELETE FROM products WHERE product_id = ?";
+
+        Connection connection = DbConnectionThreadLocal.getConnection();
         try (PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setString(1, productId);
             return psmt.executeUpdate();
@@ -313,8 +311,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
             psmt.setString(1, productId);
             psmt.executeUpdate();
-        } catch (SQLException e) { 
-            throw new RuntimeException(e); 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
