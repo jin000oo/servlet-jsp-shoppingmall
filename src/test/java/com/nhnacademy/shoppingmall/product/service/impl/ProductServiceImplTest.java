@@ -247,4 +247,38 @@ class ProductServiceImplTest {
         assertEquals(1, result.getContent().size());
         assertEquals(1, result.getTotalCount());
     }
+
+    @Test
+    @Order(16)
+    @DisplayName("getProductsByName - 성공")
+    void getProductsByName() {
+        // given
+        Page<Product> page = new Page<>(List.of(new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001"))), 1);
+        when(productRepository.findByName("상품1", 1, 10)).thenReturn(page);
+
+        // when
+        Page<Product> result = productService.getProductsByName("상품1", 1, 10);
+
+        // then
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
+        verify(productRepository, times(1)).findByName("상품1", 1, 10);
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("getProductsByIds - 성공")
+    void getProductsByIds() {
+        // given
+        List<Product> products = List.of(new Product("Test_P001", "상품1", 10000, 10, List.of("Test_C001")));
+        when(productRepository.findByIds(anyList())).thenReturn(products);
+
+        // when
+        List<Product> result = productService.getProductsByIds(List.of("Test_P001"));
+
+        // then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(productRepository, times(1)).findByIds(anyList());
+    }
 }

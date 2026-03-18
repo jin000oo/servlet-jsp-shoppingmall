@@ -90,4 +90,20 @@ public class ProductServiceImpl implements ProductService {
     public Page<Product> getProductsByCategory(String categoryId, int page, int pageSize) {
         return productRepository.findByCategory(categoryId, page, pageSize);
     }
+
+    @Override
+    public Page<Product> getProductsByName(String name, int page, int pageSize) {
+        if (name == null || name.isBlank()) {
+            return getProducts(page, pageSize);
+        }
+        return productRepository.findByName(name, page, pageSize);
+    }
+
+    @Override
+    public List<Product> getProductsByIds(List<String> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return List.of();
+        }
+        return productRepository.findByIds(productIds);
+    }
 }

@@ -213,4 +213,31 @@ class ProductRepositoryImplTest {
                 () -> assertEquals(testProduct.getProductId(), productPage.getContent().getFirst().getProductId())
         );
     }
+
+    @Test
+    @Order(10)
+    @DisplayName("findByName - 성공")
+    void findByName() {
+        int page = 1;
+        int pageSize = 10;
+        Page<Product> productPage = productRepository.findByName("상품1", page, pageSize);
+
+        assertFalse(Objects.isNull(productPage), "page is null");
+        assertAll(
+                () -> assertFalse(productPage.getContent().isEmpty(), "content is empty"),
+                () -> assertTrue(productPage.getContent().getFirst().getProductName().contains("상품1"))
+        );
+    }
+
+    @Test
+    @Order(11)
+    @DisplayName("findByIds - 성공")
+    void findByIds() {
+        List<Product> products = productRepository.findByIds(List.of(testProduct.getProductId()));
+
+        assertAll(
+                () -> assertEquals(1, products.size()),
+                () -> assertEquals(testProduct.getProductId(), products.getFirst().getProductId())
+        );
+    }
 }
