@@ -54,7 +54,7 @@
 
         <div class="d-grid gap-2">
             <form action="/cart.do" method="post" class="d-grid">
-                <input type="hidden" name="productId" value="${product.productId}">
+                <input type="hidden" name="product_id" value="${product.productId}">
                 <div class="input-group mb-3">
                     <span class="input-group-text">수량</span>
                     <input type="number" name="quantity" class="form-control" value="1" min="1" max="${product.stock}">
