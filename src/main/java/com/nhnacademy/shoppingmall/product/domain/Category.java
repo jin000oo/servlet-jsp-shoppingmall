@@ -1,20 +1,14 @@
 package com.nhnacademy.shoppingmall.product.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Category {
-    private String categoryId;
+    private final String categoryId;
     private String categoryName;
     private int sortOrder;
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
-    }
 }

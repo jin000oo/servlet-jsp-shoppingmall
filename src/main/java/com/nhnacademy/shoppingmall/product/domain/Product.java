@@ -1,23 +1,28 @@
 package com.nhnacademy.shoppingmall.product.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class Product {
     public static final String NO_IMAGE_PATH = "/resources/no-image.png";
+    public static final int MAX_CATEGORY_SIZE = 3;
 
-    private String productId;
+    private final String productId;
     private String productName;
     private int price;
     private int stock;
     private List<String> categoryIds = new ArrayList<>();
-
     private String thumbnailImagePath;
-
     private List<String> detailImagePaths = new ArrayList<>();
 
     public Product(String productId, String productName, int price, int stock, List<String> categoryIds) {
@@ -43,36 +48,17 @@ public class Product {
          return Collections.unmodifiableList(this.categoryIds);
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public void setThumbnailImagePath(String thumbnailImagePath) {
-        this.thumbnailImagePath = thumbnailImagePath;
-    }
-
     public void setCategoryIds(List<String> categoryIds) {
         validateCategories(categoryIds);
         this.categoryIds = categoryIds;
     }
 
-    public void setDetailImagePaths(List<String> detailImagePaths) {
-        this.detailImagePaths = detailImagePaths;
-    }
-
     private void validateCategories(List<String> categoryIds) {
+        // 카테고리 개수가 1개 이상 3개 이하인지 체크
         if (categoryIds == null || categoryIds.isEmpty()) {
             throw new IllegalArgumentException("A product must belong to at least 1 category.");
         }
-        if (categoryIds.size() > 3) {
+        if (categoryIds.size() > MAX_CATEGORY_SIZE) {
             throw new IllegalArgumentException("A product can belong to a maximum of 3 categories.");
         }
     }
