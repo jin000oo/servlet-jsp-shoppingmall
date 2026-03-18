@@ -74,12 +74,10 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute(RequestDispatcher.ERROR_EXCEPTION, e);
             req.setAttribute(RequestDispatcher.ERROR_REQUEST_URI, req.getRequestURI());
 
-            RequestDispatcher rd = req.getRequestDispatcher("/error.do");
-
             try {
-                rd.forward(req, resp);
+                resp.sendRedirect("/error.do");
 
-            } catch (ServletException | IOException ex) {
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }

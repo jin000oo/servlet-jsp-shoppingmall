@@ -63,6 +63,13 @@
     </table>
 
     <div class="text-end mt-3">
-        <a class="btn btn-primary btn-lg">주문하기</a>
+        <c:choose>
+            <c:when test="${empty cartList}">
+                <button class="btn btn-secondary btn-lg" disabled>주문하기</button>
+            </c:when>
+            <c:otherwise>
+                <a href="/order.do" class="btn btn-primary btn-lg">주문하기</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
