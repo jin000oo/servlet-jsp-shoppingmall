@@ -43,7 +43,7 @@
                 <td>
                     <form action="/cart/update.do" method="post"
                           style="display: inline-flex; align-items: center; gap: 5px;">
-                        <input type="hidden" name="product_id" value="${cart.productId}">
+                        <input type="hidden" name="productId" value="${cart.productId}">
 
                         <input type="number" name="quantity" value="${cart.quantity}" min="1" style="width: 70px;"
                                class="form-control form-control-sm">
@@ -53,7 +53,7 @@
                 </td>
                 <td>
                     <form action="/cart/delete.do" method="post" style="display: inline;">
-                        <input type="hidden" name="product_id" value="${cart.productId}">
+                        <input type="hidden" name="productId" value="${cart.productId}">
                         <button type="submit" class="btn btn-sm btn-danger">삭제</button>
                     </form>
                 </td>
