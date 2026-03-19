@@ -2,6 +2,18 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
+<%--
+  ~ /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ~ + Copyright 2026. NHN Academy Corp. All rights reserved.
+  ~ + * While every precaution has been taken in the preparation of this resource,  assumes no
+  ~ + responsibility for errors or omissions, or for damages resulting from the use of the information
+  ~ + contained herein
+  ~ + No part of this resource may be reproduced, stored in a retrieval system, or transmitted, in any
+  ~ + form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the
+  ~ + prior written permission.
+  ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+  --%>
+
 <div class="container mt-4">
     <div class="row">
         <!-- Sidebar -->
@@ -59,7 +71,7 @@
                         <div class="card-body">
                             <h6 class="card-title">주문 내역</h6>
                             <p class="card-text small">최근 주문한 내역을 한눈에 확인하세요.</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">바로가기</a>
+                            <a href="/order/history.do" class="btn btn-sm btn-outline-primary">바로가기</a>
                         </div>
                     </div>
                 </div>
@@ -68,7 +80,7 @@
                         <div class="card-body">
                             <h6 class="card-title">포인트 내역</h6>
                             <p class="card-text small">포인트의 적립 및 사용 내역을 확인하세요.</p>
-                            <a href="#" class="btn btn-sm btn-outline-primary">바로가기</a>
+                            <a href="/point.do" class="btn btn-sm btn-outline-primary">바로가기</a>
                         </div>
                     </div>
                 </div>
