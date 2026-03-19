@@ -56,10 +56,8 @@ public class UserRepositoryImpl implements UserRepository {
                             rs.getString("user_birth"),
                             User.Auth.valueOf(rs.getString("user_auth")),
                             rs.getInt("user_point"),
-                            Objects.nonNull(rs.getTimestamp("created_at")) ?
-                                    rs.getTimestamp("created_at").toLocalDateTime() : null,
-                            Objects.nonNull(rs.getTimestamp("latest_login_at")) ?
-                                    rs.getTimestamp("latest_login_at").toLocalDateTime() : null
+                            rs.getObject("created_at", LocalDateTime.class),
+                            rs.getObject("latest_login_at", LocalDateTime.class)
                     );
 
                     return Optional.of(user);
@@ -98,10 +96,8 @@ public class UserRepositoryImpl implements UserRepository {
                             rs.getString("user_birth"),
                             User.Auth.valueOf(rs.getString("user_auth")),
                             rs.getInt("user_point"),
-                            Objects.nonNull(rs.getTimestamp("created_at")) ?
-                                    rs.getTimestamp("created_at").toLocalDateTime() : null,
-                            Objects.nonNull(rs.getTimestamp("latest_login_at")) ?
-                                    rs.getTimestamp("latest_login_at").toLocalDateTime() : null
+                            rs.getObject("created_at", LocalDateTime.class),
+                            rs.getObject("latest_login_at", LocalDateTime.class)
                     );
 
                     return Optional.of(user);
