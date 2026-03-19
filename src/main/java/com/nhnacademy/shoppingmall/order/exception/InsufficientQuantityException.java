@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.order.exception;
 
+// 재고가 부족할 때
 public class InsufficientQuantityException extends RuntimeException {
 
     public InsufficientQuantityException(String productId) {
