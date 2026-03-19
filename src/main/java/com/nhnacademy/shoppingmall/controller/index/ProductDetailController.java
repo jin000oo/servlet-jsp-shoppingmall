@@ -1,4 +1,4 @@
-package com.nhnacademy.shoppingmall.controller.product;
+package com.nhnacademy.shoppingmall.controller.index;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;

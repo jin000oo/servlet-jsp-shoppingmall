@@ -54,7 +54,7 @@
                                 <li><a href="/admin/index.do" class="nav-link px-2 text-white">관리자 대시보드</a></li>
                             </c:when>
                             <c:otherwise>
-                                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
+                                <li><a href="/mypage/index.do" class="nav-link px-2 text-white">마이페이지</a></li>
                             </c:otherwise>
                         </c:choose>
                     </c:if>

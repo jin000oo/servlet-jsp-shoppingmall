@@ -86,9 +86,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         try(PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setString(1, productId);
 
-            ResultSet rs = psmt.executeQuery();
-            if(rs.next()) {
-                return Optional.of(mapRowToProduct(rs));
+            try (ResultSet rs = psmt.executeQuery()) {
+                if(rs.next()) {
+                    return Optional.of(mapRowToProduct(rs));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
