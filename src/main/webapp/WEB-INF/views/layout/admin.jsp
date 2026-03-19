@@ -16,7 +16,7 @@
             <div class="container">
                 <div class="d-flex flex-wrap align-items-center justify-content-between">
                     <a href="/admin/index.do" class="text-white text-decoration-none fs-4 fw-bold">
-                        ⚙️ 관리자 대시보드
+                        관리자 대시보드
                     </a>
                     <div class="text-end">
                         <a href="/index.do" class="btn btn-outline-light me-2">쇼핑몰 홈으로</a>

@@ -12,6 +12,10 @@
 
 package com.nhnacademy.shoppingmall.common.listener;
 
+import com.nhnacademy.shoppingmall.address.repository.AddressRepository;
+import com.nhnacademy.shoppingmall.address.repository.impl.AddressRepositoryImpl;
+import com.nhnacademy.shoppingmall.address.service.AddressService;
+import com.nhnacademy.shoppingmall.address.service.impl.AddressServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
@@ -40,6 +44,7 @@ public class ApplicationListener implements ServletContextListener {
     private UserService userService;
     private CategoryService categoryService;
     private ProductService productService;
+    private AddressService addressService;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -49,22 +54,24 @@ public class ApplicationListener implements ServletContextListener {
         UserRepository userRepository = new UserRepositoryImpl();
         CategoryRepository categoryRepository = new CategoryRepositoryImpl();
         ProductRepository productRepository = new ProductRepositoryImpl();
+        AddressRepository addressRepository = new AddressRepositoryImpl();
 
         // Service 객체 생성 및 의존성 주입 (DI)
         this.userService = new UserServiceImpl(userRepository);
         this.categoryService = new CategoryServiceImpl(categoryRepository);
         this.productService = new ProductServiceImpl(productRepository, categoryRepository);
+        this.addressService = new AddressServiceImpl(addressRepository);
 
         // ServletContext에 Service 등록 (IoC Container 역할)
         context.setAttribute(UserService.CONTEXT_USER_SERVICE_NAME, this.userService);
         context.setAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME, this.categoryService);
         context.setAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME, this.productService);
+        context.setAttribute(AddressService.CONTEXT_ADDRESS_SERVICE_NAME, this.addressService);
 
         log.info("Application Context Initialized: Services injected into ServletContext.");
 
         try {
             DbConnectionThreadLocal.initialize();
-
             initUsers();
 
         } finally {

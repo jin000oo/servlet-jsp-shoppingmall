@@ -1,14 +1,15 @@
-package com.nhnacademy.shoppingmall.controller.admin;
+package com.nhnacademy.shoppingmall.controller.mypage.myinfo;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = "/admin/index.do")
-public class AdminIndexController implements BaseController {
+@RequestMapping(method = RequestMapping.Method.GET, value = "/mypage/password.do")
+public class PasswordChangeController implements BaseController {
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return "redirect:/admin/product.do";
+        return "shop/mypage/password";
     }
 }

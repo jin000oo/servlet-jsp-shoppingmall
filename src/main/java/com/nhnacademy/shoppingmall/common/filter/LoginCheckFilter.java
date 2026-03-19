@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.common.filter;
 
+import com.nhnacademy.shoppingmall.user.domain.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -31,13 +32,20 @@ public class LoginCheckFilter extends HttpFilter {
             throws IOException, ServletException {
         // /mypage/ 하위경로의 접근은 로그인한 사용자만 접근할 수 있습니다.
         HttpSession session = req.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        if (session == null || session.getAttribute("user") == null) {
+        // 장바구니를 담은 사용자도 세션을 가지도록 구현되었으므로, 게스트 유저 체크
+        if (session == null || user == null) {
             res.sendRedirect("/login.do");
+            return;
+        }
+
+        // mypage는 유저만 접근 가능하므로 403 에러처리
+        if (user.getUserAuth() == User.Auth.ROLE_ADMIN) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         chain.doFilter(req, res);
     }
-
 }
