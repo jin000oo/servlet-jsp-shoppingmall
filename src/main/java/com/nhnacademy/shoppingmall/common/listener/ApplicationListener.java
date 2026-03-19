@@ -25,14 +25,12 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-
 import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import java.time.LocalDateTime;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -74,7 +72,7 @@ public class ApplicationListener implements ServletContextListener {
         }
     }
 
-    //todo#12 application 시작시 테스트 계정인 admin,user 등록합니다. 만약 존재하면 등록하지 않습니다.
+    // application 시작시 테스트 계정인 admin,user 등록합니다. 만약 존재하면 등록하지 않습니다.
     private void initUsers() {
         if (userService.getUser("admin") == null) {
             User admin = new User("admin", "관리자", "12345", "20031107",
