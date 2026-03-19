@@ -32,7 +32,10 @@ import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.service.PointService;
 import com.nhnacademy.shoppingmall.point.service.impl.PointServiceImpl;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
+import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
+import com.nhnacademy.shoppingmall.product.service.ProductService;
+import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
@@ -54,13 +57,18 @@ public class OrderPostController implements BaseController {
     private UserRepository userRepository = new UserRepositoryImpl();
     private ProductRepository productRepository = new ProductRepositoryImpl();
 
+    private ProductService productService =
+            new ProductServiceImpl(new ProductRepositoryImpl(), new CategoryRepositoryImpl());
     private PointService pointService = new PointServiceImpl(new PointRepositoryImpl(), userRepository);
     private CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
-    private OrderService orderService = new OrderServiceImpl(orderRepository, orderDetailRepository,
-            userRepository, productRepository, pointService, new RequestChannel(10));
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
+
+        OrderService orderService = new OrderServiceImpl(orderRepository, orderDetailRepository,
+                userRepository, productRepository, productService, pointService, requestChannel);
+
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
 
@@ -96,6 +104,7 @@ public class OrderPostController implements BaseController {
 
             orderService.order(order, orderDetails);
 
+            // 주문 후 장바구니 목록 삭제
             for (Cart cart : cartList) {
                 cartService.deleteCart(user.getUserId(), cart.getProductId());
             }

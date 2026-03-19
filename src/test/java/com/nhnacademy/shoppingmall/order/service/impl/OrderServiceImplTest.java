@@ -29,6 +29,7 @@ import com.nhnacademy.shoppingmall.order.service.OrderService;
 import com.nhnacademy.shoppingmall.point.service.PointService;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
+import com.nhnacademy.shoppingmall.product.service.ProductService;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -50,10 +51,12 @@ public class OrderServiceImplTest {
     OrderDetailRepository orderDetailRepository = Mockito.mock(OrderDetailRepository.class);
     UserRepository userRepository = Mockito.mock(UserRepository.class);
     ProductRepository productRepository = Mockito.mock(ProductRepository.class);
+    ProductService productService = Mockito.mock(ProductService.class);
     PointService pointService = Mockito.mock(PointService.class);
     RequestChannel requestChannel = Mockito.mock(RequestChannel.class);
     OrderService orderService = new OrderServiceImpl(
-            orderRepository, orderDetailRepository, userRepository, productRepository, pointService, requestChannel);
+            orderRepository, orderDetailRepository, userRepository, productRepository,
+            productService, pointService, requestChannel);
 
     User testUser = new User(
             "test-user",
