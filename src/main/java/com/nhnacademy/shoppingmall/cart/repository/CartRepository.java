@@ -18,10 +18,10 @@ import java.util.Optional;
 
 public interface CartRepository {
 
-    // 새 상품 담기
+    // 장바구니에 상품 담기
     int save(Cart cart);
 
-    // 중복으로 담으려는지 확인
+    // 장바구니에 중복되는 상품을 담으려는지 확인
     Optional<Cart> findByUserIdAndProductId(String userId, String productId);
 
     // 장바구니 목록 조회
@@ -30,7 +30,7 @@ public interface CartRepository {
     // 장바구니 수량 변경
     int updateQuantity(String userId, String productId, int quantity);
 
-    // 주문 완료 후 장바구니에서 비우기
+    // 장바구니에서 특정 상품 삭제
     int deleteByUserIdAndProductId(String userId, String productId);
 
 }
