@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-//todo#3-8 Test Code가 통과하도록 UserRepositoryImpl를 구현합니다.
+// Test Code가 통과하도록 UserRepositoryImpl를 구현합니다.
 
 @Slf4j
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
@@ -67,7 +67,15 @@ class UserRepositoryImplTest {
         Optional<User> userOptional =
                 userRepository.findByUserIdAndUserPassword(testUser.getUserId(), testUser.getUserPassword());
 
-        Assertions.assertEquals(testUser, userOptional.get());
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(userOptional.isPresent()),
+                () -> Assertions.assertEquals(testUser.getUserId(), userOptional.get().getUserId()),
+                () -> Assertions.assertEquals(testUser.getUserName(), userOptional.get().getUserName()),
+                () -> Assertions.assertEquals(testUser.getUserPassword(), userOptional.get().getUserPassword()),
+                () -> Assertions.assertEquals(testUser.getUserBirth(), userOptional.get().getUserBirth()),
+                () -> Assertions.assertEquals(testUser.getUserAuth(), userOptional.get().getUserAuth()),
+                () -> Assertions.assertEquals(testUser.getUserPoint(), userOptional.get().getUserPoint())
+        );
     }
 
     @Test
@@ -84,11 +92,19 @@ class UserRepositoryImplTest {
 
     @Test
     @Order(3)
-    @DisplayName("user 조회 by uerId")
+    @DisplayName("user 조회 by userId")
     void findById() {
         Optional<User> userOptional = userRepository.findById(testUser.getUserId());
 
-        Assertions.assertEquals(testUser, userOptional.get());
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(userOptional.isPresent()),
+                () -> Assertions.assertEquals(testUser.getUserId(), userOptional.get().getUserId()),
+                () -> Assertions.assertEquals(testUser.getUserName(), userOptional.get().getUserName()),
+                () -> Assertions.assertEquals(testUser.getUserPassword(), userOptional.get().getUserPassword()),
+                () -> Assertions.assertEquals(testUser.getUserBirth(), userOptional.get().getUserBirth()),
+                () -> Assertions.assertEquals(testUser.getUserAuth(), userOptional.get().getUserAuth()),
+                () -> Assertions.assertEquals(testUser.getUserPoint(), userOptional.get().getUserPoint())
+        );
     }
 
     @Test
@@ -106,9 +122,16 @@ class UserRepositoryImplTest {
                 null);
         int result = userRepository.save(newUser);
 
+        Optional<User> userOptional = userRepository.findById(newUser.getUserId());
+
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),
-                () -> Assertions.assertEquals(newUser, userRepository.findById(newUser.getUserId()).get())
+                () -> Assertions.assertEquals(newUser.getUserId(), userOptional.get().getUserId()),
+                () -> Assertions.assertEquals(newUser.getUserName(), userOptional.get().getUserName()),
+                () -> Assertions.assertEquals(newUser.getUserPassword(), userOptional.get().getUserPassword()),
+                () -> Assertions.assertEquals(newUser.getUserBirth(), userOptional.get().getUserBirth()),
+                () -> Assertions.assertEquals(newUser.getUserAuth(), userOptional.get().getUserAuth()),
+                () -> Assertions.assertEquals(newUser.getUserPoint(), userOptional.get().getUserPoint())
         );
     }
 
@@ -148,9 +171,16 @@ class UserRepositoryImplTest {
         testUser.setUserPassword("new-password");
         int result = userRepository.update(testUser);
 
+        Optional<User> userOptional = userRepository.findById(testUser.getUserId());
+
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),
-                () -> Assertions.assertEquals(testUser, userRepository.findById(testUser.getUserId()).get())
+                () -> Assertions.assertEquals(testUser.getUserId(), userOptional.get().getUserId()),
+                () -> Assertions.assertEquals(testUser.getUserName(), userOptional.get().getUserName()),
+                () -> Assertions.assertEquals(testUser.getUserPassword(), userOptional.get().getUserPassword()),
+                () -> Assertions.assertEquals(testUser.getUserBirth(), userOptional.get().getUserBirth()),
+                () -> Assertions.assertEquals(testUser.getUserAuth(), userOptional.get().getUserAuth()),
+                () -> Assertions.assertEquals(testUser.getUserPoint(), userOptional.get().getUserPoint())
         );
     }
 

@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.cart.exception;
 
+// 장바구니에 이미 담겨 있는 상품은 또 담을 수 없음
 public class CartAlreadyExistsException extends RuntimeException {
 
     public CartAlreadyExistsException(String productId) {

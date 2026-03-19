@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.order.exception;
 
+// 포인트가 부족할 때
 public class InsufficientAmountException extends RuntimeException {
 
     public InsufficientAmountException(String userId) {

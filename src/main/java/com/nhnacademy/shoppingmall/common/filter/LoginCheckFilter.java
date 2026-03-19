@@ -29,7 +29,7 @@ public class LoginCheckFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        //todo#10 /mypage/ 하위경로의 접근은 로그인한 사용자만 접근할 수 있습니다.
+        // /mypage/ 하위경로의 접근은 로그인한 사용자만 접근할 수 있습니다.
         HttpSession session = req.getSession(false);
 
         if (session == null || session.getAttribute("user") == null) {

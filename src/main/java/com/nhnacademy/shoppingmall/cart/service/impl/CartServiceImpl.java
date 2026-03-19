@@ -16,7 +16,6 @@ import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.exception.CartAlreadyExistsException;
 import com.nhnacademy.shoppingmall.cart.repository.CartRepository;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,7 +45,8 @@ public class CartServiceImpl implements CartService {
         validateId(userId);
         validateId(productId);
 
-        return cartRepository.findByUserIdAndProductId(userId, productId).orElse(null);
+        return cartRepository.findByUserIdAndProductId(userId, productId)
+                .orElse(null);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CartServiceImpl implements CartService {
         validateId(productId);
 
         if (quantity < 1) {
-            throw new InsufficientQuantityException("quantity must be greater than 1");
+            throw new IllegalArgumentException("quantity must be greater than 1");
         }
 
         cartRepository.updateQuantity(userId, productId, quantity);

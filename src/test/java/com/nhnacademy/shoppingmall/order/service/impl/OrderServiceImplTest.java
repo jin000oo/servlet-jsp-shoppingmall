@@ -26,6 +26,7 @@ import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException
 import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
+import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.service.PointService;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
@@ -51,11 +52,13 @@ public class OrderServiceImplTest {
     OrderDetailRepository orderDetailRepository = Mockito.mock(OrderDetailRepository.class);
     UserRepository userRepository = Mockito.mock(UserRepository.class);
     ProductRepository productRepository = Mockito.mock(ProductRepository.class);
+
     ProductService productService = Mockito.mock(ProductService.class);
     PointService pointService = Mockito.mock(PointService.class);
     RequestChannel requestChannel = Mockito.mock(RequestChannel.class);
-    OrderService orderService = new OrderServiceImpl(
-            orderRepository, orderDetailRepository, userRepository, productRepository,
+
+    OrderService orderService = new OrderServiceImpl(orderRepository, orderDetailRepository,
+            userRepository, productRepository,
             productService, pointService, requestChannel);
 
     User testUser = new User(
@@ -97,11 +100,10 @@ public class OrderServiceImplTest {
 
         orderService.order(testOrder, List.of(testOrderDetail));
 
-        Assertions.assertEquals(900_000, testUser.getUserPoint()); // 100_0000 - 100_000
-
-        verify(userRepository, times(1)).update(testUser);
+        verify(productService, times(1)).updateProduct(testProduct);
         verify(orderRepository, times(1)).save(testOrder);
         verify(orderDetailRepository, times(1)).save(testOrderDetail);
+        verify(pointService, times(1)).savePoint(any(Point.class));
         verify(requestChannel, times(1)).addRequest(any(PointChannelRequest.class));
     }
 

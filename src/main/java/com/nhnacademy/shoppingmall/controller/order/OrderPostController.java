@@ -109,6 +109,7 @@ public class OrderPostController implements BaseController {
                 cartService.deleteCart(user.getUserId(), cart.getProductId());
             }
 
+            // TODO: 추후 결제 성공 시 주문 내역을 보여주거나 결제 완료 됐다는 창으로 redirect하는게 UX적으로 더 좋아보임..
             return "redirect:/index.do";
 
         } catch (InsufficientAmountException e) {
@@ -122,7 +123,9 @@ public class OrderPostController implements BaseController {
             return "shop/order/order";
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            req.setAttribute("errorMessage", "주문 처리 중 시스템 오류가 발생했습니다.");
+            
+            return "shop/order/order";
         }
     }
 

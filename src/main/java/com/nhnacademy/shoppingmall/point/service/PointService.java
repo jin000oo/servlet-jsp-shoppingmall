@@ -12,13 +12,15 @@
 
 package com.nhnacademy.shoppingmall.point.service;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
-import java.util.List;
 
 public interface PointService {
 
+    // 포인트 적립/차감 내역 저장
     void savePoint(Point point);
 
-    List<Point> getPointList(String userId);
+    // 포인트 내역 조회
+    Page<Point> getPointList(String userId, int page);
 
 }

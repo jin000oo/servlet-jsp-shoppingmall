@@ -27,7 +27,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 import javax.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/loginAction.do")
 public class LoginPostController implements BaseController {
@@ -37,7 +39,7 @@ public class LoginPostController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        //todo#13-2 로그인 구현, session은 60분동안 유지됩니다.
+        // 로그인 구현, session은 60분동안 유지됩니다.
         String userId = req.getParameter("user_id");
         String userPassword = req.getParameter("user_password");
 
@@ -50,6 +52,7 @@ public class LoginPostController implements BaseController {
 
             Map<String, Cart> guestCart = (Map<String, Cart>) session.getAttribute("guestCart");
 
+            // 비회원일 때 장바구니에 상품을 담았다면 (비회원 장바구니가 비어있지 않을 때)
             if (guestCart != null && !guestCart.isEmpty()) {
                 for (Cart cart : guestCart.values()) {
                     // DB에 해당 상품이 이미 존재하는지 확인
@@ -74,6 +77,7 @@ public class LoginPostController implements BaseController {
             return "redirect:/index.do";
 
         } catch (Exception e) {
+            log.error("[LoginPostController] error: {}", e.getMessage(), e);
             return "shop/login/login_form";
         }
     }

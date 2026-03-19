@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.point.service.impl;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.PointRepository;
 import com.nhnacademy.shoppingmall.point.service.PointService;
@@ -52,13 +53,20 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public List<Point> getPointList(String userId) {
+    public Page<Point> getPointList(String userId, int page) {
         if (userId == null || userId.isBlank()) {
             log.warn("[PointServiceImpl] user id is null or blank");
             throw new IllegalArgumentException("[PointServiceImpl] user id is null or blank");
         }
 
-        return pointRepository.findByUserId(userId);
+        int pageSize = Page.DEFAULT_PAGE_SIZE;
+        int offset = (page - 1) * pageSize;
+
+        List<Point> pointList = pointRepository.findByUserId(userId, pageSize, offset);
+
+        int totalCount = pointRepository.countByUserId(userId);
+
+        return new Page<>(pointList, totalCount);
     }
 
 }

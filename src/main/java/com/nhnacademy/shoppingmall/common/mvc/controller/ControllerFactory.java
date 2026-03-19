@@ -35,7 +35,7 @@ public class ControllerFactory {
             return;
         }
 
-        /*todo#5-1 ControllerFactory 초기화, 아래 설명을 참고하여 구현합니다.
+        /* ControllerFactory 초기화, 아래 설명을 참고하여 구현합니다.
          * 1. Set<Class<?>> c 에는 com.nhnacademy.shoppingmall.common.initialize.WebAppInitializer 에서  HandlesTypes에
          * com.nhnacademy.shoppingmall.common.mvc.controller.BaseController.class인 class를 set에 담겨서 parameter로 전달 됩니다.
          * BaseController를 구현한 Controller class가 전달됩니다.
@@ -69,22 +69,22 @@ public class ControllerFactory {
             }
         }
 
-        //todo#5-2 ctx(ServletContext)에  attribute를 추가합니다. -> key : CONTEXT_CONTROLLER_FACTORY_NAME, value : ControllerFactory
+        // ctx(ServletContext)에  attribute를 추가합니다. -> key : CONTEXT_CONTROLLER_FACTORY_NAME, value : ControllerFactory
         ctx.setAttribute(CONTEXT_CONTROLLER_FACTORY_NAME, this);
     }
 
     private Object getBean(String key) {
-        //todo#5-3 beanMap에서 controller 객체를 반환 합니다.
+        // beanMap에서 controller 객체를 반환 합니다.
         return beanMap.get(key);
     }
 
     public Object getController(HttpServletRequest request) {
-        //todo#5-4 request의 method, servletPath를 이용해서 Controller 객체를 반환합니다.
+        // request의 method, servletPath를 이용해서 Controller 객체를 반환합니다.
         return getController(request.getMethod(), request.getServletPath());
     }
 
     public Object getController(String method, String path) {
-        //todo#5-5 method, path를 이용해서 Controller 객체를 반환 합니다.
+        // method, path를 이용해서 Controller 객체를 반환 합니다.
         String key = getKey(method, path);
         Object controller = getBean(key);
 
@@ -96,9 +96,9 @@ public class ControllerFactory {
     }
 
     private String getKey(String method, String path) {
-        //todo#5-6  {method}-{key}  형식으로 Key를 반환 합니다.
-        //ex GET-/index.do
-        //ex POST-/loginAction.do
+        // {method}-{key}  형식으로 Key를 반환 합니다.
+        // ex GET-/index.do
+        // ex POST-/loginAction.do
         return String.format("%s-%s", method, path);
     }
 

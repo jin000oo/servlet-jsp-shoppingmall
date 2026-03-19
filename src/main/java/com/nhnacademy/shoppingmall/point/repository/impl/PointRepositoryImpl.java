@@ -54,13 +54,14 @@ public class PointRepositoryImpl implements PointRepository {
     }
 
     @Override
-    public List<Point> findByUserId(String userId) {
+    public List<Point> findByUserId(String userId, int limit, int offset) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
                 SELECT point_id, user_id, order_id, amount, reason, created_at 
                 FROM points 
-                WHERE user_id = ?
+                WHERE user_id = ? 
+                ORDER BY created_at DESC LIMIT ? OFFSET ?
                 """;
         log.debug("sql:{}", sql);
 
@@ -68,6 +69,8 @@ public class PointRepositoryImpl implements PointRepository {
 
         try (PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setString(1, userId);
+            psmt.setInt(2, limit);
+            psmt.setInt(3, offset);
 
             try (ResultSet rs = psmt.executeQuery()) {
                 while (rs.next()) {
@@ -86,6 +89,33 @@ public class PointRepositoryImpl implements PointRepository {
             }
 
             return pointList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int countByUserId(String userId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        String sql = """
+                SELECT COUNT(*) 
+                FROM points 
+                WHERE user_id = ?
+                """;
+        log.debug("sql:{}", sql);
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, userId);
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+            return 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -24,7 +24,6 @@ import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.exception.CartAlreadyExistsException;
 import com.nhnacademy.shoppingmall.cart.repository.CartRepository;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -91,7 +90,7 @@ public class CartServiceImplTest {
     @Test
     @DisplayName("장바구니 수량 변경 실패 - 수량이 1보다 작을 때")
     void updateQuantity_fail() {
-        Assertions.assertThrows(InsufficientQuantityException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 cartService.updateQuantity(testCart.getUserId(), testCart.getProductId(), 0));
 
         verify(cartRepository, never()).updateQuantity(anyString(), anyString(), anyInt());

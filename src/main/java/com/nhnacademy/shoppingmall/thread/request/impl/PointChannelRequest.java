@@ -32,7 +32,7 @@ public class PointChannelRequest extends ChannelRequest {
     @Override
     public void execute() {
         DbConnectionThreadLocal.initialize();
-        //todo#14-5 포인트 적립구현, connection은 point적립이 완료되면 반납합니다.
+        // 포인트 적립구현, connection은 point적립이 완료되면 반납합니다.
         log.debug("pointChannel execute");
 
         try {
