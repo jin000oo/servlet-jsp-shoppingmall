@@ -114,4 +114,14 @@ public class OrderDetailRepositoryImplTest {
         Assertions.assertEquals(1, result);
     }
 
+    @Test
+    @DisplayName("주문 상세 조회")
+    void findByOrderId() {
+        orderDetailRepository.save(testOrderDetail);
+
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(testOrder.getOrderId());
+
+        Assertions.assertEquals(1, orderDetailList.size());
+    }
+
 }

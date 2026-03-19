@@ -132,6 +132,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Order> getOrderList(String userId, int page) {
+        validateId(userId);
+
         int pageSize = Page.DEFAULT_PAGE_SIZE;
         int offset = (page - 1) * pageSize;
 
@@ -144,7 +146,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDetail> getOrderDetails(String orderId) {
+        validateId(orderId);
+        
         return orderDetailRepository.findByOrderId(orderId);
+    }
+
+    private void validateId(String id) {
+        if (id == null || id.isBlank()) {
+            log.warn("[OrderServiceImpl] id is null or blank");
+            throw new IllegalArgumentException("[OrderServiceImpl] id is null or blank");
+        }
     }
 
 }
