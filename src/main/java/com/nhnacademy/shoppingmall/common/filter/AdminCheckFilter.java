@@ -24,7 +24,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@WebFilter(urlPatterns = {"/admin/*", "admin.do"})
+@WebFilter(urlPatterns = "/admin/*")
 public class AdminCheckFilter extends HttpFilter {
 
     @Override
