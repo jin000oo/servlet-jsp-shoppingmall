@@ -123,7 +123,9 @@ public class OrderPostController implements BaseController {
             return "shop/order/order";
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            req.setAttribute("errorMessage", "주문 처리 중 시스템 오류가 발생했습니다.");
+            
+            return "shop/order/order";
         }
     }
 

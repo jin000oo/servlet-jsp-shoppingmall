@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
             requestChannel.addRequest(pointChannelRequest);
 
         } catch (InterruptedException e) {
-            log.error("fail to add point request channel", e);
+            log.error("fail to add point request channel - orderId: {}", order.getOrderId(), e);
             Thread.currentThread().interrupt();
         }
     }
