@@ -27,16 +27,15 @@ public class AddressServiceImpl implements AddressService {
         if (addressRepository.findById(address.getAddressId()).isPresent()) {
             throw new AddressAlreadyExistsException(address.getAddressId());
         }
-        
-        if (address.isDefault()) {
-            resetDefaultAddress(address.getUserId());
-        } else {
-            // 처음 등록하는 주소이면, default = true
-            if (addressRepository.countByUserId(address.getUserId()) == 0) {
-                address.setDefault(true);
-            }
+
+        // 처음 등록하는 주소면, defaultAddress = true
+        if (addressRepository.countByUserId(address.getUserId()) == 0) {
+            address.setDefaultAddress(true);
+        } else if (address.isDefaultAddress()) {
+            // 기본 주소로 등록되어 있는 경우, 다른 주소의 defaultAddress = false
+            resetDefaultAddress(address.getUserId(), address.getAddressId());
         }
-        
+
         addressRepository.save(address);
     }
 
@@ -46,8 +45,8 @@ public class AddressServiceImpl implements AddressService {
             throw new AddressNotFoundException(address.getAddressId());
         }
 
-        if (address.isDefault()) {
-            resetDefaultAddress(address.getUserId());
+        if (address.isDefaultAddress()) {
+            resetDefaultAddress(address.getUserId(), address.getAddressId());
         }
 
         addressRepository.update(address);
@@ -60,12 +59,12 @@ public class AddressServiceImpl implements AddressService {
         
         addressRepository.deleteById(addressId);
 
-        // 삭제하는 값이 default 주소이면, 다른 주소 하나를 default로 설정합니다.
-        if (address.isDefault()) {
+        // 삭제하는 값이 default 주소이면, 다른 주소 하나를 새로 defaultAddress로 설정
+        if (address.isDefaultAddress()) {
             List<Address> addresses = addressRepository.findByUserId(address.getUserId());
             if (!addresses.isEmpty()) {
                 Address newDefault = addresses.get(0);
-                newDefault.setDefault(true);
+                newDefault.setDefaultAddress(true);
                 addressRepository.update(newDefault);
             }
         }
@@ -76,13 +75,7 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.findByUserId(userId);
     }
 
-    private void resetDefaultAddress(String userId) {
-        List<Address> addresses = addressRepository.findByUserId(userId);
-        for (Address addr : addresses) {
-            if (addr.isDefault()) {
-                addr.setDefault(false);
-                addressRepository.update(addr);
-            }
-        }
+    private void resetDefaultAddress(String userId, String addressId) {
+        addressRepository.resetDefaultAddress(userId, addressId);
     }
 }

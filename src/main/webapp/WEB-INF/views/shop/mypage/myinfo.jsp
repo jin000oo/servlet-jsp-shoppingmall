@@ -56,12 +56,13 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
+                        <table class="table table-hover align-middle text-nowrap">
                             <thead class="table-light">
                                 <tr>
+                                    <th style="width: 80px;">기본 주소</th>
                                     <th>배송지명</th>
                                     <th>주소</th>
-                                    <th>관리</th>
+                                    <th style="width: 120px;">관리</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,21 +70,27 @@
                                     <c:when test="${not empty addresses}">
                                         <c:forEach var="address" items="${addresses}">
                                             <tr>
-                                                <td>
-                                                    ${address.addressName}
-                                                    <c:if test="${address.isDefault}">
-                                                        <span class="badge bg-info ms-1">기본 주소지</span>
-                                                    </c:if>
+                                                <td class="text-center">
+                                                    <c:choose>
+                                                        <c:when test="${address.defaultAddress}">
+                                                            <span class="badge bg-info">기본</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <form action="/mypage/address/setDefault.do" method="post" class="m-0">
+                                                                <input type="hidden" name="addressId" value="${address.addressId}">
+                                                                <button type="submit" class="btn btn-sm btn-outline-success py-0" style="font-size: 0.75rem;">설정</button>
+                                                            </form>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </td>
+                                                <td>${address.addressName}</td>
+                                                <td>(${address.zipCode}) ${address.roadAddress} ${address.detailAddress}</td>
                                                 <td>
-                                                    (${address.zipCode}) ${address.roadAddress} ${address.detailAddress}
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group btn-group-sm">
-                                                        <a href="/mypage/address/update.do?addressId=${address.addressId}" class="btn btn-outline-primary">수정</a>
-                                                        <form action="/mypage/address/delete.do" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');" style="display:inline;">
+                                                    <div class="d-flex gap-2">
+                                                        <a href="/mypage/address/update.do?addressId=${address.addressId}" class="btn btn-sm btn-outline-primary">수정</a>
+                                                        <form action="/mypage/address/delete.do" method="post" class="m-0" onsubmit="return confirm('정말 삭제하시겠습니까?');">
                                                             <input type="hidden" name="addressId" value="${address.addressId}">
-                                                            <button type="submit" class="btn btn-outline-danger">삭제</button>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
                                                         </form>
                                                     </div>
                                                 </td>

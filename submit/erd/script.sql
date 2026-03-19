@@ -34,7 +34,7 @@ COMMENT = '회원';
 -- Table `addresses`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `addresses` (
-  `address_id` VARCHAR(50) NOT NULL COMMENT '아이디',
+  `address_id` INT NOT NULL AUTO_INCREMENT COMMENT '아이디',
   `user_id` VARCHAR(50) NOT NULL,
   `address_name` VARCHAR(50) NOT NULL COMMENT '주소 별칭',
   `zip_code` VARCHAR(5) NOT NULL COMMENT '우편 번호',

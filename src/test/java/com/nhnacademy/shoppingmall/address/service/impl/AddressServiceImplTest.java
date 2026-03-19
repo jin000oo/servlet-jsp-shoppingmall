@@ -61,7 +61,7 @@ class AddressServiceImplTest {
 
         addressService.saveAddress(address);
 
-        assertFalse(existingAddr.isDefault());
+        assertFalse(existingAddr.isDefaultAddress());
         verify(addressRepository, times(1)).update(existingAddr);
         verify(addressRepository, times(1)).save(address);
     }
@@ -76,7 +76,7 @@ class AddressServiceImplTest {
 
         addressService.saveAddress(address);
 
-        assertTrue(address.isDefault());
+        assertTrue(address.isDefaultAddress());
         verify(addressRepository, times(1)).save(address);
     }
 
@@ -102,7 +102,7 @@ class AddressServiceImplTest {
 
         addressService.updateAddress(address);
 
-        assertFalse(existingAddr.isDefault());
+        assertFalse(existingAddr.isDefaultAddress());
         verify(addressRepository, times(1)).update(existingAddr);
         verify(addressRepository, times(1)).update(address);
     }
@@ -141,7 +141,7 @@ class AddressServiceImplTest {
 
         addressService.deleteAddress("addr-1");
 
-        assertTrue(otherAddr.isDefault());
+        assertTrue(otherAddr.isDefaultAddress());
         verify(addressRepository, times(1)).update(otherAddr);
         verify(addressRepository, times(1)).deleteById("addr-1");
     }

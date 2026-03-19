@@ -13,4 +13,5 @@ public interface AddressRepository {
     int deleteById(String addressId);
     int deleteByUserId(String userId);
     int countByUserId(String userId);
+    int resetDefaultAddress(String userId, String addressId);
 }

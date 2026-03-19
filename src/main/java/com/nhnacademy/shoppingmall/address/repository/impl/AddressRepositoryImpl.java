@@ -80,7 +80,7 @@ public class AddressRepositoryImpl implements AddressRepository {
             psmt.setString(4, address.getZipCode());
             psmt.setString(5, address.getRoadAddress());
             psmt.setString(6, address.getDetailAddress());
-            psmt.setBoolean(7, address.isDefault());
+            psmt.setBoolean(7, address.isDefaultAddress());
             return psmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,7 +106,7 @@ public class AddressRepositoryImpl implements AddressRepository {
             psmt.setString(3, address.getZipCode());
             psmt.setString(4, address.getRoadAddress());
             psmt.setString(5, address.getDetailAddress());
-            psmt.setBoolean(6, address.isDefault());
+            psmt.setBoolean(6, address.isDefaultAddress());
             psmt.setString(7, address.getAddressId());
             return psmt.executeUpdate();
         } catch (SQLException e) {
@@ -153,5 +153,18 @@ public class AddressRepositoryImpl implements AddressRepository {
             throw new RuntimeException(e);
         }
         return 0;
+    }
+
+    @Override
+    public int resetDefaultAddress(String userId, String addressId) {
+        String sql = "UPDATE addresses SET is_default = 0 WHERE user_id = ?";
+
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        try(PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, userId);
+            return psmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
