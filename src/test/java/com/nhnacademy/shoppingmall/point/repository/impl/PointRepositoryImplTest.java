@@ -91,7 +91,7 @@ public class PointRepositoryImplTest {
     void findByUserId() {
         pointRepository.save(testPoint);
 
-        List<Point> pointList = pointRepository.findByUserId(testUser.getUserId(), 1, 10);
+        List<Point> pointList = pointRepository.findByUserId(testUser.getUserId(), 10, 0);
 
         Assertions.assertEquals(1, pointList.size());
     }

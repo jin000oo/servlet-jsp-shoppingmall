@@ -103,7 +103,7 @@ public class PointServiceImplTest {
     void getPointList() {
         pointService.getPointList(testUser.getUserId(), 1);
 
-        verify(pointRepository, times(1)).findByUserId(testUser.getUserId(), 10, 10);
+        verify(pointRepository, times(1)).findByUserId(testUser.getUserId(), 10, 0);
     }
 
     @Test

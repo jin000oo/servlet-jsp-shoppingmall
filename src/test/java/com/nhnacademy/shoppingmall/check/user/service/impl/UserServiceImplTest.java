@@ -31,7 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-//todo#4-6 Test Code가 통과하도록 UserServiceImpl을 구현합니다.
+// Test Code가 통과하도록 UserServiceImpl을 구현합니다.
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -88,7 +88,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.countByUserId(anyString())).thenReturn(1);
 
         Throwable throwable = Assertions.assertThrows(UserAlreadyExistsException.class, () ->
-                        userService.saveUser(testUser));
+                userService.saveUser(testUser));
         log.debug("error:{}", throwable.getMessage());
     }
 
