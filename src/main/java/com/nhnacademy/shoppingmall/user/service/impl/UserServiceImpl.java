@@ -38,15 +38,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String userId) {
-        //todo#4-1 회원조회
+        // 회원조회
         validateUserId(userId);
 
-        return userRepository.findById(userId).orElse(null);
+        return userRepository.findById(userId)
+                .orElse(null);
     }
 
     @Override
     public void saveUser(User user) {
-        //todo#4-2 회원등록
+        // 회원등록
         validateUser(user);
 
         if (isExistUser(user.getUserId())) {
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
-        //todo#4-3 회원수정
+        // 회원수정
         validateUser(user);
 
         if (!isExistUser(user.getUserId())) {
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String userId) {
-        //todo#4-4 회원삭제
+        // 회원삭제
         validateUserId(userId);
 
         if (!isExistUser(userId)) {
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User doLogin(String userId, String userPassword) {
-        //todo#4-5 로그인 구현, userId, userPassword로 일치하는 회원 조회
+        // 로그인 구현, userId, userPassword로 일치하는 회원 조회
         validateUserId(userId);
 
         if (userPassword == null || userPassword.isBlank()) {
@@ -141,4 +142,5 @@ public class UserServiceImpl implements UserService {
     private boolean isExistUser(String userId) {
         return userRepository.countByUserId(userId) > 0;
     }
+
 }

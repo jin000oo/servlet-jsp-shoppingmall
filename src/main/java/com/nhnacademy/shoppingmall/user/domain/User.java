@@ -13,8 +13,13 @@
 package com.nhnacademy.shoppingmall.user.domain;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
+@EqualsAndHashCode
+@Getter
+@ToString
 public class User {
 
     public enum Auth {
@@ -42,38 +47,6 @@ public class User {
         this.latestLoginAt = latestLoginAt;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public String getUserBirth() {
-        return userBirth;
-    }
-
-    public Auth getUserAuth() {
-        return userAuth;
-    }
-
-    public int getUserPoint() {
-        return userPoint;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getLatestLoginAt() {
-        return latestLoginAt;
-    }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -92,45 +65,6 @@ public class User {
 
     public void setUserPoint(int userPoint) {
         this.userPoint = userPoint;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        User user = (User) o;
-
-        return userPoint == user.userPoint &&
-                Objects.equals(userId, user.userId) &&
-                Objects.equals(userName, user.userName) &&
-                Objects.equals(userPassword, user.userPassword) &&
-                Objects.equals(userBirth, user.userBirth) &&
-                userAuth == user.userAuth;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, userName, userPassword, userBirth, userAuth, userPoint);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", userBirth='" + userBirth + '\'' +
-                ", userAuth=" + userAuth +
-                ", userPoint=" + userPoint +
-                ", createdAt=" + createdAt +
-                ", latestLoginAt=" + latestLoginAt +
-                '}';
     }
 
 }

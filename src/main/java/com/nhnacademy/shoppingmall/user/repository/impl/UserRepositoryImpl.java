@@ -31,8 +31,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) {
-        /*todo#3-1 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
-          해당 코드는 SQL Injection이 발생합니다. SQL Injection이 발생하지 않도록 수정하세요.
+        /* 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
+           해당 코드는 SQL Injection이 발생합니다. SQL Injection이 발생하지 않도록 수정하세요.
          */
         Connection connection = DbConnectionThreadLocal.getConnection();
 
@@ -76,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findById(String userId) {
-        //todo#3-2 회원조회
+        // 회원조회
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
@@ -118,7 +118,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int save(User user) {
-        //todo#3-3 회원등록, executeUpdate()을 반환합니다.
+        // 회원등록, executeUpdate()을 반환합니다.
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
@@ -145,7 +145,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int deleteByUserId(String userId) {
-        //todo#3-4 회원삭제, executeUpdate()을 반환합니다.
+        // 회원삭제, executeUpdate()을 반환합니다.
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
@@ -167,7 +167,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int update(User user) {
-        //todo#3-5 회원수정, executeUpdate()을 반환합니다.
+        // 회원수정, executeUpdate()을 반환합니다.
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
@@ -193,7 +193,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int updateLatestLoginAtByUserId(String userId, LocalDateTime latestLoginAt) {
-        //todo#3-6, 마지막 로그인 시간 업데이트, executeUpdate()을 반환합니다.
+        // 마지막 로그인 시간 업데이트, executeUpdate()을 반환합니다.
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
@@ -215,7 +215,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int countByUserId(String userId) {
-        //todo#3-7 userId와 일치하는 회원의 count를 반환합니다.
+        // userId와 일치하는 회원의 count를 반환합니다.
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = """
