@@ -30,7 +30,9 @@ import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.transaction.Transactional;
 
 @Transactional
@@ -55,14 +57,18 @@ public class OrderController implements BaseController {
 
         int totalAmount = 0;
 
+        Map<String, Product> productMap = new HashMap<>();
+
         for (Cart cart : cartList) {
             Product product = productService.getProduct(cart.getProductId());
             totalAmount += product.getPrice() * cart.getQuantity();
+            productMap.put(cart.getProductId(), product);
         }
 
         req.setAttribute("cartList", cartList);
         req.setAttribute("currentPoint", userService.getUser(user.getUserId()).getUserPoint());
         req.setAttribute("totalAmount", totalAmount);
+        req.setAttribute("productMap", productMap);
 
         return "shop/order/order";
     }

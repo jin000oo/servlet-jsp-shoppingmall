@@ -27,17 +27,29 @@
     <div class="card mb-4">
         <div class="card-header bg-dark text-white fw-bold">주문 상품</div>
         <table class="table table-hover mb-0">
-            <thead>
+            <thead class="table-dark">
             <tr>
-                <th>상품 ID</th>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>단가</th>
                 <th>수량</th>
+                <th>합계</th>
             </tr>
             </thead>
             <tbody>
             <c:forEach items="${cartList}" var="cart">
+                <c:set var="product" value="${productMap[cart.productId]}"/>
                 <tr>
-                    <td>${cart.productId}</td>
+                    <td>
+                        <img src="${product.thumbnailImagePath}" alt="${product.productName}"
+                             class="img-thumbnail" style="width: 60px; height: 60px; object-fit: contain;">
+                    </td>
+                    <td class="fw-bold">${product.productName}</td>
+                    <td><fmt:formatNumber value="${product.price}" type="number"/> 원</td>
                     <td>${cart.quantity} 개</td>
+                    <td class="text-primary fw-bold">
+                        <fmt:formatNumber value="${product.price * cart.quantity}" type="number"/> 원
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
