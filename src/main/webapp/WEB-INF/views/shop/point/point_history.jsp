@@ -46,4 +46,23 @@
         </c:forEach>
         </tbody>
     </table>
+    <c:if test="${totalPages > 0}">
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="?page=${currentPage - 1}">이전</a>
+                </li>
+
+                <c:forEach begin="1" end="${totalPages}" var="i">
+                    <li class="page-item ${i == currentPage ? 'active' : ''}">
+                        <a class="page-link" href="?page=${i}">${i}</a>
+                    </li>
+                </c:forEach>
+
+                <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="?page=${currentPage + 1}">다음</a>
+                </li>
+            </ul>
+        </nav>
+    </c:if>
 </div>

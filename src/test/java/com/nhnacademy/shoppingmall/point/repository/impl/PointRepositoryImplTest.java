@@ -90,8 +90,8 @@ public class PointRepositoryImplTest {
     @DisplayName("포인트 내역 조회")
     void findByUserId() {
         pointRepository.save(testPoint);
-        
-        List<Point> pointList = pointRepository.findByUserId(testUser.getUserId());
+
+        List<Point> pointList = pointRepository.findByUserId(testUser.getUserId(), 1, 10);
 
         Assertions.assertEquals(1, pointList.size());
     }

@@ -21,6 +21,9 @@ public interface PointRepository {
     int save(Point point);
 
     // 포인트 내역 조회
-    List<Point> findByUserId(String userId);
+    List<Point> findByUserId(String userId, int limit, int offset);
+
+    // 총 데이터 개수 조회
+    int countByUserId(String userId);
 
 }

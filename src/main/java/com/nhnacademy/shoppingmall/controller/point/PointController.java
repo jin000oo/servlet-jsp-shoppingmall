@@ -44,8 +44,22 @@ public class PointController implements BaseController {
             return "redirect:/login.do";
         }
 
-        List<Point> pointList = pointService.getPointList(user.getUserId());
+        int page = req.getParameter("page") == null ? 1 : Integer.parseInt(req.getParameter("page"));
+        int limit = 10;
+        int offset = (page - 1) * limit;
+
+        List<Point> pointList = pointService.getPointList(user.getUserId(), limit, offset);
         req.setAttribute("pointList", pointList);
+
+        int totalCount = pointService.getTotalCount(user.getUserId());
+        int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+        if (totalPages == 0) {
+            totalPages = 1;
+        }
+
+        req.setAttribute("currentPage", page);
+        req.setAttribute("totalPages", totalPages);
 
         User recentUser = userService.getUser(user.getUserId());
         req.setAttribute("currentPoint", recentUser.getUserPoint());

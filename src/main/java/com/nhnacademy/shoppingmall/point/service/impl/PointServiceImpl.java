@@ -52,13 +52,18 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public List<Point> getPointList(String userId) {
+    public List<Point> getPointList(String userId, int limit, int offset) {
         if (userId == null || userId.isBlank()) {
             log.warn("[PointServiceImpl] user id is null or blank");
             throw new IllegalArgumentException("[PointServiceImpl] user id is null or blank");
         }
 
-        return pointRepository.findByUserId(userId);
+        return pointRepository.findByUserId(userId, limit, offset);
+    }
+
+    @Override
+    public int getTotalCount(String userId) {
+        return pointRepository.countByUserId(userId);
     }
 
 }

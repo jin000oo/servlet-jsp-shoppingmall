@@ -19,6 +19,8 @@ public interface PointService {
 
     void savePoint(Point point);
 
-    List<Point> getPointList(String userId);
+    List<Point> getPointList(String userId, int limit, int offset);
+
+    int getTotalCount(String userId);
 
 }
