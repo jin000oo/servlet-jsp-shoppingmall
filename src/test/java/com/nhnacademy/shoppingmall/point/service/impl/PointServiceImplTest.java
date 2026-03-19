@@ -101,7 +101,7 @@ public class PointServiceImplTest {
     @Test
     @DisplayName("포인트 내역 조회")
     void getPointList() {
-        pointService.getPointList(testUser.getUserId(), 10, 10);
+        pointService.getPointList(testUser.getUserId(), 1);
 
         verify(pointRepository, times(1)).findByUserId(testUser.getUserId(), 10, 10);
     }
@@ -111,11 +111,11 @@ public class PointServiceImplTest {
     void getPointList_fail() {
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
-                        pointService.getPointList(null, 10, 10)),
+                        pointService.getPointList(null, 1)),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
-                        pointService.getPointList("", 10, 10)),
+                        pointService.getPointList("", 1)),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
-                        pointService.getPointList(" ", 10, 10))
+                        pointService.getPointList(" ", 1))
         );
     }
 

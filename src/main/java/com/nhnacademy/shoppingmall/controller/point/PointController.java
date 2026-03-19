@@ -14,6 +14,7 @@ package com.nhnacademy.shoppingmall.controller.point;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.service.PointService;
@@ -25,7 +26,6 @@ import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import javax.transaction.Transactional;
 
 @Transactional
@@ -45,14 +45,12 @@ public class PointController implements BaseController {
         }
 
         int page = req.getParameter("page") == null ? 1 : Integer.parseInt(req.getParameter("page"));
-        int limit = 10;
-        int offset = (page - 1) * limit;
 
-        List<Point> pointList = pointService.getPointList(user.getUserId(), limit, offset);
-        req.setAttribute("pointList", pointList);
+        Page<Point> pointPage = pointService.getPointList(user.getUserId(), page);
+        req.setAttribute("pointList", pointPage.getContent());
 
-        int totalCount = pointService.getTotalCount(user.getUserId());
-        int totalPages = (int) Math.ceil((double) totalCount / limit);
+        long totalCount = pointPage.getTotalCount();
+        int totalPages = (int) Math.ceil((double) totalCount / Page.DEFAULT_PAGE_SIZE);
 
         if (totalPages == 0) {
             totalPages = 1;
@@ -60,9 +58,7 @@ public class PointController implements BaseController {
 
         req.setAttribute("currentPage", page);
         req.setAttribute("totalPages", totalPages);
-
-        User recentUser = userService.getUser(user.getUserId());
-        req.setAttribute("currentPoint", recentUser.getUserPoint());
+        req.setAttribute("currentPoint", userService.getUser(user.getUserId()).getUserPoint());
 
         return "shop/point/point_history";
     }
