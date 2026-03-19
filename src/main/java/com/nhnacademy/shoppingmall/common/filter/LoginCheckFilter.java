@@ -35,7 +35,7 @@ public class LoginCheckFilter extends HttpFilter {
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
         // 장바구니를 담은 사용자도 세션을 가지도록 구현되었으므로, 게스트 유저 체크
-        if (session == null || user == null || session.getAttribute("guestUser") != null ) {
+        if (session == null || user == null) {
             res.sendRedirect("/login.do");
             return;
         }
