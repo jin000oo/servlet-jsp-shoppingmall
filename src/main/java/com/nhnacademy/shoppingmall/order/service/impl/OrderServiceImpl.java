@@ -24,6 +24,7 @@ import com.nhnacademy.shoppingmall.point.service.PointService;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.exception.ProductNotFoundException;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
+import com.nhnacademy.shoppingmall.product.service.ProductService;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -41,17 +42,19 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
+    private final ProductService productService;
     private final PointService pointService;
     private final RequestChannel requestChannel;
 
     public OrderServiceImpl(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
                             UserRepository userRepository, ProductRepository productRepository,
-                            PointService pointService, RequestChannel requestChannel) {
+                            ProductService productService, PointService pointService, RequestChannel requestChannel) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
 
+        this.productService = productService;
         this.pointService = pointService;
         this.requestChannel = requestChannel;
     }
@@ -79,11 +82,11 @@ public class OrderServiceImpl implements OrderService {
             if (product.getStock() < orderDetail.getQuantity()) {
                 throw new InsufficientQuantityException(orderDetail.getProductId());
             }
-        }
 
-        // 포인트 차감: users 테이블 수정
-        user.setUserPoint(user.getUserPoint() - order.getTotalAmount());
-        userRepository.update(user);
+            // 재고 차감: products 테이블 수정
+            product.setStock(product.getStock() - orderDetail.getQuantity());
+            productService.updateProduct(product);
+        }
 
         // 주문 및 주문 내역 저장
         orderRepository.save(order);
@@ -91,6 +94,16 @@ public class OrderServiceImpl implements OrderService {
         for (OrderDetail orderDetail : orderDetails) {
             orderDetailRepository.save(orderDetail);
         }
+
+        // 포인트 차감 내역 저장
+        Point usePoint = new Point(
+                UUID.randomUUID().toString(),
+                order.getUserId(),
+                order.getOrderId(),
+                -order.getTotalAmount(),
+                "주문 결제 사용"
+        );
+        pointService.savePoint(usePoint);
 
         // 총액의 10% 포인트 적립
         int earnPoint = (int) (order.getTotalAmount() * 0.1);

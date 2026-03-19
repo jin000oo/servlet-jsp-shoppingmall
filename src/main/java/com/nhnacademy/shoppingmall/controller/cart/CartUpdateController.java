@@ -33,7 +33,7 @@ public class CartUpdateController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String productId = req.getParameter("product_id");
+        String productId = req.getParameter("productId");
         int quantity = Integer.parseInt(req.getParameter("quantity"));
 
         HttpSession session = req.getSession(false);

@@ -33,7 +33,7 @@ public class CartDeleteController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String productId = req.getParameter("product_id");
+        String productId = req.getParameter("productId");
 
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;

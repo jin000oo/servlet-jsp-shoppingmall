@@ -49,23 +49,22 @@ public class OrderController implements BaseController {
 
         if (user == null) {
             return "redirect:/login.do";
-        } else {
-            List<Cart> cartList = cartService.getCartList(user.getUserId());
-
-            int totalAmount = 0;
-
-            for (Cart cart : cartList) {
-                Product product = productService.getProduct(cart.getProductId());
-                totalAmount += product.getPrice() * cart.getQuantity();
-            }
-
-            req.setAttribute("cartList", cartList);
-            req.setAttribute("currentPoint", userService.getUser(user.getUserId()).getUserPoint());
-            req.setAttribute("totalAmount", totalAmount);
-
-            return "shop/order/order";
         }
 
+        List<Cart> cartList = cartService.getCartList(user.getUserId());
+
+        int totalAmount = 0;
+
+        for (Cart cart : cartList) {
+            Product product = productService.getProduct(cart.getProductId());
+            totalAmount += product.getPrice() * cart.getQuantity();
+        }
+
+        req.setAttribute("cartList", cartList);
+        req.setAttribute("currentPoint", userService.getUser(user.getUserId()).getUserPoint());
+        req.setAttribute("totalAmount", totalAmount);
+
+        return "shop/order/order";
     }
 
 }

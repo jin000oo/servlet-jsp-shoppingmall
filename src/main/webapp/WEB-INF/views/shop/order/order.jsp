@@ -19,26 +19,55 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <div class="container mt-5">
     <h2>주문서 / 결제</h2>
 
-    <h4>주문 상품</h4>
-    <table class="table table-bordered"></table>
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white fw-bold">주문 상품</div>
+        <table class="table table-hover mb-0">
+            <thead>
+            <tr>
+                <th>상품 ID</th>
+                <th>수량</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${cartList}" var="cart">
+                <tr>
+                    <td>${cart.productId}</td>
+                    <td>${cart.quantity} 개</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
 
-    <hr>
+    <div class="card mb-4">
+        <div class="card-body bg-light text-end">
+            <c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger text-center" role="alert">
+                    <strong>${errorMessage}</strong>
+                </div>
+            </c:if>
 
-    <div class="alert alert-secondary">
-        <h4>총 결제 금액: <strong>${totalAmount} 원</strong></h4>
-        <h5>사용 가능 포인트: <strong>${currentPoint} P</strong></h5>
-
-        <c:if test="${currentPoint < totalAmount}">
-            <p style="color: red;">포인트가 부족합니다.</p>
-        </c:if>
+            <h5 class="mb-3">보유 포인트:
+                <span class="text-primary fw-bold">
+                    <fmt:formatNumber value="${currentPoint}" type="number"/> P
+                </span>
+            </h5>
+            <h3>총 결제 금액:
+                <span class="text-danger fw-bold">
+                    <fmt:formatNumber value="${totalAmount}" type="number"/> 원
+                </span>
+            </h3>
+        </div>
     </div>
 
     <form action="/order.do" method="post" class="text-end">
-        <input type="hidden" name="total_amount" value="${totalAmount}">
+        <input type="hidden" name="totalAmount" value="${totalAmount}">
+        <a href="/cart.do" class="btn btn-secondary btn-lg me-2">장바구니로 돌아가기</a>
         <button type="submit" class="btn btn-primary btn-lg" ${currentPoint < totalAmount ? 'disabled' : ''}>
             결제
         </button>
