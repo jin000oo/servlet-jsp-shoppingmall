@@ -15,6 +15,7 @@ package com.nhnacademy.shoppingmall.check.user.service.impl;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
+import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
@@ -38,7 +39,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserServiceImplTest {
 
     UserRepository userRepository = Mockito.mock(UserRepository.class);
-    UserService userService = new UserServiceImpl(userRepository);
+    OrderRepository orderRepository = Mockito.mock(OrderRepository.class);
+    UserService userService = new UserServiceImpl(userRepository, orderRepository);
     User testUser = new User(
             "nhnacademy-test-user",
             "nhn아카데미",
@@ -112,6 +114,7 @@ class UserServiceImplTest {
 
         userService.deleteUser(testUser.getUserId());
 
+        Mockito.verify(orderRepository, Mockito.times(1)).updateUserId(anyString(), anyString());
         Mockito.verify(userRepository, Mockito.times(1)).deleteByUserId(anyString());
         Mockito.verify(userRepository, Mockito.times(1)).countByUserId(anyString());
     }

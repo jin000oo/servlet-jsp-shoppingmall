@@ -37,6 +37,7 @@ import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -96,8 +97,11 @@ public class OrderServiceImplTest {
     @Test
     @DisplayName("주문 성공 - 잔액 및 재고 차감, 비동기 큐 전송")
     void order() throws InterruptedException {
+        List<Product> productIds = new ArrayList<>();
+        productIds.add(testProduct);
+
         when(userRepository.findById(anyString())).thenReturn(Optional.of(testUser));
-        when(productRepository.findById(anyString())).thenReturn(Optional.of(testProduct));
+        when(productRepository.findByIds(any())).thenReturn(productIds);
 
         orderService.order(testOrder, List.of(testOrderDetail));
 
@@ -130,8 +134,11 @@ public class OrderServiceImplTest {
     void order_fail2() throws InterruptedException {
         testProduct.setStock(1);
 
+        List<Product> productIds = new ArrayList<>();
+        productIds.add(testProduct);
+
         when(userRepository.findById(anyString())).thenReturn(Optional.of(testUser));
-        when(productRepository.findById(anyString())).thenReturn(Optional.of(testProduct));
+        when(productRepository.findByIds(any())).thenReturn(productIds);
 
         Assertions.assertThrows(InsufficientQuantityException.class, () ->
                 orderService.order(testOrder, List.of(testOrderDetail)));
