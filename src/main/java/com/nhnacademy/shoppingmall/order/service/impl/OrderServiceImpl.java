@@ -32,7 +32,9 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -75,16 +77,30 @@ public class OrderServiceImpl implements OrderService {
             throw new InsufficientAmountException(order.getUserId());
         }
 
+        // 주문된 상품 ID (DB 조회)
+        List<String> productIds = orderDetails.stream()
+                .map(OrderDetail::getProductId)
+                .toList();
+
+        Map<String, Product> productMap = productRepository.findByIds(productIds).stream()
+                .collect(Collectors.toMap(Product::getProductId, p -> p));
+
         // 재고 검증
         for (OrderDetail orderDetail : orderDetails) {
-            Product product = productRepository.findById(orderDetail.getProductId())
-                    .orElseThrow(() -> new ProductNotFoundException(orderDetail.getProductId()));
+            Product product = productMap.get(orderDetail.getProductId());
+
+            if (product == null) {
+                throw new ProductNotFoundException(orderDetail.getProductId());
+            }
 
             if (product.getStock() < orderDetail.getQuantity()) {
                 throw new InsufficientQuantityException(orderDetail.getProductId());
             }
+        }
 
-            // 재고 차감: products 테이블 수정
+        // 재고 차감: products 테이블 수정
+        for (OrderDetail orderDetail : orderDetails) {
+            Product product = productMap.get(orderDetail.getProductId());
             product.setStock(product.getStock() - orderDetail.getQuantity());
             productService.updateProduct(product);
         }
@@ -147,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDetail> getOrderDetails(String orderId) {
         validateId(orderId);
-        
+
         return orderDetailRepository.findByOrderId(orderId);
     }
 
