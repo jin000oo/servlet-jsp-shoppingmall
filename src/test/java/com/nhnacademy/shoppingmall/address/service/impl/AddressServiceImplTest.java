@@ -55,14 +55,11 @@ class AddressServiceImplTest {
     void saveAddress_withDefault() {
         Address address = new Address("addr-1", "user-1", "Home", "12345", "Road", "Detail", true);
         when(addressRepository.findById("addr-1")).thenReturn(Optional.empty());
-
-        Address existingAddr = new Address("addr-2", "user-1", "Office", "54321", "Road2", "Detail2", true);
-        when(addressRepository.findByUserId("user-1")).thenReturn(List.of(existingAddr));
+        when(addressRepository.countByUserId("user-1")).thenReturn(1);
 
         addressService.saveAddress(address);
 
-        assertFalse(existingAddr.isDefaultAddress());
-        verify(addressRepository, times(1)).update(existingAddr);
+        verify(addressRepository, times(1)).resetDefaultAddress("user-1", "addr-1");
         verify(addressRepository, times(1)).save(address);
     }
 
@@ -97,13 +94,9 @@ class AddressServiceImplTest {
         Address address = new Address("addr-1", "user-1", "Home", "12345", "Road", "Detail", true);
         when(addressRepository.findById("addr-1")).thenReturn(Optional.of(address));
 
-        Address existingAddr = new Address("addr-2", "user-1", "Office", "54321", "Road2", "Detail2", true);
-        when(addressRepository.findByUserId("user-1")).thenReturn(List.of(existingAddr));
-
         addressService.updateAddress(address);
 
-        assertFalse(existingAddr.isDefaultAddress());
-        verify(addressRepository, times(1)).update(existingAddr);
+        verify(addressRepository, times(1)).resetDefaultAddress("user-1", "addr-1");
         verify(addressRepository, times(1)).update(address);
     }
 
