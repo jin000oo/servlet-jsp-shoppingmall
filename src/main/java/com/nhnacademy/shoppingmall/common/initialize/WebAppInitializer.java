@@ -12,6 +12,8 @@
 
 package com.nhnacademy.shoppingmall.common.initialize;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Repository;
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.mvc.controller.ControllerFactory;
 import jakarta.servlet.ServletContainerInitializer;
@@ -24,13 +26,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @HandlesTypes(
         value = {
-                BaseController.class
+                BaseController.class,
+                Repository.class,
+                Service.class
         }
 )
 public class WebAppInitializer implements ServletContainerInitializer {
 
     @Override
     public void onStartup(Set<Class<?>> c, ServletContext ctx) throws ServletException {
+        ctx.setAttribute("initializerClasses", c);
+
         ControllerFactory controllerFactory = new ControllerFactory();
         controllerFactory.initialize(c, ctx);
     }

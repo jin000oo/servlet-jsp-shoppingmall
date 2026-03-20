@@ -16,13 +16,9 @@ import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
-import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.service.PointService;
-import com.nhnacademy.shoppingmall.point.service.impl.PointServiceImpl;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -32,11 +28,11 @@ import javax.transaction.Transactional;
 @RequestMapping(method = RequestMapping.Method.GET, value = "/mypage/point.do")
 public class PointController implements BaseController {
 
-    private final PointService pointService = new PointServiceImpl(new PointRepositoryImpl(), new UserRepositoryImpl());
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        PointService pointService = (PointService) req.getServletContext().getAttribute(PointService.CONTEXT_POINT_SERVICE_NAME);
+        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
+
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
 

@@ -5,9 +5,11 @@ import com.nhnacademy.shoppingmall.address.exception.AddressAlreadyExistsExcepti
 import com.nhnacademy.shoppingmall.address.exception.AddressNotFoundException;
 import com.nhnacademy.shoppingmall.address.repository.AddressRepository;
 import com.nhnacademy.shoppingmall.address.service.AddressService;
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 
 import java.util.List;
 
+@Service(AddressService.CONTEXT_ADDRESS_SERVICE_NAME)
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;

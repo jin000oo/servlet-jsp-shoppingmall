@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.product.service.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.exception.CategoryNotFoundException;
@@ -11,6 +12,7 @@ import com.nhnacademy.shoppingmall.product.service.ProductService;
 
 import java.util.List;
 
+@Service(ProductService.CONTEXT_PRODUCT_SERVICE_NAME)
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;

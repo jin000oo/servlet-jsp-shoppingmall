@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.SUCCESS_MESSAGE;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/admin/product/register.do")
 public class ProductRegisterPostController implements BaseController {
@@ -37,6 +39,8 @@ public class ProductRegisterPostController implements BaseController {
 
         Product product = new Product(productId, productName, price, stock, thumbnailImagePath, categoryIds, detailImagePaths);
         productService.saveProduct(product);
+
+        req.getSession().setAttribute(SUCCESS_MESSAGE, "상품이 성공적으로 등록되었습니다.");
 
         return "redirect:/admin/product.do";
     }

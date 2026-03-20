@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.user.service.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
@@ -28,6 +29,7 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service(UserService.CONTEXT_USER_SERVICE_NAME)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

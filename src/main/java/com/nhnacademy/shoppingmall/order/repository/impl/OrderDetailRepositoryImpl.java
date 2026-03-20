@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.order.repository.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Repository;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
@@ -24,6 +25,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Repository
 public class OrderDetailRepositoryImpl implements OrderDetailRepository {
 
     @Override

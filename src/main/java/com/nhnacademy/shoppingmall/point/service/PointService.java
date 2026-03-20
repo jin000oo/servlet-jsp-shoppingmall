@@ -16,6 +16,7 @@ import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 
 public interface PointService {
+    String CONTEXT_POINT_SERVICE_NAME = "CONTEXT_POINT_SERVICE";
 
     // 포인트 적립/차감 내역 저장
     void savePoint(Point point);

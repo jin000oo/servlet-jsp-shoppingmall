@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/mypage/myinfo.do")
 public class MyInfoUpdatePostController implements BaseController {
@@ -28,7 +30,7 @@ public class MyInfoUpdatePostController implements BaseController {
 
         // 기본 유효성 검사
         if (userName == null || userName.isBlank() || userBirth == null || userBirth.isBlank()) {
-            req.setAttribute("error_message", "이름과 생년월일은 필수 입력 항목입니다.");
+            req.setAttribute(ERROR_MESSAGE, "이름과 생년월일은 필수 입력 항목입니다.");
             return "shop/mypage/myinfo";
         }
 

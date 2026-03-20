@@ -87,6 +87,24 @@
     <main>
         <div class="album py-5 bg-light">
             <div class="container">
+                <%-- 공통 에러 메시지 출력 --%>
+                <c:set var="errorMsg" value="${not empty errorMessage ? errorMessage : sessionScope.errorMessage}" />
+                <c:if test="${not empty errorMsg}">
+                    <div class="alert alert-danger mx-auto" role="alert" style="width: 70%;">
+                        ${errorMsg}
+                    </div>
+                    <c:remove var="errorMessage" scope="session" />
+                </c:if>
+
+                <%-- 공통 성공 메시지 출력 --%>
+                <c:set var="successMsg" value="${not empty successMessage ? successMessage : sessionScope.successMessage}" />
+                <c:if test="${not empty successMsg}">
+                    <div class="alert alert-success mx-auto" role="alert" style="width: 70%;">
+                        ${successMsg}
+                    </div>
+                    <c:remove var="successMessage" scope="session" />
+                </c:if>
+
                 <jsp:include page="${layout_content_holder}"/>
             </div>
         </div>

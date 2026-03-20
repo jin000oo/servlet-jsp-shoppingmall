@@ -19,12 +19,6 @@
                     <a href="/mypage/password.do" class="btn btn-sm btn-outline-secondary">비밀번호 변경</a>
                 </div>
                 <div class="card-body">
-                    <c:if test="${not empty error_message}">
-                        <div class="alert alert-danger">
-                            ${error_message}
-                        </div>
-                    </c:if>
-
                     <form action="/mypage/myinfo.do" method="post">
                         <div class="mb-3">
                             <label class="form-label">아이디</label>

@@ -13,15 +13,13 @@
 package com.nhnacademy.shoppingmall.controller.auth;
 
 import com.nhnacademy.shoppingmall.cart.domain.Cart;
-import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.util.CommonConstants;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
+import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -34,11 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(method = RequestMapping.Method.POST, value = "/loginAction.do")
 public class LoginPostController implements BaseController {
 
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-    private final CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
+        CartService cartService = (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
+
         // 로그인 구현, session은 60분동안 유지됩니다.
         String userId = req.getParameter("user_id");
         String userPassword = req.getParameter("user_password");
@@ -76,6 +74,10 @@ public class LoginPostController implements BaseController {
 
             return "redirect:/index.do";
 
+        } catch (UserNotFoundException e) {
+            log.error("[LoginPostController] {}", e.getMessage(), e);
+            req.setAttribute(CommonConstants.ERROR_MESSAGE, "아이디 또는 비밀번호가 일치하지 않습니다.");
+            return "shop/login/login_form";
         } catch (Exception e) {
             log.error("[LoginPostController] error: {}", e.getMessage(), e);
             return "shop/login/login_form";

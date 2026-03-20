@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.product.service.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.exception.CategoryAlreadyExistsException;
 import com.nhnacademy.shoppingmall.product.exception.CategoryNotFoundException;
@@ -8,6 +9,7 @@ import com.nhnacademy.shoppingmall.product.service.CategoryService;
 
 import java.util.List;
 
+@Service(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME)
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
