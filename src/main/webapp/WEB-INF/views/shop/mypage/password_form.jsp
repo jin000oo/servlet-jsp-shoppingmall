@@ -17,12 +17,6 @@
                     <h5 class="mb-0">비밀번호 변경</h5>
                 </div>
                 <div class="card-body">
-                    <c:if test="${not empty error_message}">
-                        <div class="alert alert-danger">
-                            ${error_message}
-                        </div>
-                    </c:if>
-
                     <form action="/mypage/password.do" method="post">
                         <div class="mb-3">
                             <label for="currentPassword" class="form-label">현재 비밀번호</label>

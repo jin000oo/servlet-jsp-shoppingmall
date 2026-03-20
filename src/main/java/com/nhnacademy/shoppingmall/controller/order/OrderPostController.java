@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.UUID;
 import javax.transaction.Transactional;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/order.do")
 public class OrderPostController implements BaseController {
@@ -88,17 +90,17 @@ public class OrderPostController implements BaseController {
             return "redirect:/mypage/history.do";
 
         } catch (InsufficientAmountException e) {
-            req.setAttribute("errorMessage", "포인트 잔액이 부족합니다.");
+            req.setAttribute(ERROR_MESSAGE, "포인트 잔액이 부족합니다.");
 
             return "shop/order/order";
 
         } catch (InsufficientQuantityException e) {
-            req.setAttribute("errorMessage", "일부 상품의 재고가 부족합니다.");
+            req.setAttribute(ERROR_MESSAGE, "일부 상품의 재고가 부족합니다.");
 
             return "shop/order/order";
 
         } catch (Exception e) {
-            req.setAttribute("errorMessage", "주문 처리 중 시스템 오류가 발생했습니다.");
+            req.setAttribute(ERROR_MESSAGE, "주문 처리 중 시스템 오류가 발생했습니다.");
 
             return "shop/order/order";
         }

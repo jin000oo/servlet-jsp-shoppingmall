@@ -30,6 +30,16 @@
 
         <main>
             <div class="container">
+                <c:if test="${not empty errorMessage}">
+                    <div class="alert alert-danger" role="alert">
+                        ${errorMessage}
+                    </div>
+                </c:if>
+                <c:if test="${not empty successMessage}">
+                    <div class="alert alert-success" role="alert">
+                        ${successMessage}
+                    </div>
+                </c:if>
                 <jsp:include page="${layout_content_holder}" />
             </div>
         </main>

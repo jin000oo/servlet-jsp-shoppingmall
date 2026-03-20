@@ -87,6 +87,20 @@
     <main>
         <div class="album py-5 bg-light">
             <div class="container">
+                <%-- 공통 에러 메시지 출력 --%>
+                <c:if test="${not empty errorMessage}">
+                    <div class="alert alert-danger" role="alert">
+                        ${errorMessage}
+                    </div>
+                </c:if>
+
+                <%-- 공통 성공 메시지 출력 --%>
+                <c:if test="${not empty successMessage}">
+                    <div class="alert alert-success" role="alert">
+                        ${successMessage}
+                    </div>
+                </c:if>
+
                 <jsp:include page="${layout_content_holder}"/>
             </div>
         </div>

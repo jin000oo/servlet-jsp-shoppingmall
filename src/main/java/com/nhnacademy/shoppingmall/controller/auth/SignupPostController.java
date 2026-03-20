@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import javax.transaction.Transactional;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/signup.do")
 public class SignupPostController implements BaseController {
@@ -51,7 +53,7 @@ public class SignupPostController implements BaseController {
             return "redirect:/login.do";
 
         } catch (UserAlreadyExistsException e) {
-            req.setAttribute("errorMessage", "이미 존재하는 아이디입니다.");
+            req.setAttribute(ERROR_MESSAGE, "이미 존재하는 아이디입니다.");
 
             req.setAttribute("userId", userId);
             req.setAttribute("userName", userName);

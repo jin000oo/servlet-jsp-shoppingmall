@@ -19,12 +19,6 @@
                 <div class="card-body">
                     <h5 class="card-title text-danger mb-4">정말로 탈퇴하시겠습니까?</h5>
 
-                    <c:if test="${not empty error_message}">
-                        <div class="alert alert-danger">
-                            ${error_message}
-                        </div>
-                    </c:if>
-
                     <div class="alert alert-warning">
                         탈퇴를 원하시면 본인 확인을 위해 비밀번호를 입력해 주세요. 이 작업은 취소할 수 없습니다.
                     </div>

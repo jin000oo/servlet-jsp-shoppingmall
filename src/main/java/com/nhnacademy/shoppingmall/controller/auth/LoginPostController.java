@@ -16,7 +16,9 @@ import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.util.CommonConstants;
 import com.nhnacademy.shoppingmall.user.domain.User;
+import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -72,6 +74,10 @@ public class LoginPostController implements BaseController {
 
             return "redirect:/index.do";
 
+        } catch (UserNotFoundException e) {
+            log.error("[LoginPostController] {}", e.getMessage(), e);
+            req.setAttribute(CommonConstants.ERROR_MESSAGE, "아이디 또는 비밀번호가 일치하지 않습니다.");
+            return "shop/login/login_form";
         } catch (Exception e) {
             log.error("[LoginPostController] error: {}", e.getMessage(), e);
             return "shop/login/login_form";

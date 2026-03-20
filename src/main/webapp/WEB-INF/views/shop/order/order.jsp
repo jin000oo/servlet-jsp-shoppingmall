@@ -58,12 +58,6 @@
 
     <div class="card mb-4">
         <div class="card-body bg-light text-end">
-            <c:if test="${not empty errorMessage}">
-                <div class="alert alert-danger text-center" role="alert">
-                    <strong>${errorMessage}</strong>
-                </div>
-            </c:if>
-
             <h5 class="mb-3">보유 포인트:
                 <span class="text-primary fw-bold">
                     <fmt:formatNumber value="${currentPoint}" type="number"/> P

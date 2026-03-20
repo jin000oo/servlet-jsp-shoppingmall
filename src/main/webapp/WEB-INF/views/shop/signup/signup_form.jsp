@@ -27,12 +27,6 @@
                 <div class="card-body p-5">
                     <h3 class="text-center mb-4 fw-bold">회원가입</h3>
 
-                    <c:if test="${not empty errorMessage}">
-                        <div class="alert alert-danger text-center">
-                                ${errorMessage}
-                        </div>
-                    </c:if>
-
                     <form action="/signup.do" method="post">
                         <div class="mb-3">
                             <label for="userId" class="form-label">아이디</label>

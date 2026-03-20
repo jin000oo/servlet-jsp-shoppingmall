@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Objects;
 import javax.transaction.Transactional;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/mypage/withdraw.do")
 public class MemberWithdrawPostController implements BaseController {
@@ -28,7 +30,7 @@ public class MemberWithdrawPostController implements BaseController {
 
         // 비밀번호 체크
         if (inputPassword == null || !Objects.equals(user.getUserPassword(), inputPassword)) {
-            req.setAttribute("error_message", "비밀번호가 일치하지 않습니다.");
+            req.setAttribute(ERROR_MESSAGE, "비밀번호가 일치하지 않습니다.");
             return "shop/mypage/withdraw";
         }
 
