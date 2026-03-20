@@ -15,7 +15,6 @@ package com.nhnacademy.shoppingmall.user.service.impl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.service.PointService;
@@ -35,9 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -82,7 +83,6 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException(userId);
         }
 
-        OrderRepository orderRepository = new OrderRepositoryImpl();
         orderRepository.updateUserId(userId, "withdraw_user");
 
         userRepository.deleteByUserId(userId);
