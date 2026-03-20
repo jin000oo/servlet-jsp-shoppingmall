@@ -19,6 +19,7 @@ import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +70,16 @@ public class OrderRepositoryImplTest {
         int result = orderRepository.save(testOrder);
 
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    @DisplayName("주문 내역 조회")
+    void findByUserId() {
+        orderRepository.save(testOrder);
+
+        List<Order> orderList = orderRepository.findByUserId(testUser.getUserId(), 10, 0);
+
+        Assertions.assertEquals(1, orderList.size());
     }
 
 }

@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.order.service.impl;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
@@ -126,6 +127,34 @@ public class OrderServiceImpl implements OrderService {
         } catch (InterruptedException e) {
             log.error("fail to add point request channel - orderId: {}", order.getOrderId(), e);
             Thread.currentThread().interrupt();
+        }
+    }
+
+    @Override
+    public Page<Order> getOrderList(String userId, int page) {
+        validateId(userId);
+
+        int pageSize = Page.DEFAULT_PAGE_SIZE;
+        int offset = (page - 1) * pageSize;
+
+        List<Order> orderList = orderRepository.findByUserId(userId, page, offset);
+
+        int totalCount = orderRepository.countByUserId(userId);
+
+        return new Page<>(orderList, totalCount);
+    }
+
+    @Override
+    public List<OrderDetail> getOrderDetails(String orderId) {
+        validateId(orderId);
+        
+        return orderDetailRepository.findByOrderId(orderId);
+    }
+
+    private void validateId(String id) {
+        if (id == null || id.isBlank()) {
+            log.warn("[OrderServiceImpl] id is null or blank");
+            throw new IllegalArgumentException("[OrderServiceImpl] id is null or blank");
         }
     }
 

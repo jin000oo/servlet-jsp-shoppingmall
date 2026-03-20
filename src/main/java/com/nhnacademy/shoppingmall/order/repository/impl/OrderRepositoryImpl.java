@@ -17,8 +17,12 @@ import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,6 +45,73 @@ public class OrderRepositoryImpl implements OrderRepository {
             psmt.setTimestamp(4, Timestamp.valueOf(order.getCreatedAt()));
 
             return psmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Order> findByUserId(String userId, int limit, int offset) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        String sql = """
+                SELECT order_id, user_id, total_amount, created_at 
+                FROM orders 
+                WHERE user_id = ? 
+                ORDER BY created_at DESC LIMIT ? OFFSET ?
+                """;
+        log.debug("sql:{}", sql);
+
+        List<Order> orderList = new ArrayList<>();
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, userId);
+            psmt.setInt(2, limit);
+            psmt.setInt(3, offset);
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    Order order = new Order(
+                            rs.getString("order_id"),
+                            rs.getString("user_id"),
+                            rs.getInt("total_amount"),
+                            Objects.nonNull(rs.getTimestamp("created_at")) ?
+                                    rs.getTimestamp("created_at").toLocalDateTime() : null
+                    );
+
+                    orderList.add(order);
+                }
+            }
+
+            return orderList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int countByUserId(String userId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        String sql = """
+                SELECT COUNT(*) 
+                FROM orders 
+                WHERE user_id = ?
+                """;
+        log.debug("sql:{}", sql);
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, userId);
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+            return 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

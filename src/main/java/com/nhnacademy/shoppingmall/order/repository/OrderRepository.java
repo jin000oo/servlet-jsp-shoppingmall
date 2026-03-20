@@ -13,10 +13,17 @@
 package com.nhnacademy.shoppingmall.order.repository;
 
 import com.nhnacademy.shoppingmall.order.domain.Order;
+import java.util.List;
 
 public interface OrderRepository {
 
     // 주문 저장
     int save(Order order);
+
+    // 주문 내역 조회
+    List<Order> findByUserId(String userId, int limit, int offset);
+
+    // 총 데이터 개수 조회
+    int countByUserId(String userId);
 
 }

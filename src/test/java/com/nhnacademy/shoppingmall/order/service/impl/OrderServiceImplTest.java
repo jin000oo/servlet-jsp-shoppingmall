@@ -13,6 +13,7 @@
 package com.nhnacademy.shoppingmall.order.service.impl;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -139,6 +140,49 @@ public class OrderServiceImplTest {
         verify(orderRepository, never()).save(any(Order.class));
         verify(orderDetailRepository, never()).save(any(OrderDetail.class));
         verify(requestChannel, never()).addRequest(any(PointChannelRequest.class));
+    }
+
+    @Test
+    @DisplayName("주문 내역 조회")
+    void getOrderList() {
+        orderService.getOrderList(testUser.getUserId(), 1);
+
+        verify(orderRepository, times(1)).findByUserId(anyString(), anyInt(), anyInt());
+        verify(orderRepository, times(1)).countByUserId(anyString());
+    }
+
+    @Test
+    @DisplayName("주문 내역 조회 실패 - id가 null이거나 비어있음")
+    void getOrderList_fail() {
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        orderService.getOrderList(null, 1)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        orderService.getOrderList("", 1)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        orderService.getOrderList(" ", 1))
+        );
+    }
+
+    @Test
+    @DisplayName("주문 상세 조회")
+    void getOrderDetails() {
+        orderService.getOrderDetails(testOrder.getOrderId());
+
+        verify(orderDetailRepository, times(1)).findByOrderId(testOrder.getOrderId());
+    }
+
+    @Test
+    @DisplayName("주문 상세 조회 실패 - id가 null이거나 비어있음")
+    void getOrderDetails_fail() {
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        orderService.getOrderDetails(null)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        orderService.getOrderDetails("")),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+                        orderService.getOrderDetails(" "))
+        );
     }
 
 }

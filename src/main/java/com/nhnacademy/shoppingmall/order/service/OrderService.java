@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.order.service;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import java.util.List;
@@ -19,5 +20,9 @@ import java.util.List;
 public interface OrderService {
 
     void order(Order order, List<OrderDetail> orderDetails);
+
+    Page<Order> getOrderList(String userId, int page);
+
+    List<OrderDetail> getOrderDetails(String orderId);
 
 }
