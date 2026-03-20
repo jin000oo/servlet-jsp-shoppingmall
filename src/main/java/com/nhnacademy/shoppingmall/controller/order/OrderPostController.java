@@ -40,6 +40,8 @@ import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
+import com.nhnacademy.shoppingmall.user.service.UserService;
+import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -58,9 +60,10 @@ public class OrderPostController implements BaseController {
     private ProductRepository productRepository = new ProductRepositoryImpl();
 
     private ProductService productService =
-            new ProductServiceImpl(new ProductRepositoryImpl(), new CategoryRepositoryImpl());
+            new ProductServiceImpl(productRepository, new CategoryRepositoryImpl());
     private PointService pointService = new PointServiceImpl(new PointRepositoryImpl(), userRepository);
     private CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
+    private UserService userService = new UserServiceImpl(userRepository);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -108,6 +111,10 @@ public class OrderPostController implements BaseController {
             for (Cart cart : cartList) {
                 cartService.deleteCart(user.getUserId(), cart.getProductId());
             }
+
+            // 세션 동기화
+            User updatedUser = userService.getUser(user.getUserId());
+            req.getSession().setAttribute("user", updatedUser);
 
             return "redirect:/mypage/history.do";
 
