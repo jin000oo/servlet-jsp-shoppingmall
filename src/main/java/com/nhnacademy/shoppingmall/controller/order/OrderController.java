@@ -13,20 +13,13 @@
 package com.nhnacademy.shoppingmall.controller.order;
 
 import com.nhnacademy.shoppingmall.cart.domain.Cart;
-import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.product.domain.Product;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
-import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -39,13 +32,12 @@ import javax.transaction.Transactional;
 @RequestMapping(method = RequestMapping.Method.GET, value = "/order.do")
 public class OrderController implements BaseController {
 
-    private final CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-    private final ProductService productService =
-            new ProductServiceImpl(new ProductRepositoryImpl(), new CategoryRepositoryImpl());
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        CartService cartService = (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
+        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
+        ProductService productService = (ProductService) req.getServletContext().getAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME);
+
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
 

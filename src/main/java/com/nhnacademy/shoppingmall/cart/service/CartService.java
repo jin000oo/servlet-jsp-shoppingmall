@@ -16,6 +16,7 @@ import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import java.util.List;
 
 public interface CartService {
+    String CONTEXT_CART_SERVICE_NAME = "CONTEXT_CART_SERVICE";
 
     // 장바구니에 상품 담기
     void saveCart(Cart cart);

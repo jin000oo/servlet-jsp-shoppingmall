@@ -16,9 +16,7 @@ import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
@@ -28,10 +26,9 @@ import javax.transaction.Transactional;
 @RequestMapping(method = RequestMapping.Method.POST, value = "/signup.do")
 public class SignupPostController implements BaseController {
 
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
         String userId = req.getParameter("userId");
         String userPassword = req.getParameter("userPassword");
         String userName = req.getParameter("userName");

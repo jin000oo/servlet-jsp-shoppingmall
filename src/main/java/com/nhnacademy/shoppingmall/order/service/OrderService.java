@@ -18,6 +18,7 @@ import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import java.util.List;
 
 public interface OrderService {
+    String CONTEXT_ORDER_SERVICE_NAME = "CONTEXT_ORDER_SERVICE";
 
     void order(Order order, List<OrderDetail> orderDetails);
 

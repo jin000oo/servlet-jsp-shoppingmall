@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.user.repository.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Repository;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -22,11 +23,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
     @Override

@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.point.service.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.PointRepository;
@@ -23,6 +24,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service(PointService.CONTEXT_POINT_SERVICE_NAME)
 public class PointServiceImpl implements PointService {
 
     private final PointRepository pointRepository;

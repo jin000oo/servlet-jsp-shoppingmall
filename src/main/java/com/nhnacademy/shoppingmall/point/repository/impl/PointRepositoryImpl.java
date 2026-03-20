@@ -12,6 +12,7 @@
 
 package com.nhnacademy.shoppingmall.point.repository.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Repository;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.PointRepository;
@@ -26,6 +27,7 @@ import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Repository
 public class PointRepositoryImpl implements PointRepository {
 
     @Override

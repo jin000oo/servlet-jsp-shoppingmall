@@ -11,30 +11,17 @@
  */
 
 package com.nhnacademy.shoppingmall.common.listener;
-
-import com.nhnacademy.shoppingmall.address.repository.AddressRepository;
-import com.nhnacademy.shoppingmall.address.repository.impl.AddressRepositoryImpl;
-import com.nhnacademy.shoppingmall.address.service.AddressService;
-import com.nhnacademy.shoppingmall.address.service.impl.AddressServiceImpl;
+import com.nhnacademy.shoppingmall.common.mvc.service.ServiceFactory;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
-import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
-import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.service.CategoryService;
-import com.nhnacademy.shoppingmall.product.service.ProductService;
-import com.nhnacademy.shoppingmall.product.service.impl.CategoryServiceImpl;
-import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.UserRepository;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import java.time.LocalDateTime;
+import java.util.Set;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,33 +29,18 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationListener implements ServletContextListener {
 
     private UserService userService;
-    private CategoryService categoryService;
-    private ProductService productService;
-    private AddressService addressService;
-
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
+        // ServiceFactory 초기화 및 서비스 등록
+        Set<Class<?>> classes = (Set<Class<?>>) context.getAttribute("initializerClasses");
+        ServiceFactory serviceFactory = new ServiceFactory();
+        serviceFactory.initialize(classes, context);
 
-        // Repository 객체 생성
-        UserRepository userRepository = new UserRepositoryImpl();
-        CategoryRepository categoryRepository = new CategoryRepositoryImpl();
-        ProductRepository productRepository = new ProductRepositoryImpl();
-        AddressRepository addressRepository = new AddressRepositoryImpl();
+        // ServletContext에서 Service 객체 가져오기 (이미 ServiceFactory에서 등록됨)
+        this.userService = (UserService) context.getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
 
-        // Service 객체 생성 및 의존성 주입 (DI)
-        this.userService = new UserServiceImpl(userRepository);
-        this.categoryService = new CategoryServiceImpl(categoryRepository);
-        this.productService = new ProductServiceImpl(productRepository, categoryRepository);
-        this.addressService = new AddressServiceImpl(addressRepository);
-
-        // ServletContext에 Service 등록 (IoC Container 역할)
-        context.setAttribute(UserService.CONTEXT_USER_SERVICE_NAME, this.userService);
-        context.setAttribute(CategoryService.CONTEXT_CATEGORY_SERVICE_NAME, this.categoryService);
-        context.setAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME, this.productService);
-        context.setAttribute(AddressService.CONTEXT_ADDRESS_SERVICE_NAME, this.addressService);
-
-        log.info("Application Context Initialized: Services injected into ServletContext.");
+        log.info("Application Context Initialized: Services fetched from ServletContext.");
 
         try {
             DbConnectionThreadLocal.initialize();

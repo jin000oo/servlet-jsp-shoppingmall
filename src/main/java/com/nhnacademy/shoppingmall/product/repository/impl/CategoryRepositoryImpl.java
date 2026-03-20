@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.product.repository.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Repository;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override

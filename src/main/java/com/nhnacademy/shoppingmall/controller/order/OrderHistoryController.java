@@ -12,32 +12,15 @@
 
 package com.nhnacademy.shoppingmall.controller.order;
 
-import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
-import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
-import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
-import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderDetailRepositoryImpl;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
-import com.nhnacademy.shoppingmall.order.service.impl.OrderServiceImpl;
-import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
-import com.nhnacademy.shoppingmall.point.service.PointService;
-import com.nhnacademy.shoppingmall.point.service.impl.PointServiceImpl;
 import com.nhnacademy.shoppingmall.product.domain.Product;
-import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
-import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.UserRepository;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -50,21 +33,11 @@ import javax.transaction.Transactional;
 @RequestMapping(method = RequestMapping.Method.GET, value = "/mypage/history.do")
 public class OrderHistoryController implements BaseController {
 
-    private OrderRepository orderRepository = new OrderRepositoryImpl();
-    private OrderDetailRepository orderDetailRepository = new OrderDetailRepositoryImpl();
-    private UserRepository userRepository = new UserRepositoryImpl();
-    private ProductRepository productRepository = new ProductRepositoryImpl();
-
-    private ProductService productService =
-            new ProductServiceImpl(new ProductRepositoryImpl(), new CategoryRepositoryImpl());
-    private PointService pointService = new PointServiceImpl(new PointRepositoryImpl(), userRepository);
-    private CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
-
-    private OrderService orderService = new OrderServiceImpl(orderRepository, orderDetailRepository,
-            userRepository, productRepository, productService, pointService, null);
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        OrderService orderService = (OrderService) req.getServletContext().getAttribute(OrderService.CONTEXT_ORDER_SERVICE_NAME);
+        ProductService productService = (ProductService) req.getServletContext().getAttribute(ProductService.CONTEXT_PRODUCT_SERVICE_NAME);
+
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
 

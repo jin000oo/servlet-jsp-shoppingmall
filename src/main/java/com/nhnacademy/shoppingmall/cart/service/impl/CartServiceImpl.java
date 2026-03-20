@@ -16,10 +16,12 @@ import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.exception.CartAlreadyExistsException;
 import com.nhnacademy.shoppingmall.cart.repository.CartRepository;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service(CartService.CONTEXT_CART_SERVICE_NAME)
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;

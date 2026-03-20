@@ -13,9 +13,7 @@
 package com.nhnacademy.shoppingmall.controller.cart;
 
 import com.nhnacademy.shoppingmall.cart.domain.Cart;
-import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -29,10 +27,9 @@ import javax.transaction.Transactional;
 @RequestMapping(method = RequestMapping.Method.POST, value = "/cart/delete.do")
 public class CartDeleteController implements BaseController {
 
-    private final CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        CartService cartService = (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
         String productId = req.getParameter("productId");
 
         HttpSession session = req.getSession(false);

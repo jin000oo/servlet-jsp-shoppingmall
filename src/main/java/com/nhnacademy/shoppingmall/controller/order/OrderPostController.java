@@ -13,35 +13,16 @@
 package com.nhnacademy.shoppingmall.controller.order;
 
 import com.nhnacademy.shoppingmall.cart.domain.Cart;
-import com.nhnacademy.shoppingmall.cart.repository.impl.CartRepositoryImpl;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
-import com.nhnacademy.shoppingmall.cart.service.impl.CartServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
 import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
-import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
-import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderDetailRepositoryImpl;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
-import com.nhnacademy.shoppingmall.order.service.impl.OrderServiceImpl;
-import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
-import com.nhnacademy.shoppingmall.point.service.PointService;
-import com.nhnacademy.shoppingmall.point.service.impl.PointServiceImpl;
-import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.service.ProductService;
-import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
-import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.UserRepository;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -54,23 +35,11 @@ import javax.transaction.Transactional;
 @RequestMapping(method = RequestMapping.Method.POST, value = "/order.do")
 public class OrderPostController implements BaseController {
 
-    private OrderRepository orderRepository = new OrderRepositoryImpl();
-    private OrderDetailRepository orderDetailRepository = new OrderDetailRepositoryImpl();
-    private UserRepository userRepository = new UserRepositoryImpl();
-    private ProductRepository productRepository = new ProductRepositoryImpl();
-
-    private ProductService productService =
-            new ProductServiceImpl(productRepository, new CategoryRepositoryImpl());
-    private PointService pointService = new PointServiceImpl(new PointRepositoryImpl(), userRepository);
-    private CartService cartService = new CartServiceImpl(new CartRepositoryImpl());
-    private UserService userService = new UserServiceImpl(userRepository);
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        RequestChannel requestChannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
-
-        OrderService orderService = new OrderServiceImpl(orderRepository, orderDetailRepository,
-                userRepository, productRepository, productService, pointService, requestChannel);
+        OrderService orderService = (OrderService) req.getServletContext().getAttribute(OrderService.CONTEXT_ORDER_SERVICE_NAME);
+        CartService cartService = (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
+        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
 
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;

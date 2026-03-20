@@ -12,13 +12,12 @@
 
 package com.nhnacademy.shoppingmall.order.service.impl;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
-import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
-import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
-import com.nhnacademy.shoppingmall.order.repository.OrderDetailRepository;
-import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
+import com.nhnacademy.shoppingmall.order.exception.*;
+import com.nhnacademy.shoppingmall.order.repository.*;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.service.PointService;
@@ -36,6 +35,7 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service(OrderService.CONTEXT_ORDER_SERVICE_NAME)
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
