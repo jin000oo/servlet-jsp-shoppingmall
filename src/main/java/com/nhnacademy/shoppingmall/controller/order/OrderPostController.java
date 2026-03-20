@@ -1,0 +1,109 @@
+/*
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * + Copyright 2026. NHN Academy Corp. All rights reserved.
+ * + * While every precaution has been taken in the preparation of this resource,  assumes no
+ * + responsibility for errors or omissions, or for damages resulting from the use of the information
+ * + contained herein
+ * + No part of this resource may be reproduced, stored in a retrieval system, or transmitted, in any
+ * + form or by any means, electronic, mechanical, photocopying, recording, or otherwise, without the
+ * + prior written permission.
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
+package com.nhnacademy.shoppingmall.controller.order;
+
+import com.nhnacademy.shoppingmall.cart.domain.Cart;
+import com.nhnacademy.shoppingmall.cart.service.CartService;
+import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
+import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.order.domain.Order;
+import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
+import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
+import com.nhnacademy.shoppingmall.order.exception.InsufficientQuantityException;
+import com.nhnacademy.shoppingmall.order.service.OrderService;
+import com.nhnacademy.shoppingmall.user.domain.User;
+import com.nhnacademy.shoppingmall.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.transaction.Transactional;
+
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
+@Transactional
+@RequestMapping(method = RequestMapping.Method.POST, value = "/order.do")
+public class OrderPostController implements BaseController {
+
+    @Override
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        OrderService orderService = (OrderService) req.getServletContext().getAttribute(OrderService.CONTEXT_ORDER_SERVICE_NAME);
+        CartService cartService = (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
+        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
+
+        HttpSession session = req.getSession(false);
+        User user = session != null ? (User) session.getAttribute("user") : null;
+
+        if (user == null) {
+            return "redirect:/login.do";
+        }
+
+        try {
+            int totalAmount = Integer.parseInt(req.getParameter("totalAmount"));
+
+            List<Cart> cartList = cartService.getCartList(user.getUserId());
+
+            if (cartList == null || cartList.isEmpty()) {
+                return "redirect:/cart.do";
+            }
+
+            String orderId = UUID.randomUUID().toString();
+
+            Order order = new Order(orderId, user.getUserId(), totalAmount);
+
+            List<OrderDetail> orderDetails = new ArrayList<>();
+
+            for (Cart cart : cartList) {
+                OrderDetail orderDetail = new OrderDetail(
+                        UUID.randomUUID().toString(),
+                        orderId,
+                        cart.getProductId(),
+                        cart.getQuantity()
+                );
+
+                orderDetails.add(orderDetail);
+            }
+
+            orderService.order(order, orderDetails);
+
+            // 주문 후 장바구니 목록 삭제
+            for (Cart cart : cartList) {
+                cartService.deleteCart(user.getUserId(), cart.getProductId());
+            }
+
+            // 세션 동기화
+            User updatedUser = userService.getUser(user.getUserId());
+            req.getSession().setAttribute("user", updatedUser);
+
+            return "redirect:/mypage/history.do";
+
+        } catch (InsufficientAmountException e) {
+            req.setAttribute(ERROR_MESSAGE, "포인트 잔액이 부족합니다.");
+
+            return "shop/order/order";
+
+        } catch (InsufficientQuantityException e) {
+            req.setAttribute(ERROR_MESSAGE, "일부 상품의 재고가 부족합니다.");
+
+            return "shop/order/order";
+
+        } catch (Exception e) {
+            req.setAttribute(ERROR_MESSAGE, "주문 처리 중 시스템 오류가 발생했습니다.");
+
+            return "shop/order/order";
+        }
+    }
+
+}

@@ -12,10 +12,11 @@
 
 package com.nhnacademy.shoppingmall.user.exception;
 
+// 존재하지 않는 회원일 때
 public class UserNotFoundException extends RuntimeException {
-    
+
     public UserNotFoundException(String userId) {
-        super(String.format("user not found:" + userId));
+        super(String.format("user not found: %s", userId));
     }
 
 }

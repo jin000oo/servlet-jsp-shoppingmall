@@ -12,10 +12,11 @@
 
 package com.nhnacademy.shoppingmall.user.exception;
 
+// 이미 존재하는 회원일 때
 public class UserAlreadyExistsException extends RuntimeException {
 
     public UserAlreadyExistsException(String userId) {
-        super(String.format("user already exist:%s", userId));
+        super(String.format("user already exist: %s", userId));
     }
 
 }

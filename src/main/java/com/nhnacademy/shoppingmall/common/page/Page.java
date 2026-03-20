@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Page<T> {
 
+    public static final int DEFAULT_PAGE_SIZE = 10;
+
     private final List<T> content;
 
     private final long totalCount;

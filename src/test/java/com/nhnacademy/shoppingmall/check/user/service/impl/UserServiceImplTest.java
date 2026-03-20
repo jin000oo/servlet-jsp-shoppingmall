@@ -15,6 +15,7 @@ package com.nhnacademy.shoppingmall.check.user.service.impl;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
+import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
@@ -31,14 +32,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-//todo#4-6 Test Code가 통과하도록 UserServiceImpl을 구현합니다.
+// Test Code가 통과하도록 UserServiceImpl을 구현합니다.
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
     UserRepository userRepository = Mockito.mock(UserRepository.class);
-    UserService userService = new UserServiceImpl(userRepository);
+    OrderRepository orderRepository = Mockito.mock(OrderRepository.class);
+    UserService userService = new UserServiceImpl(userRepository, orderRepository);
     User testUser = new User(
             "nhnacademy-test-user",
             "nhn아카데미",
@@ -88,7 +90,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.countByUserId(anyString())).thenReturn(1);
 
         Throwable throwable = Assertions.assertThrows(UserAlreadyExistsException.class, () ->
-                        userService.saveUser(testUser));
+                userService.saveUser(testUser));
         log.debug("error:{}", throwable.getMessage());
     }
 
@@ -112,6 +114,7 @@ class UserServiceImplTest {
 
         userService.deleteUser(testUser.getUserId());
 
+        Mockito.verify(orderRepository, Mockito.times(1)).updateUserId(anyString(), anyString());
         Mockito.verify(userRepository, Mockito.times(1)).deleteByUserId(anyString());
         Mockito.verify(userRepository, Mockito.times(1)).countByUserId(anyString());
     }

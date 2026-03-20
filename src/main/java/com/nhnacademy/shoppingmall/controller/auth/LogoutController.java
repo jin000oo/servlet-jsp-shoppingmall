@@ -23,7 +23,7 @@ public class LogoutController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        //todo#13-3 로그아웃 구현
+        // 로그아웃 구현
         HttpSession session = req.getSession(false);
 
         if (session != null) {
