@@ -26,4 +26,7 @@ public interface OrderRepository {
     // 총 데이터 개수 조회
     int countByUserId(String userId);
 
+    // 회원 탈퇴 시 orders 테이블 user_id 업데이트
+    int updateUserId(String oldUserId, String newUserId);
+
 }

@@ -120,4 +120,25 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
+    @Override
+    public int updateUserId(String oldUserId, String newUserId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        String sql = """
+                UPDATE orders SET user_id = ? 
+                WHERE user_id = ?
+                """;
+        log.debug("sql:{}", sql);
+
+        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setString(1, newUserId);
+            psmt.setString(2, oldUserId);
+
+            return psmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

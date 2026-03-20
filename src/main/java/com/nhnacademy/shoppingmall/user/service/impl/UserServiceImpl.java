@@ -14,6 +14,8 @@ package com.nhnacademy.shoppingmall.user.service.impl;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.Service;
 import com.nhnacademy.shoppingmall.common.page.Page;
+import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
+import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.domain.Point;
 import com.nhnacademy.shoppingmall.point.repository.impl.PointRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.service.PointService;
@@ -79,6 +81,9 @@ public class UserServiceImpl implements UserService {
         if (!isExistUser(userId)) {
             throw new UserNotFoundException(userId);
         }
+
+        OrderRepository orderRepository = new OrderRepositoryImpl();
+        orderRepository.updateUserId(userId, "withdraw_user");
 
         userRepository.deleteByUserId(userId);
     }
