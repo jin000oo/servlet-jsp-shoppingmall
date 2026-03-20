@@ -12,10 +12,13 @@
 
 package com.nhnacademy.shoppingmall.controller.order;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.ERROR_MESSAGE;
+
 import com.nhnacademy.shoppingmall.cart.domain.Cart;
 import com.nhnacademy.shoppingmall.cart.service.CartService;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderDetail;
 import com.nhnacademy.shoppingmall.order.exception.InsufficientAmountException;
@@ -31,17 +34,18 @@ import java.util.List;
 import java.util.UUID;
 import javax.transaction.Transactional;
 
-import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
-
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/order.do")
 public class OrderPostController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        OrderService orderService = (OrderService) req.getServletContext().getAttribute(OrderService.CONTEXT_ORDER_SERVICE_NAME);
-        CartService cartService = (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
-        UserService userService = (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
+        OrderService orderService =
+                (OrderService) req.getServletContext().getAttribute(OrderService.CONTEXT_ORDER_SERVICE_NAME);
+        CartService cartService =
+                (CartService) req.getServletContext().getAttribute(CartService.CONTEXT_CART_SERVICE_NAME);
+        UserService userService =
+                (UserService) req.getServletContext().getAttribute(UserService.CONTEXT_USER_SERVICE_NAME);
 
         HttpSession session = req.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
@@ -100,6 +104,7 @@ public class OrderPostController implements BaseController {
             return "shop/order/order";
 
         } catch (Exception e) {
+            DbConnectionThreadLocal.setSqlError(true);
             req.setAttribute(ERROR_MESSAGE, "주문 처리 중 시스템 오류가 발생했습니다.");
 
             return "shop/order/order";
