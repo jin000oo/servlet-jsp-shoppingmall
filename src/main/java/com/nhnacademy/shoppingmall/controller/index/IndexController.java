@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Transactional
 @RequestMapping(method = RequestMapping.Method.GET, value = {"/index.do"})

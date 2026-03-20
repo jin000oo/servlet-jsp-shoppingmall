@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/admin/category/register.do")
 public class CategoryRegisterPostController implements BaseController {
@@ -23,6 +25,8 @@ public class CategoryRegisterPostController implements BaseController {
 
         Category category = new Category(categoryId, categoryName, sortOrder);
         categoryService.saveCategory(category);
+
+        req.getSession().setAttribute(SUCCESS_MESSAGE, "카테고리가 성공적으로 등록되었습니다.");
 
         return "redirect:/admin/category.do";
     }

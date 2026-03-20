@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.nhnacademy.shoppingmall.common.util.CommonConstants.*;
+
 @Transactional
 @RequestMapping(method = RequestMapping.Method.POST, value = "/admin/product/edit.do")
 public class ProductUpdatePostController implements BaseController {
@@ -37,6 +39,8 @@ public class ProductUpdatePostController implements BaseController {
 
         Product product = new Product(productId, productName, price, stock, thumbnailImagePath, categoryIds, detailImagePaths);
         productService.updateProduct(product);
+
+        req.getSession().setAttribute(SUCCESS_MESSAGE, "상품이 성공적으로 수정되었습니다.");
 
         return "redirect:/admin/product.do";
     }
