@@ -71,7 +71,7 @@
                         <div class="card-body">
                             <h6 class="card-title">주문 내역</h6>
                             <p class="card-text small">최근 주문한 내역을 한눈에 확인하세요.</p>
-                            <a href="/order/history.do" class="btn btn-sm btn-outline-primary">바로가기</a>
+                            <a href="/mypage/history.do" class="btn btn-sm btn-outline-primary">바로가기</a>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                         <div class="card-body">
                             <h6 class="card-title">포인트 내역</h6>
                             <p class="card-text small">포인트의 적립 및 사용 내역을 확인하세요.</p>
-                            <a href="/point.do" class="btn btn-sm btn-outline-primary">바로가기</a>
+                            <a href="/mypage/point.do" class="btn btn-sm btn-outline-primary">바로가기</a>
                         </div>
                     </div>
                 </div>

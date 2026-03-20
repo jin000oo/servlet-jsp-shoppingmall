@@ -26,9 +26,9 @@
         정보 관리</a>
     <a href="/mypage/password.do"
        class="list-group-item list-group-item-action ${param.menu == 'password' ? 'active' : ""}">비밀번호 변경</a>
-    <a href="/order/history.do" class="list-group-item list-group-item-action ${param.menu == 'order' ? 'active' : ''}">주문
+    <a href="/mypage/history.do" class="list-group-item list-group-item-action ${param.menu == 'order' ? 'active' : ''}">주문
         내역</a>
-    <a href="/point.do" class="list-group-item list-group-item-action ${param.menu == 'point' ? 'active' : ''}">포인트
+    <a href="/mypage/point.do" class="list-group-item list-group-item-action ${param.menu == 'point' ? 'active' : ''}">포인트
         내역</a>
     <a href="/mypage/withdraw.do" class="list-group-item list-group-item-action text-danger mt-3">회원탈퇴</a>
 </div>

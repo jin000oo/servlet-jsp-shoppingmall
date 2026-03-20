@@ -137,7 +137,7 @@ public class OrderServiceImpl implements OrderService {
         int pageSize = Page.DEFAULT_PAGE_SIZE;
         int offset = (page - 1) * pageSize;
 
-        List<Order> orderList = orderRepository.findByUserId(userId, page, offset);
+        List<Order> orderList = orderRepository.findByUserId(userId, pageSize, offset);
 
         int totalCount = orderRepository.countByUserId(userId);
 

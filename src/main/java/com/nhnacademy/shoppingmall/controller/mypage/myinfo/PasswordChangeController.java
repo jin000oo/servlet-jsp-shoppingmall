@@ -10,6 +10,6 @@ public class PasswordChangeController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return "shop/mypage/password";
+        return "shop/mypage/password_form";
     }
 }
