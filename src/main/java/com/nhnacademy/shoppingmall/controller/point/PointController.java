@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 @Transactional
-@RequestMapping(method = RequestMapping.Method.GET, value = "/point.do")
+@RequestMapping(method = RequestMapping.Method.GET, value = "/mypage/point.do")
 public class PointController implements BaseController {
 
     private final PointService pointService = new PointServiceImpl(new PointRepositoryImpl(), new UserRepositoryImpl());

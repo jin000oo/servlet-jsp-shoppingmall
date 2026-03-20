@@ -47,7 +47,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 @Transactional
-@RequestMapping(method = RequestMapping.Method.GET, value = "/order/history.do")
+@RequestMapping(method = RequestMapping.Method.GET, value = "/mypage/history.do")
 public class OrderHistoryController implements BaseController {
 
     private OrderRepository orderRepository = new OrderRepositoryImpl();
