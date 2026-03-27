@@ -1,3 +1,106 @@
-= Web Application 개발
+= Servlet-JSP Shopping Mall
+:toc:
+:toc-title: 목차
 
-* link:docs/03.문제/1.설명.adoc[docs/1 ~ 15]  순서대로 읽고 개발합니다.
+MVC 프레임워크와 트랜잭션 관리 구조를 직접 구현하며 내부 동작 원리를 학습한 쇼핑몰 프로젝트
+
+*개발 기간*:: 2026.03.10 ~ 2026.03.20
+*인원*:: 2인 팀 프로젝트
+
+== *Tech Stack*
+
+=== Backend
+
+- Java 21
+- Servlet / JSP
+- JDBC
+
+=== Database
+
+- MySQL
+
+=== Architecture / Patterns
+
+- MVC Pattern
+- Custom AOP (Proxy 기반)
+- Producer-Consumer Pattern
+
+=== Library
+
+- Reflections
+
+== *주요 구현 내용*
+
+=== 장바구니 시스템
+
+- 세션 + DB 기반 장바구니 로직 설계 및 구현
+- 사용자 상태에 따라 유연하게 데이터 관리
+
+=== 트랜잭션 관리 시스템
+
+- Proxy 기반 Custom Transaction 관리 구조 직접 구현
+- ThreadLocal을 활용한 트랜잭션 경계 설정
+
+=== 비동기 포인트 적립 시스템
+
+- Producer-Consumer 패턴 적용
+- Queue 기반 비동기 처리로 성능 및 결합도 개선
+
+== *Trouble Shooting*
+
+=== 비즈니스 로직과 트랜잭션 로직의 강결합 문제
+
+*문제*
+
+- Service 내부에 커넥션, commit, rollback 코드가 직접 포함됨
+- 코드 중복 증가 및 유지보수성 저하
+
+*해결*
+
+- Transaction Proxy를 직접 구현하여 트랜잭션 로직 분리
+- DbConnectionThreadLocal을 통해 트랜잭션 범위 관리
+- 비즈니스 로직의 순수성 확보
+
+*성과*
+
+- 횡단 관심사 분리에 대한 이해 향상
+
+'''
+
+=== 예외 처리 방식으로 인한 롤백 누락 문제
+
+*문제*
+
+- 컨트롤러에서 예외를 직접 처리
+- Proxy가 예외를 감지하지 못해 rollback 누락
+- 데이터가 commit되는 정합성 문제 발생
+
+*해결*
+
+- 데이터 변경 컨트롤러의 catch 블록에서 명시적 rollback 수행
+
+*성과*
+
+- 트랜잭션 경계와 예외 전파의 관계에 대한 깊은 이해
+
+'''
+
+=== 포인트 적립 로직으로 인한 성능 저하 문제
+
+*문제*
+
+- 주문 완료 시 포인트 적립 로직이 메인 트랜잭션에 포함
+- 응답 지연 및 병목 발생 가능
+- 회원가입 시 포인트 적립 실패가 전체 흐름에 영향
+
+*해결*
+
+- Producer-Consumer 패턴 기반 구조 설계
+- RequestChannel + WorkerThread 직접 구현
+- 포인트 적립을 비동기 큐 처리로 분리
+
+*성과*
+
+- 트랜잭션 처리 속도 개선
+- 시스템 간 결합도 감소
+- 실패 허용 구조 설계 경험
