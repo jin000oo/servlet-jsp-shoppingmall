@@ -1,4 +1,4 @@
-= Servlet-JSP Shopping Mall
+= Servlet-JSP Shoppingmall
 :toc:
 :toc-title: 목차
 
